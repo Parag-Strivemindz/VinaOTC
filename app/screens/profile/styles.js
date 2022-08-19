@@ -4,6 +4,7 @@ import {
   MONTSERRAT_MEDIUM,
   POPPINS_MEDIUM,
   WHITE,
+  WHITE_50,
 } from '../../styles/Fonts&Colors';
 
 export default StyleSheet.create({
@@ -32,5 +33,22 @@ export default StyleSheet.create({
     fontFamily: POPPINS_MEDIUM,
     fontSize: WP(10),
     marginTop: HP(2),
+  },
+  seeAllTxt: {
+    color: '#575C67',
+    fontFamily: POPPINS_MEDIUM,
+    fontSize: WP(13),
+  },
+  blockHeaderTxt: {
+    color: WHITE,
+    fontFamily: MONTSERRAT_MEDIUM,
+    fontSize: 15,
+  },
+  hiffenDividerRow: {
+    marginLeft: 16,
+    width: 15,
+    backgroundColor: '#FFA500',
+    alignSelf: 'center',
+    marginTop: 0,
   },
 });

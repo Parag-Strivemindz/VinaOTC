@@ -28,3 +28,5 @@ export const LIGHT_BLACK_COLOR = 'rgba(0,0,0,0.6)';
 export const BLACK_COLOR_90 = 'rgba(0,0,0,0.9)';
 export const LIGHT_WHITE = 'rgba(255,255,255,0.2)';
 export const PINK = '#EB548E';
+export const DROP_SHADOW = 'rgba(255, 255, 255, 0.07)';
+export const DROP_SHADOW_BORDER = 'rgba(255, 255, 255, 0.5)';

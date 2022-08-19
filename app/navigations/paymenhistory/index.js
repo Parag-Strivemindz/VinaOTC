@@ -5,7 +5,8 @@ import WithDrawal from '../../screens/history/Tabs/Withdraw';
 import Deposit from '../../screens/history/Tabs/Deposit';
 import {
   BACKGROUND_COLOR,
-  POPPINS_REGULAR,
+  BORDER_WHITE,
+  LIGHT_WHITE,
   ROBOTO_REGULAR,
   SECONDARY_COLOR,
   WHITE,
@@ -17,15 +18,16 @@ const Tab = createMaterialTopTabNavigator();
 const Tabbar = ({name, focused, color}) => (
   <View
     style={{
-      width: '100%',
-      height: HP(40),
+      borderRadius: 3,
+      paddingHorizontal: WP(10),
+      height: HP(35),
       justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: WP(20),
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      backgroundColor: focused ? color : 'rgba(255,255,255,0.1)',
     }}>
     <Text
       style={{
+        fontSize: WP(15),
         color: WHITE,
         fontFamily: ROBOTO_REGULAR,
         textTransform: 'capitalize',
@@ -40,6 +42,8 @@ function HistoryTabs() {
     <Tab.Navigator
       showPageIndicator={false}
       screenOptions={{
+        tabBarPressOpacity: 0,
+        tabBarPressColor: BACKGROUND_COLOR,
         tabBarShowLabel: true,
         tabBarStyle: {
           backgroundColor: BACKGROUND_COLOR,
@@ -53,9 +57,18 @@ function HistoryTabs() {
         name="Deposit"
         component={Deposit}
         options={{
+          // tabBarItemStyle: {
+          //   elevation: 10,
+          //   shadowColor: WHITE,
+          //   shadowOpacity: 10,
+          // },
           tabBarScrollEnabled: false,
           tabBarLabel: ({focused}) => (
-            <Tabbar focused={focused} name={'Deposite Request'} />
+            <Tabbar
+              focused={focused}
+              name={'Deposite Request'}
+              color={SECONDARY_COLOR}
+            />
           ),
         }}
       />
@@ -65,7 +78,11 @@ function HistoryTabs() {
         options={{
           tabBarScrollEnabled: false,
           tabBarLabel: ({focused}) => (
-            <Tabbar focused={focused} name={'Withdrawal Request'} />
+            <Tabbar
+              focused={focused}
+              name={'Withdrawal Request'}
+              color={'red'}
+            />
           ),
         }}
       />

@@ -10,6 +10,7 @@ import Container from '../../component/Container';
 import CardView from '../../component/CardView';
 import CommonHeader from '../../component/CommonHeader';
 import {ARROW_DIGONAL, BANK_LOGO} from '../../constants/IconConstant';
+import {PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
 
 const AllPortfolio = ({navigation}) => {
   const navigateTo = useCallback(screenName => {
@@ -61,7 +62,8 @@ const AllPortfolio = ({navigation}) => {
         {/**
          * Portfolio overview
          */}
-        <View style={{marginTop: HP(22), paddingHorizontal: 20}}>
+        <View
+          style={{marginTop: HP(22), paddingHorizontal: PADDING_HORIZONTAL}}>
           {/**
            * List of  Portfolio
            */}

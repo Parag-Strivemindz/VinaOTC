@@ -28,8 +28,10 @@ import LOCATION from '../assets/icons/location.svg';
 import FILLTER_EQUALIZER from '../assets/icons/filter_equilizer.svg';
 import FILLTER_HISTORY from '../assets/icons/fillter_history.svg';
 import WALLET from '../assets/icons/wallet-3-line.svg';
+import ERROR from '../assets/icons/error.svg';
 
 export {
+  ERROR,
   WALLET,
   FILLTER_HISTORY,
   FILLTER_EQUALIZER,

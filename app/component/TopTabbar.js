@@ -7,43 +7,39 @@ import {
   POPPINS_MEDIUM,
   SECONDARY_COLOR,
 } from '../styles/Fonts&Colors';
-import IndicesFuture from '../screens/home/TopTab/IndicesFuture';
-import Shares from '../screens/home/TopTab/Shares';
-import Indicies from '../screens/home/TopTab/Indices';
+import Deposit from '../screens/history/Tabs/Deposit';
+import WithDrawal from '../screens/history/Tabs/Withdraw';
 
 const TopTabbar = () => {
   const tab = [
     {
       id: '1',
-      name: 'Indicies',
-      value: Indicies(),
+      name: 'Deposite Request',
+      value: Deposit(),
     },
     {
       id: '2',
-      name: 'Indicies Future',
-      value: IndicesFuture(),
-    },
-    {
-      id: '3',
-      name: 'Shares',
-      value: Shares(),
-    },
-    {
-      id: '4',
-      name: 'Indicies',
-      value: Indicies(),
-    },
-    {
-      id: '5',
-      name: 'Indicies Future',
-      value: IndicesFuture(),
-    },
-    {
-      id: '6',
-      name: 'Shares',
-      value: Shares(),
+      name: 'Withdrawal Request',
+      value: WithDrawal(),
     },
   ];
+  // const tab = [
+  //   {
+  //     id: '1',
+  //     name: 'Indicies',
+  //     value: Indicies(),
+  //   },
+  //   {
+  //     id: '2',
+  //     name: 'Indicies Future',
+  //     value: IndicesFuture(),
+  //   },
+  //   {
+  //     id: '3',
+  //     name: 'Shares',
+  //     value: Shares(),
+  //   },
+  // ];
 
   const [getter, setter] = useState({
     currentIndex: 0,

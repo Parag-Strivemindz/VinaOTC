@@ -1,6 +1,13 @@
 import {StyleSheet} from 'react-native';
 import {HP, WP} from './Dimesions';
-import {ROBOTO_MEDIUM, SECONDARY_COLOR, WHITE} from './Fonts&Colors';
+import {
+  BACKGROUND_COLOR,
+  DROP_SHADOW,
+  DROP_SHADOW_BORDER,
+  ROBOTO_MEDIUM,
+  SECONDARY_COLOR,
+  WHITE,
+} from './Fonts&Colors';
 
 export const HEADER_HEIGHT = 50;
 export const PADDING_HORIZONTAL = 20;
@@ -28,5 +35,13 @@ export default styles = StyleSheet.create({
     color: WHITE,
     fontFamily: ROBOTO_MEDIUM,
     fontSize: 16,
+  },
+  dropShadow: {
+    borderRadius: 10,
+    elevation: 5,
+    shadowColor: DROP_SHADOW,
+    borderWidth: 0.5,
+    borderColor: DROP_SHADOW_BORDER,
+    backgroundColor: BACKGROUND_COLOR,
   },
 });

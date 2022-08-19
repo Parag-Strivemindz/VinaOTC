@@ -6,6 +6,7 @@ import LOCK_SVG from '../assets/images/lock_icon.svg';
 import EMAIL_SVG from '../assets/images/email.svg';
 import CIRCLE_SVG from '../assets/images/circle-check.svg';
 import HELPANDSUPPORT from '../assets/images/help_and_support_img.svg';
+import GIRL_PROFILE from '../assets/images/girl_profile.png';
 
 export {
   FP_CENTER_IMAGE,
@@ -16,4 +17,5 @@ export {
   EMAIL_SVG,
   CIRCLE_SVG,
   HELPANDSUPPORT,
+  GIRL_PROFILE,
 };

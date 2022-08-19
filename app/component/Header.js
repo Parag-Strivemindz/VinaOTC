@@ -7,8 +7,7 @@ import {
   FONT_BOLD_ITALIC_SECONDARY,
   FONT_BOLD_REGULAR_SECONDARY,
 } from '../styles/Fonts&Colors';
-import {VEENA_OTC_LOGO} from '../constants/ImageConstant';
-import {LOGO_SVG} from '../constants/IconConstant';
+import {BELL_ICON, LOGO_SVG} from '../constants/IconConstant';
 import MenuItem from './MenuItem';
 import RECT from '../assets/icons/Rectangle 29.svg';
 
@@ -38,7 +37,7 @@ const Header = ({icon, callback}) => {
               Logout
             </Text>
           ) : (
-            <Image resizeMode="contain" source={icon} style={styles.icon} />
+            <Image source={BELL_ICON} style={styles.icon} />
           )}
         </Pressable>
       ) : (
@@ -80,7 +79,10 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(255,255,255,0.7)',
     backgroundColor: BACKGROUND_COLOR,
   },
-  icon: {},
+  icon: {
+    width: 20,
+    height: 20,
+  },
   headerTitleTxt: {
     color: 'black',
     fontFamily: FONT_BOLD_REGULAR_SECONDARY,
