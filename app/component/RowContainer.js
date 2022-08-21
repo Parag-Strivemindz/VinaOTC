@@ -4,6 +4,7 @@ import React from 'react';
 const RowContainer = ({children, style, callback}) => {
   return (
     <Pressable
+      
       onPress={() => {
         callback != undefined && callback();
       }}
@@ -19,6 +20,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
 });

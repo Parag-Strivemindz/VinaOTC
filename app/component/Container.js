@@ -11,6 +11,7 @@ function Container({containerStyles, scrollViewContainerStyle, children}) {
   return (
     <View style={[styles.mainContainer, {...containerStyles}]}>
       <ScrollView
+        bounces={false}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{

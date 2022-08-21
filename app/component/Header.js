@@ -28,17 +28,11 @@ const Header = ({icon, callback}) => {
             }
           }}
           android_ripple={{
-            borderless: false,
-            foreground: false,
+            borderless: true,
+            radius: 20,
           }}
           style={styles.iconContainer}>
-          {callback ? (
-            <Text style={{fontFamily: FONT_MEDIUM, color: 'black', padding: 2}}>
-              Logout
-            </Text>
-          ) : (
-            <Image source={BELL_ICON} style={styles.icon} />
-          )}
+          <SvgXml xml={icon} style={styles.icon} />
         </Pressable>
       ) : (
         <View>
@@ -88,10 +82,5 @@ const styles = StyleSheet.create({
     fontFamily: FONT_BOLD_REGULAR_SECONDARY,
     fontSize: 25,
   },
-  iconContainer: {
-    backgroundColor: 'white',
-    padding: 6,
-    borderRadius: 14,
-    elevation: 1,
-  },
+  iconContainer: {},
 });

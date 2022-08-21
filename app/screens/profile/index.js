@@ -8,7 +8,12 @@ import GlobalStyles, {
 import CardViewDivider from '../../component/CardViewDivider';
 import RowContainer from '../../component/RowContainer';
 import CardView from '../../component/CardView';
-import {ARROW_DOWN, BANK_LOGO, BELL_ICON} from '../../constants/IconConstant';
+import {
+  ARROW_DOWN,
+  BANK_LOGO,
+  BELL_ICON,
+  NOTIFICATION_SVG,
+} from '../../constants/IconConstant';
 import {HP, WP} from '../../styles/Dimesions';
 import styles from './styles';
 import HifenDivider from '../../component/HifenDivider';
@@ -24,8 +29,11 @@ const Profile = ({navigation}) => {
 
   return (
     <View style={{flex: 1}}>
-      <Header icon={BELL_ICON} />
-      <Container containerStyles={{paddingTop: CONTAINER_PADDINGTOP}}>
+      <Header
+        icon={NOTIFICATION_SVG}
+        callback={() => navigateTo('Notification')}
+      />
+      <Container scrollViewContainerStyle={{paddingTop: CONTAINER_PADDINGTOP}}>
         <RowContainer
           callback={() => navigateTo('MyProfile')}
           style={{

@@ -1,17 +1,14 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {SvgXml} from 'react-native-svg';
-import {
-  BACKGROUND_COLOR,
-  FONT_BOLD_REGULAR_SECONDARY,
-  POPPINS_MEDIUM,
-  POPPINS_REGULAR,
-  WHITE,
-} from '../styles/Fonts&Colors';
+import {useNavigation} from '@react-navigation/native';
+import PropTypes from 'prop-types';
+
+import RowContainer from './RowContainer';
+
 import {ARROW_BACK} from '../constants/IconConstant';
 import {WP} from '../styles/Dimesions';
-import {useNavigation} from '@react-navigation/native';
-import RowContainer from './RowContainer';
+import {BACKGROUND_COLOR, POPPINS_MEDIUM, WHITE} from '../styles/Fonts&Colors';
 import {HEADER_HEIGHT} from '../styles/GlobalStyles';
 
 const CommonHeader = ({title, rightItem}) => {
@@ -37,6 +34,11 @@ const CommonHeader = ({title, rightItem}) => {
       <View>{rightItem && rightItem()}</View>
     </View>
   );
+};
+
+CommonHeader.propTypes = {
+  title: PropTypes.string.isRequired,
+  rightItem: PropTypes.func,
 };
 
 export default CommonHeader;

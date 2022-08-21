@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {LogBox, Text, View} from 'react-native';
 import React from 'react';
 import {PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
 import {FILLTER_EQUALIZER, WALLET} from '../../constants/IconConstant';
@@ -8,39 +8,22 @@ import ActionButton from '../../component/ActionButton';
 import {SECONDARY_COLOR} from '../../styles/Fonts&Colors';
 import CardViewDivider from '../../component/CardViewDivider';
 import styles from './styles';
+import {HP} from '../../styles/Dimesions';
 
-const data = [
-  {
-    id: '1',
-    payment_type: 'Deposite',
-    value: '-11,300',
-    time: 'march 12, 6:30 pm',
-  },
-  {
-    id: '2',
-    payment_type: 'Withdrawal',
-    value: '+8,000',
-    time: 'march 12, 6:30 pm',
-  },
-  {
-    id: '3',
-    payment_type: 'Deposite',
-    value: '-11,300',
-    time: 'march 12, 6:30 pm',
-  },
-  {
-    id: '4',
-    payment_type: 'Withdrawal',
-    value: '+8,000,',
-    time: 'march 12, 6:30 pm',
-  },
-];
-const PaymentHistory = () => {
+const ProfilePaymentHistory = ({callback, data}) => {
   return (
     <View style={{paddingHorizontal: PADDING_HORIZONTAL}}>
       <RowContainer style={{marginBottom: HP(30)}}>
         <Text style={styles.paymentHistory}>PAYMENT HISTORY</Text>
-        <SvgXml xml={FILLTER_EQUALIZER} width={15} height={15} />
+        <SvgXml
+          xml={FILLTER_EQUALIZER}
+          width={15}
+          height={15}
+          onPress={() => {
+            console.log('Calleds');
+            callback();
+          }}
+        />
       </RowContainer>
       {data.map(item => {
         return (
@@ -69,6 +52,7 @@ const PaymentHistory = () => {
               </RowContainer>
               <Text
                 style={{
+                  // alignSelf: 'flex-start',
                   color:
                     item.payment_type == 'Deposite'
                       ? SECONDARY_COLOR
@@ -85,4 +69,4 @@ const PaymentHistory = () => {
   );
 };
 
-export default PaymentHistory;
+export default ProfilePaymentHistory;

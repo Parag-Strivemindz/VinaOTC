@@ -1,14 +1,18 @@
-import {HP} from '../../styles/Dimesions';
+import {HP, WP} from '../../styles/Dimesions';
 import {
   BACKGROUND_COLOR,
+  GREEN_LIGHT,
   MONTSERRAT_MEDIUM,
   MONTSERRAT_REGULAR,
   POPPINS_MEDIUM,
+  POPPINS_REGULAR,
   ROBOTO_MEDIUM,
   ROBOTO_REGULAR,
   SECONDARY_COLOR,
   WHITE,
+  WHITE_50,
 } from '../../styles/Fonts&Colors';
+import {PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
 
 const {StyleSheet} = require('react-native');
 
@@ -80,5 +84,46 @@ export default StyleSheet.create({
     color: '#575C67',
     fontFamily: POPPINS_MEDIUM,
     fontSize: 13,
+  },
+  itemContainer: {
+    // marginVertical: 10,
+    paddingVertical: HP(13),
+    paddingHorizontal: PADDING_HORIZONTAL,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  itemContainerLeftTitTxt: {
+    fontFamily: ROBOTO_MEDIUM,
+    color: WHITE,
+    fontSize: WP(15),
+  },
+  itemContainerLeftSubTitTxt: {
+    fontFamily: ROBOTO_MEDIUM,
+    fontSize: WP(14),
+    color: WHITE_50,
+  },
+  filedInputTxt: {
+    fontFamily: POPPINS_REGULAR,
+    color: WHITE,
+    fontSize: WP(13),
+  },
+  addFundsTxt: {
+    fontFamily: MONTSERRAT_MEDIUM,
+    fontSize: WP(11),
+    color: WHITE,
+  },
+  bigActionBtnTxt: {
+    fontFamily: ROBOTO_REGULAR,
+    color: WHITE,
+    fontSize: WP(16),
+  },
+  rowFilteItemContainer: {
+    // marginTop: HP(10),
+    // borderWidth: 1,
+    paddingVertical: HP(20),
+    backgroundColor: GREEN_LIGHT,
+    alignItems: 'center',
+    paddingHorizontal: PADDING_HORIZONTAL,
   },
 });

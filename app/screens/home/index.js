@@ -74,7 +74,7 @@ const Home = ({navigation}) => {
            * List of  Portfolio
            */}
           <View style={{marginTop: 10}}>
-            <CardView callback={() => navigateTo('Portfolio')}></CardView>
+            <CardView callback={() => navigateTo('BuyShares')}></CardView>
             <CardView></CardView>
             <CardView></CardView>
           </View>

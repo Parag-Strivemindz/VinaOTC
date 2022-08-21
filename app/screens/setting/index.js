@@ -30,9 +30,9 @@ import {
 } from '../../styles/GlobalStyles';
 
 const Setting = ({navigation}) => {
-  const navigateTo = useCallback(screenName => {
+  const navigateTo = screenName => {
     navigation.navigate(screenName);
-  }, []);
+  };
 
   const ItemContainer = ({icon, title, callback}) => {
     return (
@@ -52,7 +52,10 @@ const Setting = ({navigation}) => {
           backgroundColor: BACKGROUND_COLOR,
           marginHorizontal: PADDING_HORIZONTAL,
         }}>
-        <RowContainer>
+        <View
+          style={{
+            flexDirection: 'row',
+          }}>
           <SvgXml xml={icon} style={{marginRight: 15}} />
           <Text
             style={{
@@ -62,7 +65,7 @@ const Setting = ({navigation}) => {
             }}>
             {title}
           </Text>
-        </RowContainer>
+        </View>
         <SvgXml xml={ARROW_BACK} rotation={180} />
       </RowContainer>
     );
@@ -70,7 +73,7 @@ const Setting = ({navigation}) => {
 
   return (
     <View style={{flex: 1}}>
-      <Header  />
+      <Header />
       <Container
         scrollViewContainerStyle={{flexGrow: 1}}
         containerStyles={{

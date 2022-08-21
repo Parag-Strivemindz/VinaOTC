@@ -29,8 +29,22 @@ import FILLTER_EQUALIZER from '../assets/icons/filter_equilizer.svg';
 import FILLTER_HISTORY from '../assets/icons/fillter_history.svg';
 import WALLET from '../assets/icons/wallet-3-line.svg';
 import ERROR from '../assets/icons/error.svg';
+import CIRCLE from '../assets/icons/circle.svg';
+import SORT from '../assets/icons/sort.svg';
+import WARNING from '../assets/icons/warning.svg';
+import RADIO from '../assets/icons/radiosvg.svg';
+import CLOSE_SVG from '../assets/icons/close.svg';
+import ATTACH_SVG from '../assets/icons/attachment.svg';
+import NOTIFICATION_SVG from '../assets/icons/notification.svg';
 
 export {
+  NOTIFICATION_SVG,
+  ATTACH_SVG,
+  CLOSE_SVG,
+  RADIO,
+  WARNING,
+  SORT,
+  CIRCLE,
   ERROR,
   WALLET,
   FILLTER_HISTORY,

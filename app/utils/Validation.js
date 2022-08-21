@@ -28,28 +28,45 @@ export function passwordVerification(password, confirmPassword = '') {
 
   return arrayError;
 }
-//userName validation
-export function isFeildValid(
-  firstName,
-  lastName = '',
-  companyName = '',
-  companyPhone = '',
-) {
+
+export const NumberVerification = (
+  accountNumber = '',
+  branchCode = '',
+  IFSCcode = '',
+) => {
   const arrayError = [];
-  const numberRegex = /^[0-9]{10}$/g;
-  firstName.trim() == ''
-    ? arrayError.push(`${strings.emptyFldErr}${strings.Fullname}`)
+  const numberRegex_ACnumber = /^[0-15]{10}$/g;
+  const numberRegex = /^[0-4]{10}$/g;
+
+  accountNumber.trim() == '' ||
+  accountNumber.match(numberRegex_ACnumber) == null
+    ? arrayError.push('Invalid Account Number')
     : arrayError.push('');
-  lastName.trim() == ''
-    ? arrayError.push('Please fill the lastname')
+
+  branchCode.trim() == '' ||
+  branchCode.trim().length < 10 ||
+  branchCode.match(numberRegex) == null
+    ? arrayError.push('Invalid Branch Code')
     : arrayError.push('');
-  companyName.trim() == ''
-    ? arrayError.push("Company name can't be empty")
+
+  IFSCcode.trim() == ''
+    ? arrayError.push(`${strings.emptyFldErr} IFSC code`)
     : arrayError.push('');
-  companyPhone.trim() == '' ||
-  companyPhone.trim().length < 10 ||
-  companyPhone.match(numberRegex) == null
-    ? arrayError.push('Invalid phone number')
+
+  return arrayError;
+};
+
+//userName validation
+export function isFeildValid(value_1 = '', value_2 = '', value_3 = '') {
+  const arrayError = [];
+  value_1.trim() == ''
+    ? arrayError.push(`${strings.emptyFldErr}' Field`)
+    : arrayError.push('');
+  value_2.trim() == ''
+    ? arrayError.push(`${strings.emptyFldErr}{' Field'}`)
+    : arrayError.push('');
+  value_3.trim() == ''
+    ? arrayError.push(`${strings.emptyFldErr}{' Field'}`)
     : arrayError.push('');
   console.log(arrayError + ' isFieldValidEror');
   return arrayError;

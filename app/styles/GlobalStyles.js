@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {HP, WP} from './Dimesions';
+import {HP, WINDOW_WIDTH, WP} from './Dimesions';
 import {
   BACKGROUND_COLOR,
   DROP_SHADOW,
@@ -9,10 +9,10 @@ import {
   WHITE,
 } from './Fonts&Colors';
 
-export const HEADER_HEIGHT = 50;
-export const PADDING_HORIZONTAL = 20;
-export const PADDING_VERTICAL = 20;
-export const CONTAINER_PADDINGTOP = WP(HEADER_HEIGHT + PADDING_VERTICAL);
+export const HEADER_HEIGHT = HP(50);
+export const PADDING_HORIZONTAL = WP(20);
+export const PADDING_VERTICAL = HP(20);
+export const CONTAINER_PADDINGTOP = HEADER_HEIGHT + PADDING_VERTICAL;
 
 export default styles = StyleSheet.create({
   containerStyle: {
@@ -38,10 +38,18 @@ export default styles = StyleSheet.create({
   },
   dropShadow: {
     borderRadius: 10,
-    elevation: 5,
-    shadowColor: DROP_SHADOW,
+    elevation: 4,
+    shadowColor: WHITE,
     borderWidth: 0.5,
     borderColor: DROP_SHADOW_BORDER,
     backgroundColor: BACKGROUND_COLOR,
+  },
+  modalContainer: {
+    backgroundColor: WHITE,
+    width: WINDOW_WIDTH * 0.8,
+    borderRadius: 11,
+    paddingVertical: HP(10),
+    // height: HP(200),
+    // paddingVertical: HP(15),
   },
 });
