@@ -1,34 +1,143 @@
-import React, {Component} from 'react';
-import {Text, ScrollView, View, StyleSheet} from 'react-native';
-import Neumorphism from 'react-native-neumorphism';
-import {BACKGROUND_COLOR, WHITE} from '../../styles/Fonts&Colors';
+import React from 'react';
+import {Text, View, StyleSheet} from 'react-native';
+import {Neomorph, NeomorphFlex, Shadow} from 'react-native-neomorph-shadows';
 
-export default class Notification extends Component {
-  render() {
-    return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: BACKGROUND_COLOR,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Neumorphism
-          //   style={{
-          //     backgroundColor: BACKGROUND_COLOR,
-          //   }}
-          lightColor={'#FFFFFF80'}
-          darkColor={'#FFFFFF80'}
-          shapeType={'pressed'}
-          radius={100}>
-          <View style={{width: 200, height: 200}}>
-            <Text>TEST</Text>
-          </View>
-        </Neumorphism>
-      </View>
-    );
-  }
+import CommonHeader from '../../component/CommonHeader';
+import Container from '../../component/Container';
+import RowContainer from '../../component/RowContainer';
+import {HP, WINDOW_WIDTH, WP} from '../../styles/Dimesions';
+
+import {
+  MONTSERRAT_REGULAR,
+  ROBOTO_BOLD,
+  ROBOTO_MEDIUM,
+  ROBOTO_REGULAR,
+  SECONDARY_COLOR,
+  WHITE,
+} from '../../styles/Fonts&Colors';
+import GlobalStyles, {
+  CONTAINER_PADDINGTOP,
+  PADDING_HORIZONTAL,
+} from '../../styles/GlobalStyles';
+
+function Neumor({style, children, inner, darkShadow, lightShadow}) {
+  return (
+    <Neomorph
+      inner={inner}
+      darkShadowColor={darkShadow} // <- set this
+      lightShadowColor={lightShadow} // <- this
+      style={{
+        shadowOpacity: 0.3, // <- and this or yours opacity
+        shadowRadius: 3,
+        borderRadius: 30,
+        backgroundColor: '#1D1E1E',
+        width: 60,
+        height: 60,
+        ...style,
+      }}>
+      {children}
+    </Neomorph>
+  );
 }
+
+const data = [
+  {
+    id: '1',
+    sender: 'Jhoan Harper',
+    time: 'Monday 10-mar-2022',
+    message: `Sharing insights into different aspects of Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, w`,
+  },
+  {
+    id: '2',
+    sender: 'Jhoan Harper',
+    time: 'Monday 10-mar-2022',
+    message: `Sharing insights into different aspects of..`,
+  },
+];
+
+function Notification() {
+  return (
+    <View style={{flex: 1}}>
+      <CommonHeader title="Notification" />
+      <Container
+        scrollViewContainerStyle={{
+          paddingTop: CONTAINER_PADDINGTOP,
+          paddingHorizontal: PADDING_HORIZONTAL,
+        }}>
+        <View>
+          {data.map(item => {
+            return (
+              <View
+                key={item.id}
+                style={[
+                  GlobalStyles.dropShadow,
+                  {
+                    // shadowOffset: {width: 10, height: 10},
+                    marginTop: HP(20),
+                    padding: 15,
+                    // shadowOpacity: 0.2,
+                    // shadowRadius: 10,
+                    borderRadius: 10,
+                    borderWidth: 0,
+                    width: WINDOW_WIDTH * 0.9,
+                    borderTopLeftRadius: 20,
+                  },
+                ]}>
+                <RowContainer
+                  style={{
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                  }}>
+                  <Neumor
+                    inner={true}
+                    darkShadow={'#000000'}
+                    lightShadow={WHITE}
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text style={styles.text}>SM</Text>
+                  </Neumor>
+                  <View style={{marginLeft: WP(15)}}>
+                    <Text
+                      style={{
+                        color: SECONDARY_COLOR,
+                        fontFamily: ROBOTO_MEDIUM,
+                        fontSize: WP(17),
+                      }}>
+                      {item.sender}
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: ROBOTO_REGULAR,
+                        color: WHITE,
+                        fontSize: WP(10),
+                        marginTop: HP(2),
+                      }}>
+                      {item.time}
+                    </Text>
+                  </View>
+                </RowContainer>
+                <Text
+                  style={{
+                    lineHeight: 20,
+                    marginTop: HP(20),
+                    fontFamily: MONTSERRAT_REGULAR,
+                    color: WHITE,
+                    fontSize: WP(13),
+                  }}>
+                  {item.message}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
+      </Container>
+    </View>
+  );
+}
+
+export default Notification;
 
 const styles = StyleSheet.create({
   container: {
@@ -54,6 +163,7 @@ const styles = StyleSheet.create({
   },
   roundedButton: {
     height: 80,
+
     width: 80,
     shadowColor: '#2b2b2b',
     shadowOpacity: 0.7,
@@ -70,6 +180,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 36,
+    fontSize: WP(16),
+    fontFamily: ROBOTO_BOLD,
   },
 });

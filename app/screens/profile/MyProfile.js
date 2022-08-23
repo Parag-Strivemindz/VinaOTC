@@ -22,6 +22,7 @@ import {HP, WP} from '../../styles/Dimesions';
 import {
   BLACK_70,
   GREEN_LIGHT,
+  MONTSERRAT_REGULAR,
   ROBOTO_MEDIUM,
   WHITE,
 } from '../../styles/Fonts&Colors';
@@ -202,8 +203,17 @@ const MyProfile = ({navigation}) => {
               alignItems: 'center',
             }}>
             <View style={styles.balanceContainer}>
-              <Text style={{color: WHITE}}>Total Balance</Text>
-              <Text style={{color: WHITE}}>32,445$</Text>
+              <Text style={{color: WHITE, fontFamily: MONTSERRAT_REGULAR}}>
+                Total Balance
+              </Text>
+              <Text
+                style={{
+                  color: WHITE,
+                  fontFamily: ROBOTO_MEDIUM,
+                  fontSize: WP(25),
+                }}>
+                32,445$
+              </Text>
             </View>
             <View>
               <ActionButton

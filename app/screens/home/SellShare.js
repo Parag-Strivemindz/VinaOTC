@@ -24,7 +24,7 @@ import {
   SECONDARY_COLOR,
   WHITE,
 } from '../../styles/Fonts&Colors';
-import {ARROW_DOWN, CLOCK} from '../../constants/IconConstant';
+import {ARROWSHARES_SVG, ARROW_DOWN, CLOCK} from '../../constants/IconConstant';
 
 const data = [
   {
@@ -186,7 +186,7 @@ const SellShare = () => {
           }}
           value={getter.ammount}
           onChangeText={text => onChangeText(text, 'ammount')}
-          iconLeft={ARROW_DOWN}
+          iconLeft={ARROWSHARES_SVG}
         />
         <WarningBanner
           style={{marginTop: HP(15), height: HP(42), borderRadius: 5}}

@@ -25,7 +25,12 @@ import {
   MONTSERRAT_REGULAR,
   MONTSERRAT_MEDIUM,
 } from '../../styles/Fonts&Colors';
-import {ARROW_DIGONAL, ARROW_DOWN, CLOCK} from '../../constants/IconConstant';
+import {
+  ARROWSHARES_SVG,
+  ARROW_DIGONAL,
+  ARROW_DOWN,
+  CLOCK,
+} from '../../constants/IconConstant';
 
 const data = [
   {
@@ -125,7 +130,7 @@ const BuyShares = ({navigation}) => {
         })}
         <CardViewDivider style={{maringVertical: HP(10)}} />
         <FieldInput
-          iconLeft={ARROW_DIGONAL}
+          iconLeft={ARROWSHARES_SVG}
           containerStyle={{
             marginTop: HP(20),
             marginHorizontal: PADDING_HORIZONTAL,

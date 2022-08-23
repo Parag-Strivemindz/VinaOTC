@@ -1,23 +1,35 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useRef} from 'react';
 import {StyleSheet, View, Animated} from 'react-native';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useFocusEffect} from '@react-navigation/native';
+
 import HomeStack from './Home';
-import PaymentHistoryStack from './paymenhistory';
 import SettingStack from './settings';
 import ProfileStack from './profile';
-import {SvgXml, Line, Svg} from 'react-native-svg';
+import {SvgXml} from 'react-native-svg';
 import {SECONDARY_COLOR, WHITE} from '../styles/Fonts&Colors';
-import {EMAIL_SVG} from '../constants/ImageConstant';
+
 import {
   HOME_SVG,
   POSTCARD_SVG,
   SETTING_SVG,
   USER_SVG,
 } from '../constants/IconConstant';
-import {useFocusEffect} from '@react-navigation/native';
 import PaymentHistory from '../screens/history';
 
 const Tab = createBottomTabNavigator();
+
+const getRouteName = route => {
+  const hideOnRoute = ['Chat'];
+  const routeName = getFocusedRouteNameFromRoute(route);
+  if (routeName != undefined) {
+    if (routeName.includes('Chat')) {
+      return 'none';
+    }
+    return 'flex';
+  }
+};
 
 const TabBarIcon = ({focused, src}) => {
   const ActiveBar = useRef(new Animated.Value(0)).current;
@@ -79,11 +91,15 @@ const BottomTab = () => (
     <Tab.Screen
       name="SettingStack"
       component={SettingStack}
-      options={{
+      options={({route, navigation}) => ({
+        tabBarStyle: {
+          ...styles.tabBarContainer,
+          display: getRouteName(route),
+        },
         tabBarIcon: ({focused}) => (
           <TabBarIcon focused={focused} src={SETTING_SVG} />
         ),
-      }}
+      })}
     />
     <Tab.Screen
       name="PaymentHistory"

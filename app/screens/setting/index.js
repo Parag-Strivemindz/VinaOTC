@@ -79,7 +79,11 @@ const Setting = ({navigation}) => {
         containerStyles={{
           paddingTop: HP(HEADER_HEIGHT + PADDING_VERTICAL),
         }}>
-        <ItemContainer icon={CHAT} title={'Chat With Us'} />
+        <ItemContainer
+          icon={CHAT}
+          title={'Chat With Us'}
+          callback={() => navigateTo('Chat')}
+        />
         <ItemContainer
           icon={SERVICES}
           title={'Help & Support'}

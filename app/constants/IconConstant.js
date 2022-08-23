@@ -36,8 +36,14 @@ import RADIO from '../assets/icons/radiosvg.svg';
 import CLOSE_SVG from '../assets/icons/close.svg';
 import ATTACH_SVG from '../assets/icons/attachment.svg';
 import NOTIFICATION_SVG from '../assets/icons/notification.svg';
+import ARROWSHARES_SVG from '../assets/icons/arrow_Shares.svg';
+import FILE_SVG from '../assets/icons/file.svg';
+import CAMERA_SVG from '../assets/icons/camera.svg';
 
 export {
+  FILE_SVG,
+  CAMERA_SVG,
+  ARROWSHARES_SVG,
   NOTIFICATION_SVG,
   ATTACH_SVG,
   CLOSE_SVG,

@@ -28,9 +28,11 @@ import {
 } from '../../styles/Fonts&Colors';
 import {
   ATTACH_SVG,
+  CAMERA_SVG,
   CIRCLE,
   CLOSE_SVG,
   ERROR,
+  FILE_SVG,
   RADIO,
 } from '../../constants/IconConstant';
 
@@ -44,10 +46,12 @@ const filerItems = [
   {
     id: '1',
     name: 'File',
+    icon: FILE_SVG,
   },
   {
     id: '2',
     name: 'Camera',
+    icon: CAMERA_SVG,
   },
 ];
 const data = [
@@ -192,11 +196,7 @@ const AddFund = () => {
               // marginTop: HP(15),
             }}>
             <RowContainer style={{alignItems: 'center'}}>
-              {selectedItem === item.name ? (
-                <SvgXml xml={CIRCLE} />
-              ) : (
-                <SvgXml xml={CIRCLE} />
-              )}
+              <SvgXml xml={item.icon} />
               <Text
                 style={{
                   marginLeft: WP(15),
@@ -342,8 +342,9 @@ const AddFund = () => {
             backgroundColor: WHITE,
           }}>
           <RowContainer
+            callback={() => close()}
             style={{
-              alingItems: 'center',
+              alignItems: 'center',
               paddingHorizontal: PADDING_HORIZONTAL,
             }}>
             <SvgXml xml={ATTACH_SVG} style={{marginRight: WP(20)}} />

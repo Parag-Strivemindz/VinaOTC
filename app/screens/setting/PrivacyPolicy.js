@@ -1,20 +1,62 @@
-import {View, Text} from 'react-native';
+import {View, Text, ActivityIndicator} from 'react-native';
 import React from 'react';
+import WebView from 'react-native-webview';
+
 import CommonHeader from '../../component/CommonHeader';
 import Container from '../../component/Container';
-import {POPPINS_REGULAR} from '../../styles/Fonts&Colors';
-import {WP} from '../../styles/Dimesions';
-import {
-  HEADER_HEIGHT,
-  PADDING_HORIZONTAL,
-  PADDING_VERTICAL,
-} from '../../styles/GlobalStyles';
+
+import {BALCK, ROBOTO_MEDIUM, SECONDARY_COLOR} from '../../styles/Fonts&Colors';
+import {CONTAINER_PADDINGTOP} from '../../styles/GlobalStyles';
 
 const PrivacyPolicy = () => {
+  function OnErrorShow({errorDomain, errorCode, errorDesc}) {
+    console.log(errorDomain);
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text
+          style={{
+            fontSize: 15,
+            color: BALCK,
+            fontFamily: ROBOTO_MEDIUM,
+          }}>
+          Something Went Wrong...
+        </Text>
+      </View>
+    );
+  }
+
+  function OnLoading() {
+    return (
+      <View style={{flex: 1}}>
+        <ActivityIndicator animating size={'large'} color={SECONDARY_COLOR} />
+      </View>
+    );
+  }
+
   return (
     <View style={{flex: 1}}>
-      <CommonHeader title={'Privacy Policy'} />
-      <Container
+      <WebView
+        onError={({event}) => {
+          console.log(event);
+        }}
+        onLoadProgress={OnLoading}
+        onHttpError={event => {
+          console.log(event.nativeEvent);
+        }}
+        renderError={OnErrorShow}
+        bounces={false}
+        source={{
+          uri: 'https://vinaotc.com/backend/api/privacy_policy?lang=en',
+        }}
+      />
+    </View>
+  );
+};
+
+export default PrivacyPolicy;
+
+{
+  /* <Container
         containerStyles={{
           paddingTop: HEADER_HEIGHT + PADDING_VERTICAL,
           paddingHorizontal: PADDING_HORIZONTAL,
@@ -43,9 +85,5 @@ const PrivacyPolicy = () => {
           spread sheet list in a .csv format. Click here to view an example. If
           you need assistance, watch the helper video or contact us
         </Text>
-      </Container>
-    </View>
-  );
-};
-
-export default PrivacyPolicy;
+      </Container> */
+}

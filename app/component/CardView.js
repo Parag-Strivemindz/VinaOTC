@@ -97,7 +97,7 @@ const CardView = ({callback, url}) => {
       {/**
        * Bank Details
        */}
-      <RowContainer>
+      <RowContainer callback={() => callback != undefined && callback()}>
         {RenderBack(url)}
         <View style={{alignItems: 'flex-end', position: 'absolute', right: 0}}>
           {<SvgXml xml={ZIGZAG_SVG_1} style={{marginRight: 5}} />}
@@ -105,7 +105,7 @@ const CardView = ({callback, url}) => {
         </View>
       </RowContainer>
       <CardViewDivider />
-      <RowContainer>
+      <RowContainer callback={() => callback != undefined && callback()}>
         <View>
           <Text style={styles.invest}>Invested</Text>
           <Text style={styles.value}>$200</Text>

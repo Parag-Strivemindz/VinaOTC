@@ -4,7 +4,6 @@ import React from 'react';
 const RowContainer = ({children, style, callback}) => {
   return (
     <Pressable
-      
       onPress={() => {
         callback != undefined && callback();
       }}
