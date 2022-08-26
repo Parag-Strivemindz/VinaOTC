@@ -12,10 +12,8 @@ import CommonHeader from '../../component/CommonHeader';
 import {ARROW_DIGONAL, BANK_LOGO} from '../../constants/IconConstant';
 import {PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
 
-const AllPortfolio = ({navigation}) => {
-  const navigateTo = useCallback(screenName => {
-    navigation.navigate(screenName);
-  }, []);
+const AllPortfolio = ({navigation, route}) => {
+  const {walletDetails, allPortfolio, navigateTo} = route.params.data;
 
   const rightItem = () => <SvgXml xml={ARROW_DIGONAL} onPress={() => {}} />;
 
@@ -29,28 +27,12 @@ const AllPortfolio = ({navigation}) => {
         <RowContainer style={styles.subHaeaderContainer}>
           <View>
             <Text numberOfLines={1} style={styles.titleTxt}>
-              $78676.33
+              {walletDetails.data ? walletDetails.data : '0'}
             </Text>
             <Text style={[styles.subtitleTxt, {marginTop: HP(10)}]}>
               Total Portfolio
             </Text>
             <HifenDivider style={styles.hiffenDivider} />
-            <Text style={styles.subtitleTxt}>
-              Total Investment{'  '}
-              <Text style={{color: SECONDARY_COLOR}}>$7878.00</Text>
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.profit}>+15.06%</Text>
-            <Text
-              style={[
-                styles.subtitleTxt,
-                {
-                  marginTop: HP(20),
-                },
-              ]}>
-              Weekly Change
-            </Text>
           </View>
           <View style={styles.dividerContainer}>
             <Image
@@ -68,11 +50,19 @@ const AllPortfolio = ({navigation}) => {
            * List of  Portfolio
            */}
           <View style={{marginTop: 10}}>
-            <CardView
-              callback={() => navigateTo('Portfolio')}
-              url={BANK_LOGO}></CardView>
-            <CardView url={BANK_LOGO}></CardView>
-            <CardView url={BANK_LOGO}></CardView>
+            {allPortfolio.data.map((item, index) => {
+              return (
+                <CardView
+                  key={index.toString()}
+                  data={item}
+                  callback={() =>
+                    navigateTo('Portfolio', {
+                      stockId: allPortfolio.stock_id,
+                    })
+                  }
+                />
+              );
+            })}
           </View>
         </View>
       </Container>

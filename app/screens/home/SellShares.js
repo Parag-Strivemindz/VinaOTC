@@ -44,7 +44,7 @@ const data = [
   },
 ];
 
-const SellShare = () => {
+const SellShares = () => {
   const [getter, setter] = useState({
     ammount: '',
   });
@@ -256,4 +256,4 @@ const SellShare = () => {
   );
 };
 
-export default SellShare;
+export default SellShares;

@@ -1,32 +1,47 @@
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import RowContainer from './RowContainer';
 import {SvgXml} from 'react-native-svg';
-import {
-  LINE_SVG,
-  ZIGZAG_SVG,
-  ZIGZAG_SVG_1,
-  LINE_SVG_1,
-} from '../constants/IconConstant';
+
+import RowContainer from './RowContainer';
+
+import {ZIGZAG_SVG, ZIGZAG_SVG_1, LINE_SVG_1} from '../constants/IconConstant';
+import CardViewDivider from './CardViewDivider';
+
 import {
   BACKGROUND_COLOR,
-  POPPINS_BOLD,
   POPPINS_MEDIUM,
   POPPINS_REGULAR,
+  ROBOTO_REGULAR,
+  SECONDARY_COLOR,
   WHITE,
 } from '../styles/Fonts&Colors';
-import CardViewDivider from './CardViewDivider';
 import {WP} from '../styles/Dimesions';
-import {getItem} from '../utils/AsyncStorage';
 
-const CardView = ({callback, url}) => {
+const GrowthAndEquity = (
+  <Text
+    style={{
+      color: WHITE,
+      fontFamily: POPPINS_REGULAR,
+      fontSize: 12,
+      marginVertical: 2,
+    }}>
+    Growth | Equity - Sectoral/Thematic
+  </Text>
+);
+
+const CardView = ({callback, url, data}) => {
+  const {
+    total_price,
+    stock_amount,
+    order_type,
+    qty,
+    title,
+    stock_id,
+    status,
+    code,
+    created_at,
+  } = data;
+
   const RenderBack = url => {
     return (
       <View>
@@ -34,7 +49,7 @@ const CardView = ({callback, url}) => {
           <>
             <Text
               style={{color: WHITE, fontFamily: POPPINS_MEDIUM, fontSize: 14}}>
-              HDFC BANK
+              {title}
             </Text>
             <Text
               style={{
@@ -43,15 +58,18 @@ const CardView = ({callback, url}) => {
                 fontSize: 12,
                 marginVertical: 2,
               }}>
-              Growth | Equity - Sectoral/Thematic
+              {code}
             </Text>
+            {/**
+             * Stock and Equity
+             */}
             <Text
               style={{
                 color: '#FFA500',
                 fontFamily: POPPINS_REGULAR,
                 fontSize: 12,
               }}>
-              Stock Allocted - 11
+              Stock Allocted - {qty || 0}
             </Text>
           </>
         ) : (
@@ -64,17 +82,11 @@ const CardView = ({callback, url}) => {
                   fontFamily: POPPINS_MEDIUM,
                   fontSize: 14,
                 }}>
-                HDFC BANK
+                {title}
               </Text>
-              <Text
-                style={{
-                  color: WHITE,
-                  fontFamily: POPPINS_REGULAR,
-                  fontSize: 12,
-                  marginVertical: 2,
-                }}>
-                Growth | Equity - Sectoral/Thematic
-              </Text>
+              {/**
+               * Stock and Equity
+               */}
             </View>
           </RowContainer>
         )}
@@ -90,38 +102,86 @@ const CardView = ({callback, url}) => {
         left: 10,
         right: 10,
       }}
-      style={styles.container}
-      onPressIn={() => {
+      style={[styles.container, {paddingTop: 30}]}
+      onPress={() => {
         callback != undefined && callback();
       }}>
       {/**
        * Bank Details
        */}
-      <RowContainer callback={() => callback != undefined && callback()}>
+      <RowContainer
+        callback={() => {
+          const closurefunction = callback();
+          closurefunction({
+            CodeId: code,
+            stockAmout: stock_amount,
+            title: title,
+            created_at: created_at,
+          });
+        }}>
         {RenderBack(url)}
-        <View style={{alignItems: 'flex-end', position: 'absolute', right: 0}}>
-          {<SvgXml xml={ZIGZAG_SVG_1} style={{marginRight: 5}} />}
-          {<SvgXml xml={LINE_SVG_1} style={{bottom: 14}} />}
-        </View>
+        <Text
+          style={{
+            color: SECONDARY_COLOR,
+            fontSize: WP(14),
+            fontFamily: ROBOTO_REGULAR,
+            textTransform: 'capitalize',
+          }}>
+          {order_type}
+        </Text>
       </RowContainer>
       <CardViewDivider />
       <RowContainer callback={() => callback != undefined && callback()}>
         <View>
           <Text style={styles.invest}>Invested</Text>
-          <Text style={styles.value}>$200</Text>
+          <Text style={styles.value}>{total_price}</Text>
         </View>
         <View>
           <Text style={styles.invest}>Current</Text>
-          <Text style={styles.value}>$500</Text>
+          <Text style={styles.value}>{stock_amount}</Text>
         </View>
         <View>
-          <Text style={[styles.invest, {color: '#E94E1B'}]}>Returns</Text>
           <Text
-            style={[styles.value, {alignSelf: 'flex-end', color: '#E94E1B'}]}>
-            -400
+            style={[
+              styles.invest,
+              {color: status ? WHITE : '#E94E1B', textTransform: 'capitalize'},
+            ]}>
+            {status ? 'status' : 'Returns'}
+          </Text>
+          <Text
+            style={[
+              styles.value,
+              {
+                alignSelf: 'flex-end',
+                color: '#E94E1B',
+                textTransform: 'capitalize',
+                fontFamily: POPPINS_MEDIUM,
+                fontSize: WP(15),
+              },
+            ]}>
+            {status ? status : '-400'}
           </Text>
         </View>
       </RowContainer>
+      <View
+        style={{
+          alignItems: 'flex-end',
+          position: 'absolute',
+          right: 10,
+          top: 5,
+        }}>
+        {status != 'pending' ? (
+          <>
+            <SvgXml xml={ZIGZAG_SVG} style={{marginRight: 5}} />
+            <SvgXml xml={LINE_SVG_1} style={{bottom: 3}} />
+          </>
+        ) : (
+          <>
+            <SvgXml xml={ZIGZAG_SVG_1} style={{marginRight: 5}} />
+            <SvgXml xml={LINE_SVG_1} style={{bottom: 14}} />
+          </>
+        )}
+      </View>
     </Pressable>
   );
 };
@@ -144,7 +204,7 @@ const styles = StyleSheet.create({
   invest: {
     color: '#01C400',
     fontFamily: POPPINS_MEDIUM,
-    fontSize: 14,
+    fontSize: WP(14),
     alignSelf: 'center',
   },
   value: {

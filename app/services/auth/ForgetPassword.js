@@ -1,5 +1,6 @@
 import {postRequest} from '../../utils/AxiosRequest';
-import ApiConstants from '../../constants/ApiConstants';
+import env from '../../config/env';
+import SnackBar from '../../component/SnackBar';
 
 function errorhandler(error) {
   if (error.response) {
@@ -7,6 +8,7 @@ function errorhandler(error) {
     // that falls out of the range of 2xx
     console.log(JSON.stringify(error.response) + ' server Response');
     if (error.response.data) {
+      SnackBar(error.response.data.message);
       alert(error.response.data.message);
     }
     if (error.response.status > 200) {
@@ -25,29 +27,42 @@ function errorhandler(error) {
   // console.log(error.config);
 }
 
+function onResponseHandler(res, setter) {
+  if (res.data.status === 400 || res.data.status === 401) {
+    setter(prev => ({
+      ...prev,
+      isLoading: false,
+    }));
+    SnackBar(res.data.message);
+  }
+  if (res.data.status === 200) {
+    setter(prev => ({
+      ...prev,
+      isLoading: false,
+      isLinkSend: true,
+    }));
+    SnackBar(res.data.message);
+  }
+}
+
 const ForgetPassword = (email, setter) => dispatch => {
   try {
     setter(prev => ({
       ...prev,
       isLoading: true,
     }));
-    postRequest(ApiConstants.FORGET_PASSWORD, {
-      email: email,
+    postRequest(env.FORGET_PASSWORD, {
+      Email: email,
     })
       .then(res => {
-        setter(prev => ({
-          ...prev,
-          isLoading: false,
-          isOtpSend: true,
-        }));
+        onResponseHandler(res, setter);
       })
       .catch(error => {
         setter(prev => ({
           ...prev,
           isLoading: false,
-          isOtpSend: false,
+          isLinkSend: false,
         }));
-        // console.log(error);
         errorhandler(error);
       });
   } catch (error) {

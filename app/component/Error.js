@@ -1,11 +1,22 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {Component, PureComponent} from 'react';
 
-const Error = ({message, color, fontSize}) => {
-  return (
-    <Text style={[styles.erroMessageTxt, {color, fontSize}]}>{message}</Text>
-  );
-};
+class Error extends PureComponent {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <Text
+        style={[
+          styles.erroMessageTxt,
+          {color: this.props.color, fontSize: this.props.fontSize},
+        ]}>
+        {this.props.message}
+      </Text>
+    );
+  }
+}
 
 export default Error;
 

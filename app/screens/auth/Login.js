@@ -13,24 +13,26 @@ import {useFocusEffect} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 
 import strings from '../../utils/Localization';
-import {WP, HP} from '../../styles/Dimesions';
 import {loginUser} from '../../services/auth';
 import {emailVerification} from '../../utils/Validation';
 import FieldInput from './common/FieldInput';
+import CommonAuthComponent from './common/ImageHeader';
+import ActionButton from '../../component/ActionButton';
+import Container from './common/Container';
+import Picker from '../../component/MenuItem';
+import {Selector} from '../../store/redux/user/index';
+import {setItem} from '../../utils/AsyncStorage';
+import {APP_LANGUAGE} from '../../constants/AppConstant';
+
+import {WP, HP} from '../../styles/Dimesions';
 import styles from './Styles';
+import {BACKGROUND_COLOR} from '../../styles/Fonts&Colors';
 import {
   LOCK_SVG,
   LOGIN_CENTER_IMAGE,
   EMAIL_SVG,
 } from '../../constants/ImageConstant';
-import CommonAuthComponent from './common/ImageHeader';
-import ActionButton from '../../component/ActionButton';
-import Container from './common/Container';
-import {BACKGROUND_COLOR} from '../../styles/Fonts&Colors';
-import Picker from '../../component/MenuItem';
-import {Selector} from '../../store/redux/localization';
-import {setItem} from '../../utils/AsyncStorage';
-import {APP_LANGUAGE} from '../../constants/AppConstant';
+import Loader from '../../component/Loader';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -51,6 +53,8 @@ const Login = ({navigation}) => {
     language: {value: 'English', shortForm: 'en'},
     isVisible: false,
   });
+
+  const userState = useSelector(Selector.User_Info);
 
   const languageChange = item => {
     try {
@@ -173,17 +177,18 @@ const Login = ({navigation}) => {
               {strings.Forgetpassword}
             </Text>
             <ActionButton
+              disabled={userState.isLoading ? true : false}
               callBack={makeLoginCall}
               style={{
                 marginTop: HP(58),
                 width: WP(200),
                 alignSelf: 'center',
               }}>
-              {/* {state.isLoading ? (
+              {userState.isLoading ? (
                 <Loader size={'small'} color={'#fff'} />
               ) : (
-              )} */}
-              <Text style={styles.loginTxt}>{strings.login}</Text>
+                <Text style={styles.loginTxt}>{strings.login}</Text>
+              )}
             </ActionButton>
           </View>
           <Pressable

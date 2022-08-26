@@ -5,16 +5,25 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  Text,
 } from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import Proptypes from 'prop-types';
+import Animated, {
+  FadeIn,
+  FadeOut,
+  Easing,
+  SlideInDown,
+  SlideInUp,
+  SlideOutDown,
+  SlideOutUp,
+  SlideInRight,
+} from 'react-native-reanimated';
 
 import {HP} from '../../../styles/Dimesions';
-import Error from '../../../component/Error';
 import {HIDE_ICON, SHOW_ICON} from '../../../constants/IconConstant';
 import {
   BALCK,
-  BORDER_WHITE,
   PLACEHOLDER_WHITE,
   SECONDARY_COLOR,
   WHITE,
@@ -22,6 +31,8 @@ import {
   WHITE_50,
 } from '../../../styles/Fonts&Colors';
 import Styles from '../Styles';
+
+const AnimatedError = Animated.createAnimatedComponent(Text);
 
 const FieldInput = ({
   value,
@@ -139,7 +150,12 @@ const FieldInput = ({
         </View>
       }
       {errorMessage != '' && (
-        <Error message={errorMessage} color={'red'} fontSize={12} />
+        <AnimatedError
+          style={[styles.erroMessageTxt]}
+          entering={SlideInDown.easing(Easing.linear).duration(500)}
+          exiting={FadeOut}>
+          {errorMessage}
+        </AnimatedError>
       )}
     </View>
   );
@@ -172,6 +188,10 @@ const styles = StyleSheet.create({
     right: 20,
     bottom: 20,
   },
+  erroMessageTxt: {
+    color: 'red',
+    fontSize: 12,
+  },
 });
 
 FieldInput.Proptypes = {
@@ -186,4 +206,4 @@ FieldInput.Proptypes = {
   placeholdercolor: Proptypes.string,
 };
 
-export default FieldInput;
+export default React.memo(FieldInput);

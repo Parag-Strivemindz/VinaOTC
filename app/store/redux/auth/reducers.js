@@ -1,15 +1,9 @@
-import {
-  SLICE_NAME,
-  LOGOUT,
-  USER_INFO,
-  FORGET_PASSWORD,
-  LOGIN,
-} from './ActionTypes';
+import {LOGOUT, USER_INFO, FORGET_PASSWORD, LOGIN} from './ActionTypes';
 
 const initialState = {
   loginData: {
     isLoading: false,
-    data: [],
+    data: null,
     error: null,
   },
   forgetPassword: {
@@ -26,7 +20,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case LOGIN:
+    case USER_INFO:
       return {
         ...state,
         loginData: {

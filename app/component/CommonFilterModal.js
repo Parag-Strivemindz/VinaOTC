@@ -9,13 +9,20 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 
-const CommonFilterModal = ({children, containerStyle, close, getter}) => {
+const CommonFilterModal = ({
+  children,
+  containerStyle,
+  close,
+  isVisible,
+  style,
+}) => {
   return (
     <Modal
       transparent
       animationType="fade"
-      visible={getter.isVisible}
-      onRequestClose={close}>
+      visible={isVisible}
+      onRequestClose={close}
+      {...style}>
       <TouchableOpacity
         activeOpacity={1}
         onPress={() => close()}

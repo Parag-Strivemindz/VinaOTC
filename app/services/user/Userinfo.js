@@ -1,19 +1,19 @@
-import {postRequest} from '../../utils/AxiosRequest';
-import {setItem} from '../../utils/AsyncStorage';
-import {AUTH_LOGIN, USER_ID} from '../../constants/AppConstant';
-import env from '../../config/env';
-import {USER_INFO} from '../../store/redux/user/ActionTypes';
+import SplashScreen from 'react-native-splash-screen';
 import SnackBar from '../../component/SnackBar';
 
-export function errorhandler(error) {
+import env from '../../config/env';
+import {USER_ID} from '../../constants/AppConstant';
+import {USER_INFO} from '../../store/redux/user/ActionTypes';
+import {getItem} from '../../utils/AsyncStorage';
+import {postRequestWithHeader} from '../../utils/AxiosRequest';
+
+function errorhandler(error, dispatch) {
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
     // console.log(JSON.stringify(error.response) + ' server Response');
     if (error.response.data) {
-      SnackBar(error.response.data.message);
-      console.log(error.response.data);
-      // alert(error.response.data.message);
+      alert(error.response.data.message);
     }
     if (error.response.status > 200) {
       // alert(error.response.status);
@@ -31,7 +31,7 @@ export function errorhandler(error) {
   // console.log(error.config);
 }
 
-function checkCredentials(res, dispatch) {
+function responseHandler(res, dispatch) {
   if (res.data.status === 400 || res.data.status === 401) {
     dispatch({
       type: USER_INFO,
@@ -41,59 +41,51 @@ function checkCredentials(res, dispatch) {
         error: null,
       },
     });
+    // SplashScreen.hide();
     SnackBar(res.data.message);
   }
   if (res.data.status === 200) {
-    const {api_token, UserID} = res?.data.data;
-    // console.log(res.data + ' User Login token');
-    const setAuthToken = setItem(AUTH_LOGIN, api_token);
-    const setUserId = setItem(USER_ID, JSON.stringify(UserID));
-
-    Promise.all([setAuthToken, setUserId]);
-
+    // console.log(JSON.stringify(res.data) + ' User_INFO Data');
     dispatch({
       type: USER_INFO,
       payload: {
         isLoading: false,
         data: {
-          ...res?.data.data,
+          ...res.data.data,
         },
         error: null,
       },
     });
-    SnackBar(res.data.message);
+    // SplashScreen.hide();
   }
 }
 
-export default loginUser = (email, password) => dispatch => {
+const getUserInfo = isLoader => async dispatch => {
   try {
-    dispatch({
-      type: USER_INFO,
-      payload: {
-        isLoading: true,
-        data: null,
-        error: null,
-      },
-    });
-    postRequest(env.LOCAL_LOGIN, {
-      Email: email,
-      Password: password,
-    })
+    isLoader(true);
+    const userId = await getItem(USER_ID);
+    postRequestWithHeader(env.GET_PROFILE_DETAILS, {UserID: userId})
       .then(res => {
-        checkCredentials(res, dispatch);
+        responseHandler(res, dispatch);
+        isLoader(false);
       })
-      .catch(err => {
-        errorhandler(err);
+      .catch(e => {
+        errorhandler(e);
+        isLoader(false);
         dispatch({
           type: USER_INFO,
           payload: {
-            data: null,
             isLoading: false,
+            data: null,
             error: 'Somthing Went Wrong...',
           },
         });
       });
-  } catch (error) {
-    console.error(error);
+  } catch (e) {
+    console.error(e + ' coming from UserInfo');
+  } finally {
+    console.log('finally');
   }
 };
+
+export default getUserInfo;

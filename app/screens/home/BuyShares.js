@@ -1,16 +1,17 @@
 import {View, Text, Image} from 'react-native';
 import React, {useCallback, useState} from 'react';
+import {useSelector} from 'react-redux';
 
-import styles from './styles';
+import {Selector} from '../../store/redux/dashboard';
 import CommonHeader from '../../component/CommonHeader';
 import Container from '../../component/Container';
-import TestData from './Testdata.json';
 import ActionButton from '../../component/ActionButton';
 import CardViewDivider from '../../component/CardViewDivider';
 import RowContainer from '../../component/RowContainer';
 import FieldInput from '../auth/common/FieldInput';
 
 import {WP, HP} from '../../styles/Dimesions';
+import styles from './styles';
 import GlobalStyles, {
   CONTAINER_PADDINGTOP,
   PADDING_HORIZONTAL,
@@ -21,16 +22,9 @@ import {
   WHITE,
   SECONDARY_COLOR,
   ROBOTO_MEDIUM,
-  WHITE_50,
-  MONTSERRAT_REGULAR,
   MONTSERRAT_MEDIUM,
 } from '../../styles/Fonts&Colors';
-import {
-  ARROWSHARES_SVG,
-  ARROW_DIGONAL,
-  ARROW_DOWN,
-  CLOCK,
-} from '../../constants/IconConstant';
+import {ARROWSHARES_SVG, CLOCK} from '../../constants/IconConstant';
 
 const data = [
   {
@@ -50,7 +44,41 @@ const data = [
   },
 ];
 
-const BuyShares = ({navigation}) => {
+function NumberShares({title, data}) {
+  return (
+    <RowContainer
+      style={{
+        alingItems: 'center',
+        paddingVertical: HP(8),
+      }}>
+      <Text
+        numberOfLines={1}
+        style={{
+          width: '50%',
+          fontFamily: ROBOTO_REGULAR,
+          color: WHITE,
+          alignSelf: 'flex-start',
+        }}>
+        {title}
+      </Text>
+      <Text
+        style={{
+          width: '50%',
+          fontFamily: ROBOTO_REGULAR,
+          color: SECONDARY_COLOR,
+        }}>
+        {data}
+      </Text>
+    </RowContainer>
+  );
+}
+
+const BuyShares = ({navigation, route}) => {
+  const walletDetails = useSelector(Selector.WALLET_DETAILS);
+  const stockView = useSelector(Selector.STOCK_VIEW);
+
+  const {title, created_at, CodeId, stockAmout} = route.params;
+
   const [getter, setter] = useState({
     ammount: '',
   });
@@ -73,6 +101,8 @@ const BuyShares = ({navigation}) => {
     [getter, setter],
   );
 
+  console.log(stockView);
+
   return (
     <View style={{flex: 1}}>
       <CommonHeader title="Buy Shares" />
@@ -80,54 +110,53 @@ const BuyShares = ({navigation}) => {
         scrollViewContainerStyle={{
           paddingTop: CONTAINER_PADDINGTOP,
         }}>
-        {TestData.map((item, index) => {
-          return (
-            <View
-              key={item.id}
-              style={[
-                styles.itemContainer,
-                {
-                  backgroundColor: index % 2 === 0 ? '#01C4000F' : undefined,
-                },
-              ]}>
-              <View>
-                <Text style={styles.itemContainerLeftTitTxt}>{item.title}</Text>
-                <RowContainer style={{marginTop: HP(10), alignItems: 'center'}}>
-                  <Image
-                    source={CLOCK}
-                    style={{
-                      width: 14,
-                      height: 14,
-                      tintColor: WHITE,
-                      marginRight: 13,
-                    }}
-                  />
-                  <Text style={styles.itemContainerLeftSubTitTxt}>
-                    {item.time}
-                  </Text>
-                </RowContainer>
-              </View>
-              <View>
-                <Text
-                  style={[
-                    styles.itemContainerLeftTitTxt,
-                    {alignSelf: 'flex-end', fontSize: WP(14)},
-                  ]}>
-                  {item.value}
-                </Text>
-                <Text
-                  style={{
-                    marginTop: HP(10),
-                    color: SECONDARY_COLOR,
-                    fontFamily: ROBOTO_MEDIUM,
-                    fontSize: WP(12),
-                  }}>
-                  {item.statistics}
-                </Text>
-              </View>
-            </View>
-          );
-        })}
+        <View
+          style={[
+            styles.itemContainer,
+            {
+              backgroundColor: '#01C4000F',
+            },
+          ]}>
+          <View>
+            <Text style={styles.itemContainerLeftTitTxt}>{title}</Text>
+            <RowContainer
+              style={{
+                marginTop: HP(10),
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+              }}>
+              <Image
+                resizeMode="center"
+                source={CLOCK}
+                style={{
+                  width: 14,
+                  height: 14,
+                  tintColor: WHITE,
+                  marginRight: HP(5),
+                }}
+              />
+              <Text style={styles.itemContainerLeftSubTitTxt}>
+                {created_at.slice(-9)} |<Text> {CodeId}</Text>
+              </Text>
+            </RowContainer>
+          </View>
+          <Text
+            style={[
+              styles.itemContainerLeftTitTxt,
+              {fontSize: WP(14), alignSelf: 'flex-start'},
+            ]}>
+            {stockAmout}$
+          </Text>
+          {/* <Text
+              style={{
+                marginTop: HP(10),
+                color: SECONDARY_COLOR,
+                fontFamily: ROBOTO_MEDIUM,
+                fontSize: WP(12),
+              }}>
+              {item.statistics}
+            </Text> */}
+        </View>
         <CardViewDivider style={{maringVertical: HP(10)}} />
         <FieldInput
           iconLeft={ARROWSHARES_SVG}
@@ -147,43 +176,29 @@ const BuyShares = ({navigation}) => {
             marginVertical: HP(30),
           }}
         />
-        <View style={{paddingHorizontal: PADDING_HORIZONTAL}}>
-          <View
-            style={[
-              GlobalStyles.dropShadow,
-              {
-                borderWidth: 0,
-                paddingHorizontal: PADDING_HORIZONTAL,
-                paddingVertical: HP(12),
-              },
-            ]}>
-            {data.map(item => {
-              return (
-                <RowContainer
-                  style={{alingItems: 'center', paddingVertical: HP(8)}}>
-                  <Text
-                    numberOfLines={1}
-                    style={{
-                      width: '50%',
-                      fontFamily: ROBOTO_REGULAR,
-                      color: WHITE,
-                      alignSelf: 'flex-start',
-                    }}>
-                    {item.name}
-                  </Text>
-                  <Text
-                    style={{
-                      width: '50%',
-                      fontFamily: ROBOTO_REGULAR,
-                      color: SECONDARY_COLOR,
-                    }}>
-                    {item.value}
-                  </Text>
-                </RowContainer>
-              );
-            })}
+        {stockView.data.totalshare > 0 && (
+          <View style={{paddingHorizontal: PADDING_HORIZONTAL}}>
+            <View
+              style={[
+                GlobalStyles.dropShadow,
+                {
+                  borderWidth: 0,
+                  paddingHorizontal: PADDING_HORIZONTAL,
+                  paddingVertical: HP(12),
+                },
+              ]}>
+              <NumberShares
+                title={'Number of Shares'}
+                data={stockView.data.totalShares}></NumberShares>
+              <NumberShares
+                title={'Price per share'}
+                data={stockView.data.pricepershare}></NumberShares>
+              <NumberShares
+                title={'Total Price'}
+                data={stockView.data.totalprice}></NumberShares>
+            </View>
           </View>
-        </View>
+        )}
         <CardViewDivider
           style={{
             marginVertical: HP(30),
@@ -219,7 +234,7 @@ const BuyShares = ({navigation}) => {
                 color: WHITE,
                 fontSize: WP(25),
               }}>
-              $12,000
+              ${walletDetails.data.data}
             </Text>
           </View>
           <View

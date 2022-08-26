@@ -1,5 +1,6 @@
 import {postRequest} from '../../utils/AxiosRequest';
-import {devEnviromentVariables} from '../../config/env';
+import env from '../../config/env';
+import SnackBar from '../../component/SnackBar';
 
 function errorhandler(error) {
   if (error.response) {
@@ -7,7 +8,8 @@ function errorhandler(error) {
     // that falls out of the range of 2xx
     console.log(JSON.stringify(error.response) + ' server Response');
     if (error.response.data) {
-      alert(error.response.data.message);
+      SnackBar(error.response.data.message);
+      // alert(error.response.data.message);
     }
     if (error.response.status > 200) {
       // alert(error.response.status);
@@ -25,37 +27,49 @@ function errorhandler(error) {
   // console.log(error.config);
 }
 
-export default Register =
-  (fullName, email, password, setRegister) => dispatch => {
-    try {
-      setRegister(prev => ({
-        ...prev,
-        isRegister: false,
-        isLoading: true,
-      }));
-      postRequest(devEnviromentVariables.LOCAL_REGISTER, {
-        fullName,
-        email,
-        password,
+function responseHandler(res, setter) {
+  if (res.data.status === 400) {
+    setter(prev => ({
+      ...prev,
+      isLoading: false,
+    }));
+    SnackBar(res.data.message);
+  }
+
+  if (res.data.status === 200) {
+    console.log(res.data + ' User Login token');
+
+    setter(prev => ({
+      ...prev,
+      isLoading: false,
+    }));
+    SnackBar(res.data.message);
+  }
+}
+
+export default Register = (fullName, email, password, setter) => dispatch => {
+  try {
+    setter(prev => ({
+      ...prev,
+      isLoading: true,
+    }));
+    postRequest(env.LOCAL_REGISTER, {
+      FullName: fullName,
+      Email: email,
+      Password: password,
+    })
+      .then(res => {
+        responseHandler(res, setter);
       })
-        .then(res => {
-          console.log(JSON.stringify(res) + ' response');
-          setRegister(prev => ({
-            ...prev,
-            isLoading: false,
-            isRegister: true,
-          }));
-        })
-        .catch(error => {
-          errorhandler(error);
-          // console.log(error + ' error From Regiseter');
-          setRegister(prev => ({
-            ...prev,
-            isLoading: false,
-            isRegister: false,
-          }));
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+      .catch(error => {
+        errorhandler(error);
+        // console.log(error + ' error From Regiseter');
+        setter(prev => ({
+          ...prev,
+          isLoading: false,
+        }));
+      });
+  } catch (error) {
+    console.error(error);
+  }
+};

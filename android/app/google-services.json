@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "952060014614",
+    "project_id": "vinaotc-chat",
+    "storage_bucket": "vinaotc-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952060014614:android:3e26b1ebf3da70a6890537",
+        "android_client_info": {
+          "package_name": "com.vinaotc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "952060014614-cphl787siv8uf3843hvl7ppb0gns81tq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vinaotc",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "952060014614-9gifh2cpblmia4cc5l57n05r1gp2cilq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPT721XjyKUuWp-4Gk04B9Zyfwh1uiQjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "952060014614-9gifh2cpblmia4cc5l57n05r1gp2cilq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

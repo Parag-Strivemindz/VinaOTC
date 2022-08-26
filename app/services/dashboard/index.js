@@ -1,3 +1,4 @@
 import getStockAction from './StockDetails';
+import GetMyStockPortfolio from './GetMyStockPortfolio';
 
-export {getStockAction};
+export {getStockAction, GetMyStockPortfolio};

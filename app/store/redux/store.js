@@ -1,16 +1,29 @@
-import {applyMiddleware, legacy_createStore as createStore} from 'redux';
-import {combineReducers, StoreEnhancer} from 'redux';
+import {
+  applyMiddleware,
+  legacy_createStore as createStore,
+  combineReducers,
+  compose,
+} from 'redux';
 import thunk from 'redux-thunk';
 import auth from './auth/reducers';
 import dashboard from './dashboard/reducers';
 import Localization from './localization/reducers';
+import userInfoReducer from './user/reducers';
 
-const middleWare = [thunk];
+const middleware = [thunk];
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const enhancer = composeEnhancers(
+  applyMiddleware(...middleware),
+  // other store enhancers if any
+);
 
 const rootReducer = combineReducers({
   auth,
   dashboard,
   local: Localization,
+  user: userInfoReducer,
 });
 
-export default store = createStore(rootReducer, applyMiddleware(...middleWare));
+export default store = createStore(rootReducer, enhancer);

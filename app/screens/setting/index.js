@@ -1,11 +1,12 @@
 import {Text, View} from 'react-native';
-import React, {useCallback} from 'react';
+import React from 'react';
 import {SvgXml} from 'react-native-svg';
+import {useSelector, useDispatch} from 'react-redux';
 
-import styles from './styles';
 import Container from '../../component/Container';
 import Header from '../../component/Header';
 import RowContainer from '../../component/RowContainer';
+
 import {
   ARROW_BACK,
   CHAT,
@@ -22,17 +23,23 @@ import {
   WHITE,
   WHITE_50,
 } from '../../styles/Fonts&Colors';
+import {SignOut} from '../../services/auth';
 import {HP, WP} from '../../styles/Dimesions';
 import {
   HEADER_HEIGHT,
   PADDING_HORIZONTAL,
   PADDING_VERTICAL,
 } from '../../styles/GlobalStyles';
+import {Selector} from '../../store/redux/user';
 
 const Setting = ({navigation}) => {
+  const userInfo = useSelector(Selector.User_Info);
+
   const navigateTo = screenName => {
     navigation.navigate(screenName);
   };
+
+  const dispatch = useDispatch();
 
   const ItemContainer = ({icon, title, callback}) => {
     return (
@@ -99,7 +106,11 @@ const Setting = ({navigation}) => {
           icon={UNLOCK}
           title={'Change Password'}
         />
-        <ItemContainer icon={LOGOUT} title={'Log Me Out'} />
+        <ItemContainer
+          icon={LOGOUT}
+          title={'Log Me Out'}
+          callback={() => dispatch(SignOut())}
+        />
         <View
           style={{
             width: '100%',

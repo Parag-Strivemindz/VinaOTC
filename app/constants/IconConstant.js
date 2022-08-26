@@ -39,8 +39,10 @@ import NOTIFICATION_SVG from '../assets/icons/notification.svg';
 import ARROWSHARES_SVG from '../assets/icons/arrow_Shares.svg';
 import FILE_SVG from '../assets/icons/file.svg';
 import CAMERA_SVG from '../assets/icons/camera.svg';
+import RIGHT_ARROW_PNG from '../assets/icons/right-arrows.png';
 
 export {
+  RIGHT_ARROW_PNG,
   FILE_SVG,
   CAMERA_SVG,
   ARROWSHARES_SVG,

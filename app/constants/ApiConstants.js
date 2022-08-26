@@ -1,12 +1,32 @@
-import {DEV_API_URL_IDENTITY, PROD_API_URL_IDENTITY} from '@env';
-//Store all of the api end points
-export default {
-  LOGIN: `${PROD_API_URL_IDENTITY}/api/login`,
-  REGISTER: `${PROD_API_URL_IDENTITY}/api/register`,
-  LOCAL_LOGIN: `${DEV_API_URL_IDENTITY}/login`,
-  LOCAL_REGISTER: `${DEV_API_URL_IDENTITY}/register`,
-  OTP_VERFICATION: `${DEV_API_URL_IDENTITY}/verify-otp`,
-  FORGET_PASSWORD: `${DEV_API_URL_IDENTITY}/forgot-password`,
-  VERIFY_FORGOT_OTP: `${DEV_API_URL_IDENTITY}/verify-forgot-otp`,
-  RESET_PASSWORD: `${DEV_API_URL_IDENTITY}/reset-password`,
-};
+//api endPoint
+export const login = 'login';
+export const register = 'registration';
+export const forgot = 'forgot';
+export const updateProfile = 'updateprofile';
+export const apiToken = '?api_token=';
+export const getProfileDetails = 'get_profile_details';
+export const loggedOutUser = 'logout_user';
+export const changePassword = 'changepassword';
+export const getNotification = 'get_notification';
+export const addBankInfo = 'add_bank_info';
+export const bankInfoList = 'bank_info_list';
+export const bankInfoView = 'bank_info_view';
+export const walletsdetails = 'wallets_details';
+export const contactus = 'contact_us';
+export const paymentHistoryListing = 'payment_history';
+export const privacyPolicy = 'privacy_policy';
+export const withdrawFund = 'withdraw_funds';
+export const deposit = 'deposits';
+export const getintouch = 'get_in_touch';
+export const stockListing = 'sotcks_listing';
+export const stockView = 'stocks_view';
+export const buyStock = 'buy_sotcks';
+export const sellStock = 'sell_sotcks';
+export const myStockPortfolioApi = 'my_stocks_portfolio';
+export const depositList = 'deposits_list';
+export const withdrawalList = 'withdrawal_list';
+export const length = '?length=';
+export const start = '?start=';
+export const mySellStockApi = 'my_sell_stocks';
+export const readnotification = 'read_notification';
+export const lang = '?lang=';

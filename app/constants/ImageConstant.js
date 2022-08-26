@@ -7,8 +7,10 @@ import EMAIL_SVG from '../assets/images/email.svg';
 import CIRCLE_SVG from '../assets/images/circle-check.svg';
 import HELPANDSUPPORT from '../assets/images/help_and_support_img.svg';
 import GIRL_PROFILE from '../assets/images/girl_profile.png';
+import LAUNCH_SCREEN from '../assets/images/launch_screen.png';
 
 export {
+  LAUNCH_SCREEN,
   FP_CENTER_IMAGE,
   LOGIN_CENTER_IMAGE,
   VEENA_OTC_LOGO,

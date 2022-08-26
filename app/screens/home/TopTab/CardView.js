@@ -1,26 +1,17 @@
 import React from 'react';
 import {View, StyleSheet, ScrollView, Text, Image} from 'react-native';
-import {useSelector} from 'react-redux';
 
 import {
-  ROBOTO_BOLD,
   ROBOTO_MEDIUM,
-  ROBOTO_REGULAR,
   SECONDARY_COLOR,
   WHITE,
-  WHITE_30,
   WHITE_50,
 } from '../../../styles/Fonts&Colors';
 import {WP, HP} from '../../../styles/Dimesions';
-import {Selector} from '../../../store/redux/dashboard/index';
 import RowContainer from '../../../component/RowContainer';
-import {widthPercentageToDP} from 'react-native-responsive-screen';
 import {CLOCK} from '../../../constants/IconConstant';
 
 const CardView = ({value}) => {
-  const Stock = useSelector(Selector.Stock_Details);
-  // console.log(JSON.stringify(Stock) + ' lengtth');
-
   return (
     <View style={styles.continer}>
       <ScrollView

@@ -1,18 +1,45 @@
 import {Image, Text, View} from 'react-native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 
-import styles from './styles';
+import {GetMyStockPortfolio} from '../../services/dashboard';
+import getStockList from '../../services/dashboard/GetStockList';
+import {Selector} from '../../store/redux/dashboard/index';
+import GetWalletDetails from '../../services/dashboard/GetWalletDetails';
+
+import Loader from '../../component/Loader';
 import Container from '../../component/Container';
 import Header from '../../component/Header';
 import HifenDivider from '../../component/HifenDivider';
-import {SECONDARY_COLOR} from '../../styles/Fonts&Colors';
-import {HP} from '../../styles/Dimesions';
 import RowContainer from '../../component/RowContainer';
 import CardView from '../../component/CardView';
+import StockWebView from '../../component/StockWebView';
+
+import {SECONDARY_COLOR} from '../../styles/Fonts&Colors';
+import styles from './styles';
+import {HP} from '../../styles/Dimesions';
 
 const Home = ({navigation}) => {
+  const myPortfolio = useSelector(Selector.My_Stock_Portfolio);
+  const walletDetails = useSelector(Selector.WALLET_DETAILS);
+  const stockList = useSelector(Selector.STOCK_LIST);
+
   const navigateTo = useCallback(screenName => {
-    navigation.navigate(screenName);
+    return (params = {}) => {
+      navigation.navigate(screenName, {
+        ...params,
+      });
+    };
+  }, []);
+
+  const dispatch = useDispatch();
+
+  console.log(myPortfolio.data);
+
+  useEffect(() => {
+    dispatch(GetMyStockPortfolio());
+    dispatch(GetWalletDetails());
+    dispatch(getStockList());
   }, []);
 
   return (
@@ -25,18 +52,18 @@ const Home = ({navigation}) => {
         <RowContainer style={styles.subHaeaderContainer}>
           <View>
             <Text numberOfLines={1} style={styles.titleTxt}>
-              $78676.33
+              {walletDetails.data ? walletDetails.data.data : '0'}
             </Text>
             <Text style={[styles.subtitleTxt, {marginTop: HP(10)}]}>
               Total Portfolio
             </Text>
             <HifenDivider style={styles.hiffenDivider} />
-            <Text style={styles.subtitleTxt}>
+            {/* <Text style={styles.subtitleTxt}>
               Total Investment{'  '}
               <Text style={{color: SECONDARY_COLOR}}>$7878.00</Text>
-            </Text>
+            </Text> */}
           </View>
-          <View>
+          {/* <View>
             <Text style={styles.profit}>+15.06%</Text>
             <Text
               style={[
@@ -47,7 +74,7 @@ const Home = ({navigation}) => {
               ]}>
               Weekly Change
             </Text>
-          </View>
+          </View> */}
           <View style={styles.dividerContainer}>
             <Image
               style={styles.divider}
@@ -66,7 +93,13 @@ const Home = ({navigation}) => {
             </RowContainer>
             <Text
               style={styles.seeAllTxt}
-              onPress={() => navigateTo('AllPortfolio')}>
+              onPress={() =>
+                navigation.navigate('AllPortfolio', {
+                  walletDetails: walletDetails.data,
+                  allPortfolio: myPortfolio.data,
+                  navigateTo,
+                })
+              }>
               See All
             </Text>
           </RowContainer>
@@ -74,16 +107,32 @@ const Home = ({navigation}) => {
            * List of  Portfolio
            */}
           <View style={{marginTop: 10}}>
-            <CardView callback={() => navigateTo('BuyShares')}></CardView>
-            <CardView></CardView>
-            <CardView></CardView>
+            {myPortfolio.isLoading ? (
+              <Loader color={SECONDARY_COLOR} size="large" />
+            ) : (
+              myPortfolio.data &&
+              myPortfolio.data.data.map((item, index) => {
+                return (
+                  <CardView
+                    key={index.toString()}
+                    data={item}
+                    callback={() => navigateTo('Portfolio')}
+                  />
+                );
+              })
+            )}
           </View>
         </View>
-        <View>
-          {/*
+        {stockList.isLoading ? (
+          <Loader color={SECONDARY_COLOR} size="large" />
+        ) : (
+          stockList.data && (
+            <StockWebView html={stockList.data.data[0].sotck_listing_en} />
+          )
+        )}
+        {/*
           <HomeTab />
           */}
-        </View>
       </Container>
     </View>
   );

@@ -1,14 +1,10 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {
-  GiftedChat,
-  InputToolbar,
-  Send,
-  SystemMessage,
-  Bubble,
-} from 'react-native-gifted-chat';
-import {useCallback} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {GiftedChat, InputToolbar, Send, Bubble} from 'react-native-gifted-chat';
+import firestore from '@react-native-firebase/firestore';
+
 import CommonHeader from '../../component/CommonHeader';
+
 import {
   BACKGROUND_COLOR,
   POPPINS_MEDIUM,
@@ -19,30 +15,55 @@ import {HP, WP} from '../../styles/Dimesions';
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
-  const userId = 'ebe55bad-b8b1-4671-8414-1100d787707a';
+  const ADMIN_ID = 'ebe55bad-b8b1-4671-8414-1100d787707a';
+  const CLIENT_ID = '13445abc';
+  const chatID =
+    ADMIN_ID > CLIENT_ID
+      ? ADMIN_ID.concat(CLIENT_ID)
+      : CLIENT_ID.concat(ADMIN_ID);
+
+  const CollectionId = 'Chat';
+  const chatsRef = firestore()
+    .collection(CollectionId)
+    .doc(chatID)
+    .collection('messages');
+
+  const appendMessages = useCallback(
+    messages => {
+      setMessages(previousMessages =>
+        GiftedChat.append(previousMessages, messages),
+      );
+    },
+    [messages],
+  );
+
+  function handleSend(messages) {
+    const {text, _id, createdAt, user} = messages[0];
+    const writes = chatsRef.add({
+      text,
+      _id,
+      createdAt,
+      user,
+    });
+    Promise.all(writes);
+  }
 
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Did you send mony in my accout Number',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ]);
+    const unsubscribe = chatsRef.onSnapshot(querySnapshot => {
+      const messagesFirestore = querySnapshot
+        .docChanges()
+        .filter(({type}) => type === 'added')
+        .map(({doc}) => {
+          const message = doc.data();
+          console.log(messages);
+          return {...message, createdAt: message.createdAt.toDate()};
+        })
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      // .filter(item => item.email === email)
+      appendMessages(messagesFirestore);
+    });
+    return () => unsubscribe();
   }, []);
-
-  const onSend = useCallback((messages = []) => {
-    setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, messages),
-    );
-  }, []);
-
-  console.log(messages);
 
   const customtInputToolbar = props => {
     return (
@@ -106,46 +127,16 @@ export default function Chat() {
     const {currentMessage, wrapperStyle, user} = props;
     console.log(user);
     return (
-      // Step 3: return the component
-      // <View
-      //   style={{
-      //     borderRadius: 7,
-      //     backgroundColor:
-      //       user._id === userId
-      //         ? 'rgba(1, 196, 0, 0.1)'
-      //         : 'rgba(255, 255, 255, 0.1)',
-      //   }}>
-      //   <Text>{text}</Text>
-      //   {/* <Text>{createdAt}</Text> */}
-      //   <View
-      //     style={{
-      //       width: 0,
-      //       height: 0,
-      //       borderLeftWidth: 10,
-      //       borderRightWidth: 10,
-      //       borderBottomWidth: 20,
-      //       borderStyle: 'solid',
-      //       backgroundColor: 'transparent',
-      //       borderLeftColor: 'transparent',
-      //       borderRightColor: 'transparent',
-      //       borderBottomColor: '#00BCD4',
-      //     }}></View>
-      // </View>
-
       <Bubble
         {...props}
         wrapperStyle={{
           right: {
-            // ...styles.borderSolid,
             borderRadius: 3,
             borderBottomColor: 'rgba(255,255,255,0.1)',
-            // borderLeftWidth: 10,
             backgroundColor: 'rgba(255,255,255,0.1)',
           },
           left: {
-            // ...styles.borderSolid,
             borderRadius: 3,
-            // borderRightWidth: 20,
             backgroundColor: 'rgba(1, 196, 0, 0.1)',
           },
         }}
@@ -158,15 +149,6 @@ export default function Chat() {
           },
         }}
       />
-    );
-  }
-
-  function RenderCustomeBubble(props) {
-    console.log(props);
-    return (
-      <View>
-        <Text>Hjzd</Text>
-      </View>
     );
   }
 
@@ -184,11 +166,11 @@ export default function Chat() {
         renderInputToolbar={customtInputToolbar}
         renderSend={customeOnSend}
         messages={messages}
-        onSend={messages => onSend(messages)}
+        onSend={handleSend}
         renderBubble={renderBubble}
         showUserAvatar
         user={{
-          _id: 3,
+          _id: CLIENT_ID,
           name: 'Parag Sharma',
           avatar: 'https://placeimg.com/140/140/any',
         }}
