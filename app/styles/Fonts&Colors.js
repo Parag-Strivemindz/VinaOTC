@@ -32,5 +32,3 @@ export const PINK = '#EB548E';
 export const DROP_SHADOW = 'rgba(255, 255, 255, 0.07)';
 export const DROP_SHADOW_BORDER = 'rgba(255, 255, 255, 0.5)';
 export const GREEN_LIGHT = 'rgba(1, 196, 0, 0.1)';
-export const LIGHT_ORANGE = '#FA963A';
-export const BLACK_01 = 'rgba(255, 255, 255, 0.1)';

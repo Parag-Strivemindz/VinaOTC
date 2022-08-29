@@ -111,13 +111,15 @@ const CardView = ({callback, url, data}) => {
        */}
       <RowContainer
         callback={() => {
-          const closurefunction = callback();
-          closurefunction({
-            CodeId: code,
-            stockAmout: stock_amount,
-            title: title,
-            created_at: created_at,
-          });
+          if (callback != undefined) {
+            const closurefunction = callback();
+            closurefunction({
+              CodeId: code,
+              stockAmout: stock_amount,
+              title: title,
+              created_at: created_at,
+            });
+          }
         }}>
         {RenderBack(url)}
         <Text

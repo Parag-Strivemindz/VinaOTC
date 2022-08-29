@@ -9,6 +9,7 @@ import auth from './auth/reducers';
 import dashboard from './dashboard/reducers';
 import Localization from './localization/reducers';
 import userInfoReducer from './user/reducers';
+import bankInfo from './bank/reducers';
 
 const middleware = [thunk];
 
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   dashboard,
   local: Localization,
   user: userInfoReducer,
+  bank: bankInfo,
 });
 
 export default store = createStore(rootReducer, enhancer);

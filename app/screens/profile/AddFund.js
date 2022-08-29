@@ -193,7 +193,6 @@ const AddFund = () => {
             style={{
               ...styles.rowFilteItemContainer,
               backgroundColor: selectedItem === item.name ? GREEN_LIGHT : WHITE,
-              // marginTop: HP(15),
             }}>
             <RowContainer style={{alignItems: 'center'}}>
               <SvgXml xml={item.icon} />

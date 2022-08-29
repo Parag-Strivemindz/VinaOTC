@@ -2,7 +2,7 @@ import {STOCK_VIEW} from '../../store/redux/dashboard/actionTypes';
 import {postRequestWithHeader} from '../../utils/AxiosRequest';
 import env from '../../config/env';
 import {USER_ID} from '../../constants/AppConstant';
-import {errorhandler, responseHandler} from './GetMyStockPortfolio';
+import {errorhandler, responseHandler} from './index';
 import {getItem} from '../../utils/AsyncStorage';
 
 const getStockView = codeId => {
@@ -25,7 +25,7 @@ const getStockView = codeId => {
           responseHandler(res.data, STOCK_VIEW, dispatch);
         })
         .catch(error => {
-          errorhandler(error);
+          errorhandler(error, STOCK_VIEW, dispatch);
         });
     } catch (error) {
       console.error(error + ' error from MyStockPortfolio');

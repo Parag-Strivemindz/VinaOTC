@@ -5,6 +5,10 @@ import {
   walletsdetails,
   stockListing,
   stockView,
+  bankInfoList,
+  deposit,
+  mySellStockApi,
+  paymentHistoryListing,
 } from '../constants/ApiConstants';
 
 console.log(DEV_API_URL_IDENTITY);
@@ -23,6 +27,10 @@ const devEnviromentVariables = {
   WALLET_DETAILS: `${DEV_API_URL_IDENTITY}/${walletsdetails}`,
   STOCK_LISTING: `${DEV_API_URL_IDENTITY}/${stockListing}`,
   STOCK_VIEW: `${DEV_API_URL_IDENTITY}/${stockView}`,
+  BANK_INFO_LIST: `${DEV_API_URL_IDENTITY}/${bankInfoList}`,
+  DEPOSITE_FUNDS: `${DEV_API_URL_IDENTITY}/${deposit}`,
+  SELL_STOCK_LIST: `${DEV_API_URL_IDENTITY}/${mySellStockApi}`,
+  MY_PAYMENT_HISTORY: `${DEV_API_URL_IDENTITY}/${paymentHistoryListing}`,
 };
 
 //make config for productionEnviroment

@@ -1,10 +1,22 @@
-import {LayoutAnimation, StyleSheet, Text, View, Image} from 'react-native';
-import React, {useCallback, useState} from 'react';
+import {
+  LayoutAnimation,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TextInput,
+  ToastAndroid,
+} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
 import {SvgXml} from 'react-native-svg';
 import {
   launchCamera,
   launchImageLibrary,
 } from '@yunfeic/react-native-imagepicker';
+import {useDispatch, useSelector} from 'react-redux';
+
+import getBankInfoList from '../../services/bank/BankInfoList';
+import {Selector} from '../../store/redux/bank/index';
 
 import {isFeildValid} from '../../utils/Validation';
 import styles from './styles';
@@ -39,7 +51,8 @@ import {
   RADIO,
   ATTACH_SVG,
 } from '../../constants/IconConstant';
-
+import Loader from '../../component/Loader';
+import DepositeFunds from '../../services/bank/DepositeFunds';
 const filerItems = [
   {
     id: '1',
@@ -50,65 +63,35 @@ const filerItems = [
     name: 'camera',
   },
 ];
-const data = [
-  {
-    id: '1',
-    name: 'Accont Name',
-    value: '2545 2358 2358 1258',
-  },
-  {
-    id: '2',
-    name: 'ifsc code',
-    value: 'hdfc00124',
-  },
-  {
-    id: '3',
-    name: 'Name of A/C holder',
-    value: 'lesa harper',
-  },
-  {
-    id: '4',
-    name: 'Bank name',
-    value: 'Hdfc Bank LTD',
-  },
-  {
-    id: '5',
-    name: 'Branch Code',
-    value: '125456',
-  },
-  {
-    id: '6',
-    name: 'Branch Address',
-    value: `Mountain View, California`,
-  },
-];
 
-function BankDetails(props) {
+function BankDetails({title, value}) {
   return (
-    <RowContainer
-      style={{
-        alingItems: 'center',
-        paddingVertical: HP(8),
-      }}>
-      <Text
-        numberOfLines={1}
+    <>
+      <RowContainer
         style={{
-          width: '50%',
-          fontFamily: ROBOTO_REGULAR,
-          color: WHITE,
-          alignSelf: 'flex-start',
+          alingItems: 'center',
+          paddingVertical: HP(8),
         }}>
-        {props.item.name}
-      </Text>
-      <Text
-        style={{
-          width: '50%',
-          fontFamily: ROBOTO_REGULAR,
-          color: SECONDARY_COLOR,
-        }}>
-        {props.item.value}
-      </Text>
-    </RowContainer>
+        <Text
+          numberOfLines={1}
+          style={{
+            width: '50%',
+            fontFamily: ROBOTO_REGULAR,
+            color: WHITE,
+            alignSelf: 'flex-start',
+          }}>
+          {title}
+        </Text>
+        <Text
+          style={{
+            width: '50%',
+            fontFamily: ROBOTO_REGULAR,
+            color: SECONDARY_COLOR,
+          }}>
+          {value || 'No Available'}
+        </Text>
+      </RowContainer>
+    </>
   );
 }
 
@@ -199,13 +182,26 @@ const FindAttachment = ({close, callback}) => {
   );
 };
 
-function AddMoney({navigation}) {
+function AddMoney({navigation, route}) {
+  const bankInfo = useSelector(Selector.BankInfoList);
   const [getter, setter] = useState({
     ammount: '',
-    attachment: {},
+    attachment: {
+      fileName: '',
+      type: '',
+      uri: '',
+      width: undefined,
+    },
     isVisible: false,
     showImage: false,
+    isLoading: false,
   });
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getBankInfoList());
+  }, []);
 
   const [error, setError] = useState({
     ammountError: '',
@@ -266,16 +262,33 @@ function AddMoney({navigation}) {
   const onRemoveAttachment = () => {
     setter(prev => ({
       ...prev,
-      attachment: {},
+      attachment: {
+        fileName: '',
+        type: '',
+        uri: '',
+        width: '',
+      },
     }));
   };
 
   const onFundDeposite = useCallback(() => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const [ammount] = isFeildValid(getter.ammount);
-
-    if (ammount == '' && Object.keys(getter.attachment).length > 0) {
+    // getter.attachment.uri != '' add this later
+    if (ammount == '') {
       //make your api call here
+      dispatch(
+        DepositeFunds(
+          navigation,
+          getter.ammount,
+          {
+            uri: getter.attachment.uri,
+            name: getter.attachment.fileName,
+            type: getter.attachment.type,
+          },
+          setter,
+        ),
+      );
       setError(prev => ({
         ...prev,
         ammountError: '',
@@ -285,13 +298,30 @@ function AddMoney({navigation}) {
         ...prev,
         ammountError: ammount,
       }));
+      if (getter.attachment.uri == '')
+        ToastAndroid.show('Please Select File', ToastAndroid.LONG);
     }
     //check if any field is empty or invalid
   }, [getter, setter, Error, setError]);
 
+  const WalletBalance = ({params}) => {
+    return (
+      <Text
+        style={{color: 'white', fontFamily: ROBOTO_MEDIUM, fontSize: WP(21)}}>
+        {params}
+      </Text>
+    );
+  };
+
   return (
     <View style={{flex: 1}}>
-      <CommonHeader title={'Add Money'} />
+      <CommonHeader
+        title={'Add Money'}
+        rightItem={
+          route.params &&
+          (() => <WalletBalance params={route.params.walletBalance} />)
+        }
+      />
       <Container>
         <View
           style={{
@@ -309,6 +339,7 @@ function AddMoney({navigation}) {
             Please Enter ammout that you wants to Deposit
           </Text>
           <FieldInput
+            keyboardType={'number-pad'}
             containerStyle={{
               marginTop: HP(10),
             }}
@@ -337,27 +368,55 @@ function AddMoney({navigation}) {
             marginVertical: HP(30),
           }}
         />
+
+        {/*
+         * Bank Details
+         */}
         <View style={{paddingHorizontal: PADDING_HORIZONTAL}}>
-          <View
-            style={[
-              GlobalStyles.dropShadow,
-              {
-                borderWidth: 0,
-                paddingHorizontal: PADDING_HORIZONTAL,
-                paddingVertical: HP(12),
-              },
-            ]}>
-            {data.map(item => {
-              return <BankDetails key={item.id} item={item}></BankDetails>;
-            })}
-          </View>
+          {bankInfo.data ? (
+            bankInfo.data.data &&
+            bankInfo.data.data.map((item, index) => {
+              return (
+                <View
+                  key={index.toString()}
+                  style={[
+                    GlobalStyles.dropShadow,
+                    {
+                      marginBottom: HP(20),
+                      borderWidth: 0,
+                      paddingHorizontal: PADDING_HORIZONTAL,
+                      paddingVertical: HP(12),
+                    },
+                  ]}>
+                  <BankDetails
+                    title={'Accont Number'}
+                    value={item.bank_account_no}
+                  />
+                  <BankDetails title={'ifsc Code'} value={item.ifsc_code} />
+                  <BankDetails
+                    title={'Name of A/c holder'}
+                    value={item.account_holder_name}
+                  />
+                  <BankDetails title={'Bank Name'} value={item.bank_name} />
+                  <BankDetails title={'Branch Code'} value={item.branch_code} />
+                  <BankDetails
+                    title={'Branch Address'}
+                    value={item.bank_address}
+                  />
+                </View>
+              );
+            })
+          ) : bankInfo.isLoading ? (
+            <Loader size={'large'} color={SECONDARY_COLOR} />
+          ) : null}
         </View>
+
         <CardViewDivider
           style={{
-            marginVertical: HP(25),
+            marginBottom: HP(25),
           }}
         />
-        {Object.keys(getter.attachment).length > 0 && (
+        {getter.attachment.uri != '' && (
           <RowContainer
             callback={() =>
               setter(prev => ({
@@ -402,14 +461,18 @@ function AddMoney({navigation}) {
             marginTop: HP(30),
             width: WP(244),
           }}>
-          <Text
-            style={{
-              fontFamily: ROBOTO_REGULAR,
-              color: WHITE,
-              fontSize: WP(16),
-            }}>
-            Deposite Funds
-          </Text>
+          {getter.isLoading ? (
+            <Loader size={'small'} color={'white'} />
+          ) : (
+            <Text
+              style={{
+                fontFamily: ROBOTO_REGULAR,
+                color: WHITE,
+                fontSize: WP(16),
+              }}>
+              Deposite Funds
+            </Text>
+          )}
         </ActionButton>
         <CommonFilterModal close={close} isVisible={getter.isVisible}>
           <FindAttachment close={close} callback={onFilterSelect} />

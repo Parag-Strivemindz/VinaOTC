@@ -2,10 +2,10 @@ import {Image, Text, View} from 'react-native';
 import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {GetMyStockPortfolio} from '../../services/dashboard';
+import GetMyStockPortfolio from '../../services/dashboard/GetMyStockPortfolio';
 import getStockList from '../../services/dashboard/GetStockList';
-import {Selector} from '../../store/redux/dashboard/index';
 import GetWalletDetails from '../../services/dashboard/GetWalletDetails';
+import {Selector} from '../../store/redux/dashboard/index';
 
 import Loader from '../../component/Loader';
 import Container from '../../component/Container';

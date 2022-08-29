@@ -2,9 +2,8 @@ import React, {useState} from 'react';
 import {View, Text, Pressable, Modal, StyleSheet} from 'react-native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {SvgXml} from 'react-native-svg';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
-import TopTab from '../navigations/Home/TopTab';
 import RowContainer from './RowContainer';
 import {ARROW_DOWN} from '../constants/IconConstant';
 import {

@@ -2,7 +2,7 @@ import {WALLET_DETAILS} from '../../store/redux/dashboard/actionTypes';
 import {postRequestWithHeader} from '../../utils/AxiosRequest';
 import env from '../../config/env';
 import {USER_ID} from '../../constants/AppConstant';
-import {errorhandler, responseHandler} from './GetMyStockPortfolio';
+import {errorhandler, responseHandler} from './index';
 import {getItem} from '../../utils/AsyncStorage';
 
 const GetWalletDetails = () => {
@@ -22,7 +22,7 @@ const GetWalletDetails = () => {
           responseHandler(res.data, WALLET_DETAILS, dispatch);
         })
         .catch(error => {
-          errorhandler(error);
+          errorhandler(error, WALLET_DETAILS, payload);
         });
     } catch (error) {
       console.error(error + ' error from MyStockPortfolio');

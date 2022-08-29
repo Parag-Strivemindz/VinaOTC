@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import getStockView from '../../services/dashboard/GetStockView';
 
+import useNavigation from '../../component/UseNavigation';
 import Container from '../../component/Container';
 import CommonHeader from '../../component/CommonHeader';
 import StockWebView from '../../component/StockWebView';
@@ -28,11 +29,11 @@ import {
   WHITE,
 } from '../../styles/Fonts&Colors';
 import {CLOCK, RIGHT_ARROW_PNG} from '../../constants/IconConstant';
-import UseNavigation from '../../component/UseNavigation';
 
-function Shares({title, color, screenName = '', data = {}}) {
-  const navigate = UseNavigation(screenName);
+function Shares({title, color, screenName = '', data = {}, navigation}) {
+  const navigate = useNavigation(screenName, navigation);
 
+  console.log(navigate + ' navigate');
   return (
     <View
       style={{
@@ -73,7 +74,7 @@ function Shares({title, color, screenName = '', data = {}}) {
   );
 }
 
-const Portfolio = ({route}) => {
+const Portfolio = ({route, navigation}) => {
   const {CodeId, stockAmout, title, created_at} = route.params;
 
   const stockView = useSelector(Selector.STOCK_VIEW);
@@ -150,10 +151,12 @@ const Portfolio = ({route}) => {
               marginTop: HP(15),
             }}>
             <Shares
+              navigation={navigation}
               screenName={'SellShares'}
               color={BLACK_01}
               title={'Sell'}></Shares>
             <Shares
+              navigation={navigation}
               screenName={'BuyShares'}
               color={'#0096FF'}
               title={'Buy'}

@@ -1,19 +1,20 @@
 import {View, Text, Image} from 'react-native';
-import React, {useCallback} from 'react';
+import React from 'react';
 import {SvgXml} from 'react-native-svg';
+
 import RowContainer from '../../component/RowContainer';
-import styles from './styles';
 import HifenDivider from '../../component/HifenDivider';
-import {SECONDARY_COLOR} from '../../styles/Fonts&Colors';
-import {HP} from '../../styles/Dimesions';
 import Container from '../../component/Container';
-import CardView from '../../component/CardView';
 import CommonHeader from '../../component/CommonHeader';
-import {ARROW_DIGONAL, BANK_LOGO} from '../../constants/IconConstant';
+import CardView from '../../component/CardView';
+
+import styles from './styles';
+import {HP} from '../../styles/Dimesions';
+import {ARROW_DIGONAL} from '../../constants/IconConstant';
 import {PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
 
 const AllPortfolio = ({navigation, route}) => {
-  const {walletDetails, allPortfolio, navigateTo} = route.params.data;
+  const {walletDetails, allPortfolio, navigateTo} = route.params;
 
   const rightItem = () => <SvgXml xml={ARROW_DIGONAL} onPress={() => {}} />;
 

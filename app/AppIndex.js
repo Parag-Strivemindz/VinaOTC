@@ -30,7 +30,7 @@ const AppIndex = () => {
 
   if (!loader) {
     if (userInfo.data) {
-      if (userInfo.data.Status === STATUS_ACTIVE) {
+      if (userInfo.data.data.Status === STATUS_ACTIVE) {
         return <BottomTab />;
       }
     } else {

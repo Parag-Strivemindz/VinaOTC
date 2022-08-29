@@ -1,41 +1,62 @@
 import {Image, Text, View} from 'react-native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+import {SvgXml} from 'react-native-svg';
+
+import {Selector as dashboardSelector} from '../../store/redux/dashboard/index';
+import {Selector as userSelector} from '../../store/redux/user/index';
+import getMySellStock from '../../services/user/MySellStock';
+
 import Container from '../../component/Container';
+import RowContainer from '../../component/RowContainer';
+import CardViewDivider from '../../component/CardViewDivider';
+import CardView from '../../component/CardView';
+import HifenDivider from '../../component/HifenDivider';
+import Header from '../../component/Header';
+
+import styles from './styles';
 import GlobalStyles, {
   CONTAINER_PADDINGTOP,
   PADDING_HORIZONTAL,
 } from '../../styles/GlobalStyles';
-import CardViewDivider from '../../component/CardViewDivider';
-import RowContainer from '../../component/RowContainer';
-import CardView from '../../component/CardView';
-import {
-  ARROW_DOWN,
-  BANK_LOGO,
-  BELL_ICON,
-  NOTIFICATION_SVG,
-} from '../../constants/IconConstant';
+import {ARROW_DOWN, NOTIFICATION_SVG} from '../../constants/IconConstant';
 import {HP, WP} from '../../styles/Dimesions';
-import styles from './styles';
-import HifenDivider from '../../component/HifenDivider';
 import {GIRL_PROFILE} from '../../constants/ImageConstant';
-import {MONTSERRAT_MEDIUM, WHITE} from '../../styles/Fonts&Colors';
-import {SvgXml} from 'react-native-svg';
-import Header from '../../component/Header';
+import {
+  MONTSERRAT_MEDIUM,
+  WHITE,
+  SECONDARY_COLOR,
+} from '../../styles/Fonts&Colors';
+import Loader from '../../component/Loader';
 
 const Profile = ({navigation}) => {
+  const myPortfolio = useSelector(dashboardSelector.My_Stock_Portfolio);
+  const walletDetails = useSelector(dashboardSelector.WALLET_DETAILS);
+  const mySellStock = useSelector(userSelector.My_Sell_Stocks);
+
   const navigateTo = useCallback(screenName => {
-    navigation.navigate(screenName);
+    return (params = {}) => {
+      navigation.navigate(screenName, {
+        ...params,
+      });
+    };
+  }, []);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getMySellStock());
   }, []);
 
   return (
     <View style={{flex: 1}}>
       <Header
         icon={NOTIFICATION_SVG}
-        callback={() => navigateTo('Notification')}
+        callback={() => navigateTo('Notification')()}
       />
       <Container scrollViewContainerStyle={{paddingTop: CONTAINER_PADDINGTOP}}>
         <RowContainer
-          callback={() => navigateTo('MyProfile')}
+          callback={() => navigateTo('MyProfile')()}
           style={{
             ...GlobalStyles.dropShadow,
             alignItems: 'center',
@@ -72,7 +93,13 @@ const Profile = ({navigation}) => {
           </RowContainer>
           <Text
             style={styles.seeAllTxt}
-            onPress={() => navigateTo('AllPortfolio')}>
+            onPress={() =>
+              navigation.navigate('AllPortfolio', {
+                walletDetails: walletDetails.data,
+                allPortfolio: myPortfolio.data,
+                navigateTo,
+              })
+            }>
             See All
           </Text>
         </RowContainer>
@@ -82,11 +109,20 @@ const Profile = ({navigation}) => {
            * List of  Portfolio
            */}
           <View style={{marginTop: 10}}>
-            <CardView
-              callback={() => navigateTo('Portfolio')}
-              url={BANK_LOGO}></CardView>
-            <CardView url={BANK_LOGO}></CardView>
-            <CardView url={BANK_LOGO}></CardView>
+            {myPortfolio.isLoading ? (
+              <Loader color={SECONDARY_COLOR} size="large" />
+            ) : (
+              myPortfolio.data &&
+              myPortfolio.data.data.map((item, index) => {
+                return (
+                  <CardView
+                    key={index.toString()}
+                    data={item}
+                    callback={() => navigateTo('Portfolio')()}
+                  />
+                );
+              })
+            )}
           </View>
         </View>
         <CardViewDivider />
@@ -99,11 +135,7 @@ const Profile = ({navigation}) => {
             <Text style={[styles.blockHeaderTxt]}>HISTORY</Text>
             <HifenDivider style={styles.hiffenDividerRow} />
           </RowContainer>
-          <Text
-            style={styles.seeAllTxt}
-            onPress={() => navigateTo('AllPortfolio')}>
-            See All
-          </Text>
+          <Text style={styles.seeAllTxt}>See All</Text>
         </RowContainer>
         <View
           style={{marginTop: HP(22), paddingHorizontal: PADDING_HORIZONTAL}}>
@@ -111,10 +143,14 @@ const Profile = ({navigation}) => {
            * List of  Portfolio
            */}
           <View style={{marginTop: 10}}>
-            <CardView
-              callback={() => navigateTo('Portfolio')}
-              url={BANK_LOGO}></CardView>
-            <CardView url={BANK_LOGO}></CardView>
+            {mySellStock.isLoading ? (
+              <Loader color={SECONDARY_COLOR} size="large" />
+            ) : (
+              mySellStock.data &&
+              mySellStock.data.data.map((item, index) => {
+                return <CardView key={index.toString()} data={item} />;
+              })
+            )}
           </View>
         </View>
       </Container>
