@@ -32,7 +32,7 @@ export function errorhandler(error) {
 }
 
 function checkCredentials(res, dispatch) {
-  if (res.data.status === 400 || res.data.status === 401) {
+  if (res.status === 400 || res.data.status === 401) {
     dispatch({
       type: USER_INFO,
       payload: {
@@ -41,11 +41,10 @@ function checkCredentials(res, dispatch) {
         error: null,
       },
     });
-    SnackBar(res.data.message);
+    SnackBar(res.message);
   }
-  if (res.data.status === 200) {
-    const {api_token, UserID} = res?.data.data;
-    // console.log(res.data + ' User Login token');
+  if (res.status === 200) {
+    const {api_token, UserID} = res?.data;
     const setAuthToken = setItem(AUTH_LOGIN, api_token);
     const setUserId = setItem(USER_ID, JSON.stringify(UserID));
 
@@ -56,12 +55,12 @@ function checkCredentials(res, dispatch) {
       payload: {
         isLoading: false,
         data: {
-          ...res?.data.data,
+          ...res,
         },
         error: null,
       },
     });
-    SnackBar(res.data.message);
+    SnackBar(res.message);
   }
 }
 
@@ -80,7 +79,7 @@ export default loginUser = (email, password) => dispatch => {
       Password: password,
     })
       .then(res => {
-        checkCredentials(res, dispatch);
+        checkCredentials(res.data, dispatch);
       })
       .catch(err => {
         errorhandler(err);

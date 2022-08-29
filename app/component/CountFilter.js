@@ -4,22 +4,20 @@ import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {SvgXml} from 'react-native-svg';
 import {useDispatch} from 'react-redux';
 
+import ActionButton from './ActionButton';
 import RowContainer from './RowContainer';
 import {ARROW_DOWN} from '../constants/IconConstant';
+
+import {HP, WP} from '../styles/Dimesions';
 import {
   BACKGROUND_COLOR,
   BLACK_COLOR_90,
-  LIGHT_BLACK_COLOR,
   ROBOTO_MEDIUM,
-  ROBOTO_REGULAR,
   WHITE,
   WHITE_30,
 } from '../styles/Fonts&Colors';
-import ActionButton from './ActionButton';
-import {HP, WP} from '../styles/Dimesions';
-import {getStockAction} from '../services/dashboard';
 
-const Filter = ({style}) => {
+const CountFilter = ({style, onCountSelect}) => {
   const [getter, setter] = useState({
     countValue: 5,
     isVisible: false,
@@ -53,7 +51,7 @@ const Filter = ({style}) => {
         countValue: value,
         isVisible: false,
       }));
-      // dispatch(getStockAction(value));
+      onCountSelect(value);
     } catch (error) {
       console.log(error);
     }
@@ -167,4 +165,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Filter;
+export default CountFilter;

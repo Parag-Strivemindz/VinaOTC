@@ -1,6 +1,14 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, InteractionManager} from 'react-native';
 import {SvgXml} from 'react-native-svg';
+import PropTypes from 'prop-types';
+import Animated, {
+  SlideInLeft,
+  SlideOutRight,
+  Layout,
+  LayoutAnimation,
+  Easing,
+} from 'react-native-reanimated';
 
 import getMyPaymentHistory from '../../services/user/MyPaymentHistory';
 import {Selector} from '../../store/redux/user';
@@ -13,9 +21,16 @@ import CardViewDivider from '../../component/CardViewDivider';
 import Loader from '../../component/Loader';
 
 import styles from './styles';
-import {FILLTER_EQUALIZER, WALLET} from '../../constants/IconConstant';
+import {CIRCLE, FILLTER_EQUALIZER, WALLET} from '../../constants/IconConstant';
 import {PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
-import {MONTSERRAT_MEDIUM, SECONDARY_COLOR} from '../../styles/Fonts&Colors';
+import {
+  BLACK_70,
+  GREEN_LIGHT,
+  MONTSERRAT_MEDIUM,
+  ROBOTO_MEDIUM,
+  SECONDARY_COLOR,
+  WHITE,
+} from '../../styles/Fonts&Colors';
 import {HP} from '../../styles/Dimesions';
 
 const filerItems = [
@@ -89,17 +104,18 @@ const PaymentFilter = ({selectedItem, close, callback}) => {
   );
 };
 
-const ProfilePaymentHistory = () => {
+const ProfilePaymentHistory = ({numberOfItems}) => {
   const myPaymentHistory = useSelector(Selector.My_Payment_History);
   const [getter, setter] = useState({
     isVisible: false,
     filterItem: '',
   });
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getMyPaymentHistory());
-  }, []);
+    dispatch(getMyPaymentHistory(undefined, numberOfItems));
+  }, [numberOfItems]);
 
   const onFilterSelect = value => {
     setter(prev => ({
@@ -130,9 +146,13 @@ const ProfilePaymentHistory = () => {
         />
       </RowContainer>
       {myPaymentHistory.data ? (
-        myPaymentHistory.data.data.map(item => {
+        myPaymentHistory.data.data.map((item, index) => {
           return (
-            <React.Fragment key={item.wallet_id}>
+            <Animated.View
+              key={item.wallet_id.toString()}
+              entering={SlideInLeft.delay(100)}
+              // exiting={SlideOutRight}
+              layout={Layout.mass(10).delay(index * 10)}>
               <RowContainer>
                 <RowContainer>
                   <ActionButton
@@ -153,7 +173,6 @@ const ProfilePaymentHistory = () => {
                 </RowContainer>
                 <Text
                   style={{
-                    // alignSelf: 'flex-start',
                     color:
                       item.type == 'credit'
                         ? 'rgba(233, 78, 27, 1)'
@@ -165,7 +184,7 @@ const ProfilePaymentHistory = () => {
                 </Text>
               </RowContainer>
               <CardViewDivider style={{marginVertical: HP(20)}} />
-            </React.Fragment>
+            </Animated.View>
           );
         })
       ) : myPaymentHistory.isLoading ? (
@@ -189,6 +208,14 @@ const ProfilePaymentHistory = () => {
       </CommonFilterModal>
     </View>
   );
+};
+
+ProfilePaymentHistory.propTypes = {
+  numberOfItems: PropTypes.number,
+};
+
+ProfilePaymentHistory.defaultProps = {
+  numberOfItems: 10,
 };
 
 export default ProfilePaymentHistory;

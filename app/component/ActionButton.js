@@ -3,7 +3,7 @@ import React from 'react';
 import {ROBOTO_MEDIUM, SECONDARY_COLOR, WHITE} from '../styles/Fonts&Colors';
 import {HP} from '../styles/Dimesions';
 
-const ActionButton = ({children, callBack, props, style}) => {
+function ActionButton({children, callBack, style, image, ...props}) {
   return (
     <Pressable
       {...props}
@@ -18,7 +18,7 @@ const ActionButton = ({children, callBack, props, style}) => {
       {/* <Text styles={styles.actionBtnTxt}>{text}</Text> */}
     </Pressable>
   );
-};
+}
 
 export default ActionButton;
 

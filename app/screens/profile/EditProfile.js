@@ -11,50 +11,187 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {SvgXml} from 'react-native-svg';
+import {useDispatch} from 'react-redux';
+import {
+  launchImageLibrary,
+  launchCamera,
+} from '@yunfeic/react-native-imagepicker';
 
+import updateUserProfile from '../../services/user/UpdateProfile';
+
+import {CAMERA, FILE} from '../../constants/AppConstant';
 import CommonHeader from '../../component/CommonHeader';
 import Container from '../../component/Container';
 import FiledInput from '../../screens/auth/common/FieldInput';
+import CommonFilterModal from '../../component/CommonFilterModal';
 import {emailVerification, isFeildValid} from '../../utils/Validation';
 import ActionButton from '../../component/ActionButton';
 
-import GlobalStyles from '../../styles/GlobalStyles';
-import {EMAIL_SVG, GIRL_PROFILE} from '../../constants/ImageConstant';
-import {SORT, USER_SVG} from '../../constants/IconConstant';
+import styles from './styles';
+import GlobalStyles, {PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
+import {EMAIL_SVG} from '../../constants/ImageConstant';
+import {CIRCLE, ERROR, SORT, USER_SVG} from '../../constants/IconConstant';
 import {HP, WP} from '../../styles/Dimesions';
 import {
   BACKGROUND_COLOR,
+  BLACK_70,
   POPPINS_REGULAR,
+  ROBOTO_MEDIUM,
   ROBOTO_REGULAR,
   SECONDARY_COLOR,
   WHITE,
 } from '../../styles/Fonts&Colors';
+import RowContainer from '../../component/RowContainer';
+import Loader from '../../component/Loader';
 
-if (Platform.OS === 'android') {
-  if (UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-}
+const filerItems = [
+  {
+    id: '1',
+    name: FILE,
+  },
+  {
+    id: '2',
+    name: CAMERA,
+  },
+];
 
-export default function EditProfile({userName, userEmail}) {
+const FindAttachment = ({close, callback}) => {
+  return (
+    <View style={[GlobalStyles.modalContainer]}>
+      <RowContainer
+        style={{
+          alingItems: 'center',
+          paddingHorizontal: PADDING_HORIZONTAL,
+          // paddingVertical: HP(15),
+        }}>
+        <Text
+          style={{
+            color: BLACK_70,
+            fontFamily: ROBOTO_MEDIUM,
+          }}>
+          Choose Photo From
+        </Text>
+        <SvgXml
+          xml={ERROR}
+          onPress={() => close()}
+          hitSlop={{
+            left: 10,
+            right: 10,
+            top: 10,
+            bottom: 10,
+          }}
+        />
+      </RowContainer>
+      {filerItems.map((item, index) => (
+        <RowContainer
+          callback={() => callback(item.name)}
+          key={index.toString()}
+          style={{
+            ...styles.rowFilteItemContainer,
+            backgroundColor: WHITE,
+            // marginTop: HP(15),
+          }}>
+          <RowContainer style={{alignItems: 'center'}}>
+            <SvgXml xml={CIRCLE} />
+            <Text
+              style={{
+                marginLeft: WP(15),
+                color: BLACK_70,
+                fontFamily: ROBOTO_MEDIUM,
+              }}>
+              {item.name}
+            </Text>
+          </RowContainer>
+        </RowContainer>
+      ))}
+    </View>
+  );
+};
+
+export default function EditProfile({route, navigation}) {
+  const {profileImg, userName, email} = route.params;
   const [getter, setter] = useState({
     fullName: userName,
-    Email: userEmail,
+    Email: email,
+    isLoading: false,
+    isVisible: false,
+    attachment: {
+      fileName: '',
+      type: '',
+      uri: profileImg,
+    },
   });
+
+  const onFilterSelect = useCallback(value => {
+    const options = {
+      mediaType: 'photo',
+      selectionLimit: 1,
+    };
+    if (value == FILE) {
+      launchImageLibrary(options, res => {
+        if (res.assets) {
+          const {fileName, type, uri} = res.assets[0];
+          setter(prev => ({
+            ...prev,
+            attachment: {
+              fileName,
+              type,
+              uri,
+            },
+          }));
+          console.log(uri, type, fileName);
+        }
+      });
+    }
+    if (value == CAMERA) {
+      launchCamera(options, res => {
+        if (res.assets) {
+          const {fileName, type, uri} = res.assets[0];
+          setter(prev => ({
+            ...prev,
+            attachment: {
+              fileName,
+              type,
+              uri,
+            },
+          }));
+          console.log(uri, type, fileName);
+        }
+      });
+    }
+    close();
+  }, []);
+
+  const close = useCallback(() => {
+    setter(prev => ({
+      ...prev,
+      isVisible: !prev.isVisible,
+    }));
+  }, [setter]);
 
   const [error, setError] = useState({
     fullNameError: '',
     emailError: '',
   });
 
-  const makeSignUpCall = useCallback(() => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+  const dispatch = useDispatch();
+
+  const onEdit = useCallback(() => {
     const isEmailValid = emailVerification(getter.Email);
 
     const [fullName] = isFeildValid(getter.fullName);
 
     if (isEmailValid == '' && fullName == '') {
       //make your api call here
+      dispatch(
+        updateUserProfile(
+          getter.fullName,
+          getter.Email,
+          getter.attachment,
+          setter,
+          navigation,
+        ),
+      );
       setError(prev => ({
         ...prev,
         emailError: '',
@@ -78,11 +215,16 @@ export default function EditProfile({userName, userEmail}) {
           ...GlobalStyles.containerStyle,
           alignItems: 'center',
         }}>
-        <TouchableOpacity style={styles.profileContainer} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.profileContainer}
+          activeOpacity={0.8}
+          onPress={() => close()}>
           <Image
-            source={GIRL_PROFILE}
+            source={{
+              uri: getter.attachment.uri,
+            }}
             style={styles.profile}
-            resizeMode="contain"
+            resizeMode="cover"
           />
           {/*
            * Select Photo Indicator
@@ -131,6 +273,7 @@ export default function EditProfile({userName, userEmail}) {
             placeholder={'Name'}
           />
           <FiledInput
+            editable={false}
             iconLeft={EMAIL_SVG}
             style={styles.username}
             containerStyle={{marginTop: HP(15)}}
@@ -146,11 +289,19 @@ export default function EditProfile({userName, userEmail}) {
           />
         </View>
         <ActionButton
+          disabled={getter.isLoading ? true : false}
           style={styles.updateProfileBtn}
-          callBack={() => makeSignUpCall()}>
-          <Text style={styles.updateProfileTxt}>Update Profile</Text>
+          callBack={() => onEdit()}>
+          {getter.isLoading ? (
+            <Loader color={'white'} size="small" />
+          ) : (
+            <Text style={styles.updateProfileTxt}>Update Profile</Text>
+          )}
         </ActionButton>
       </Container>
+      <CommonFilterModal close={close} isVisible={getter.isVisible}>
+        <FindAttachment close={close} callback={onFilterSelect} />
+      </CommonFilterModal>
     </View>
   );
 }
@@ -164,34 +315,3 @@ EditProfile.propTypes = {
   userName: PropTypes.string.isRequired,
   userEmail: PropTypes.string.isRequired,
 };
-
-const styles = StyleSheet.create({
-  profileContainer: {
-    width: WP(84),
-    height: HP(84),
-    borderRadius: WP(84 / 2),
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    marginTop: HP(12),
-  },
-  profile: {
-    width: '100%',
-    height: '100%',
-  },
-  updateProfileBtn: {
-    height: HP(44),
-    width: WP(204),
-    borderRadius: 6,
-    marginTop: HP(50),
-  },
-  updateProfileTxt: {
-    fontFamily: ROBOTO_REGULAR,
-    color: WHITE,
-    fontSize: WP(16),
-  },
-  username: {
-    fontFamily: POPPINS_REGULAR,
-    // fontSize: WP(13),
-  },
-});

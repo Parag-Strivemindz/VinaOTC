@@ -44,6 +44,7 @@ import {
   WHITE,
 } from '../../styles/Fonts&Colors';
 import {HP, WP} from '../../styles/Dimesions';
+import {CAMERA, FILE} from '../../constants/AppConstant';
 import {
   CIRCLE,
   CLOSE_SVG,
@@ -53,14 +54,15 @@ import {
 } from '../../constants/IconConstant';
 import Loader from '../../component/Loader';
 import DepositeFunds from '../../services/bank/DepositeFunds';
+
 const filerItems = [
   {
     id: '1',
-    name: 'file',
+    name: FILE,
   },
   {
     id: '2',
-    name: 'camera',
+    name: CAMERA,
   },
 ];
 
@@ -275,19 +277,10 @@ function AddMoney({navigation, route}) {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const [ammount] = isFeildValid(getter.ammount);
     // getter.attachment.uri != '' add this later
-    if (ammount == '') {
+    if ((ammount == '', getter.attachment.uri != '')) {
       //make your api call here
       dispatch(
-        DepositeFunds(
-          navigation,
-          getter.ammount,
-          {
-            uri: getter.attachment.uri,
-            name: getter.attachment.fileName,
-            type: getter.attachment.type,
-          },
-          setter,
-        ),
+        DepositeFunds(navigation, getter.ammount, getter.attachment, setter),
       );
       setError(prev => ({
         ...prev,

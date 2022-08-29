@@ -6,6 +6,7 @@ import {
   MONTSERRAT_REGULAR,
   POPPINS_MEDIUM,
   POPPINS_REGULAR,
+  ROBOTO_REGULAR,
   WHITE,
   WHITE_50,
 } from '../../styles/Fonts&Colors';
@@ -65,7 +66,7 @@ export default StyleSheet.create({
   name: {
     color: WHITE,
     fontFamily: POPPINS_MEDIUM,
-    fontSize: WP(15),
+    fontSize: WP(20),
   },
   email: {
     color: 'rgba(255,255,255,1)',
@@ -113,5 +114,41 @@ export default StyleSheet.create({
   filedInputTxt: {
     fontFamily: MONTSERRAT_REGULAR,
     color: WHITE,
+  },
+  rowFilteItemContainer: {
+    // marginTop: HP(10),
+    // borderWidth: 1,
+    paddingVertical: HP(20),
+    backgroundColor: GREEN_LIGHT,
+    alignItems: 'center',
+    paddingHorizontal: PADDING_HORIZONTAL,
+  },
+  profileContainer: {
+    width: WP(84),
+    height: HP(84),
+    borderRadius: WP(84 / 2),
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: HP(12),
+  },
+  profile: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 50,
+  },
+  updateProfileBtn: {
+    height: HP(44),
+    width: WP(204),
+    borderRadius: 6,
+    marginTop: HP(50),
+  },
+  updateProfileTxt: {
+    fontFamily: ROBOTO_REGULAR,
+    color: WHITE,
+    fontSize: WP(16),
+  },
+  username: {
+    fontFamily: POPPINS_REGULAR,
   },
 });

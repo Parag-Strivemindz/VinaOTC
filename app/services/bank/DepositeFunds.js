@@ -2,7 +2,6 @@ import {postRequestMultipart} from '../../utils/AxiosRequest';
 import env from '../../config/env';
 
 import SnackBar from '../../component/SnackBar';
-
 import {USER_ID} from '../../constants/AppConstant';
 import {errorhandler} from '../dashboard';
 import {getItem} from '../../utils/AsyncStorage';
@@ -19,27 +18,38 @@ const DepositeFunds = (navigation, amount, file, setter) => {
       const userId = await getItem(USER_ID);
       data.append('UserID', userId);
       data.append('Amount', amount);
-      data.append('AttachedFile', file);
-      //   console.log(JSON.stringify(data) + ' data');
+      data.append('AttachedFile', {
+        uri: file.uri,
+        name: file.fileName,
+        type: file.type,
+      });
+
+      const autoDismiss = false;
+      const action = true;
+
       postRequestMultipart(env.DEPOSITE_FUNDS, data)
         .then(res => {
           console.log(res.data);
           if (res.data.status === 200) {
             navigation.goBack();
+            SnackBar(res.data.message);
           }
-          SnackBar(res.data.message);
+          if (res.data.status >= 400) {
+            SnackBar(res.data.message, autoDismiss, action);
+          }
+          setter(prev => ({
+            ...prev,
+            isLoading: false,
+          }));
         })
         .catch(error => {
-          console.error(error + ' erorr');
+          console.error(error + ' error');
           errorhandler(error);
+          // SnackBar(res.data.message, autoDismiss, action);
         });
     } catch (error) {
       console.error(error + ' error from MyStockPortfolio');
     } finally {
-      setter(prev => ({
-        ...prev,
-        isLoading: false,
-      }));
     }
   };
 };

@@ -2,7 +2,9 @@ import {View, Text, Image} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {useSelector} from 'react-redux';
 
+import {useDispatch} from 'react-redux';
 import {Selector} from '../../store/redux/dashboard';
+
 import CommonHeader from '../../component/CommonHeader';
 import Container from '../../component/Container';
 import ActionButton from '../../component/ActionButton';
@@ -25,6 +27,9 @@ import {
   MONTSERRAT_MEDIUM,
 } from '../../styles/Fonts&Colors';
 import {ARROWSHARES_SVG, CLOCK} from '../../constants/IconConstant';
+import buyStocks from '../../services/stock/BuyStocks';
+import {isFeildValid} from '../../utils/Validation';
+import Loader from '../../component/Loader';
 
 const data = [
   {
@@ -77,10 +82,11 @@ const BuyShares = ({navigation, route}) => {
   const walletDetails = useSelector(Selector.WALLET_DETAILS);
   const stockView = useSelector(Selector.STOCK_VIEW);
 
-  const {title, created_at, CodeId, stockAmout} = route.params;
+  const {title, created_at, CodeId, stockAmout, stock_id} = route.params;
 
   const [getter, setter] = useState({
     ammount: '',
+    isLoading: false,
   });
 
   const [error, setError] = useState({
@@ -91,6 +97,8 @@ const BuyShares = ({navigation, route}) => {
     navigation.navigate(screenName);
   }, []);
 
+  const dispatch = useDispatch();
+
   const onChangeText = useCallback(
     (text, key) => {
       setter(prev => ({
@@ -100,6 +108,22 @@ const BuyShares = ({navigation, route}) => {
     },
     [getter, setter],
   );
+
+  const onStockBuy = () => {
+    const [ammount] = isFeildValid(getter.ammount);
+    if (ammount == '') {
+      dispatch(buyStocks(getter.ammount, stock_id, setter, navigation));
+      setError(prev => ({
+        ...prev,
+        ammounError: '',
+      }));
+    } else {
+      setError(prev => ({
+        ...prev,
+        ammounError: ammount,
+      }));
+    }
+  };
 
   console.log(stockView);
 
@@ -159,6 +183,8 @@ const BuyShares = ({navigation, route}) => {
         </View>
         <CardViewDivider style={{maringVertical: HP(10)}} />
         <FieldInput
+          editable={getter.isLoading ? false : true}
+          keyboardType={'number-pad'}
           iconLeft={ARROWSHARES_SVG}
           containerStyle={{
             marginTop: HP(20),
@@ -264,11 +290,19 @@ const BuyShares = ({navigation, route}) => {
           }}
         />
         <ActionButton
+          disabled={getter.isLoading ? true : false}
+          callBack={() => onStockBuy()}
           style={{
             height: HP(44),
             width: WP(232),
           }}>
-          <Text style={styles.bigActionBtnTxt}>Proceed With Wallet Funds</Text>
+          {getter.isLoading ? (
+            <Loader />
+          ) : (
+            <Text style={styles.bigActionBtnTxt}>
+              Proceed With Wallet Funds
+            </Text>
+          )}
         </ActionButton>
       </Container>
     </View>

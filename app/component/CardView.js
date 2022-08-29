@@ -118,6 +118,7 @@ const CardView = ({callback, url, data}) => {
               stockAmout: stock_amount,
               title: title,
               created_at: created_at,
+              stock_id,
             });
           }
         }}>

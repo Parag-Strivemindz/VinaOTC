@@ -13,7 +13,7 @@ import {
 } from '../../../styles/GlobalStyles';
 import {FILLTER_EQUALIZER} from '../../../constants/IconConstant';
 import {BACKGROUND_COLOR, SECONDARY_COLOR} from '../../../styles/Fonts&Colors';
-import Filter from '../../../component';
+import CountFilter from '../../../component/CountFilter';
 import {HP} from '../../../styles/Dimesions';
 import FilterModal from './FilterModal';
 
@@ -85,7 +85,7 @@ const WithDrawal = () => {
       <Container containerStyles={{paddingTop: HP(15)}}>
         <FilterItem />
       </Container>
-      <Filter style={{paddingBottom: 10}} />
+      <CountFilter style={{paddingBottom: 10}} onCountSelect={() => {}} />
       <FilterModal setter={setter} getter={getter} close={CloseModal} />
     </View>
   );

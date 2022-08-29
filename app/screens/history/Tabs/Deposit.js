@@ -1,20 +1,21 @@
 import {View, Text} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
-import styles from './styles';
+import {SvgXml} from 'react-native-svg';
 import RowContainer from '../../../component/RowContainer';
 import CardViewDivider from '../../../component/CardViewDivider';
-import {SvgXml} from 'react-native-svg';
-import {stocks} from '..';
 import Container from '../../../component/Container';
+import {stocks} from '..';
+import FilterModal from './FilterModal';
+
+import styles from './styles';
 import {
   PADDING_HORIZONTAL,
   PADDING_VERTICAL,
 } from '../../../styles/GlobalStyles';
 import {FILLTER_EQUALIZER} from '../../../constants/IconConstant';
 import {HP} from '../../../styles/Dimesions';
-import Filter from '../../../component';
+import CountFilter from '../../../component/CountFilter';
 import {BACKGROUND_COLOR, SECONDARY_COLOR} from '../../../styles/Fonts&Colors';
-import FilterModal from './FilterModal';
 
 const Deposit = () => {
   const [getter, setter] = useState({
@@ -32,6 +33,11 @@ const Deposit = () => {
   useEffect(() => {
     console.log(getter);
   }, [getter, setter]);
+
+  const onCountSelect = useCallback(value => {
+    //make api call here
+    console.log(value);
+  }, []);
 
   const CloseModal = useCallback(() => {
     setter(prev => ({
@@ -82,9 +88,9 @@ const Deposit = () => {
         <SvgXml xml={FILLTER_EQUALIZER} width={16} onPress={CloseModal} />
       </RowContainer>
       <Container containerStyles={{paddingTop: HP(15)}}>
-        <FilterItem />
+        <CountFilter onCountSelect={() => {}} />
       </Container>
-      <Filter style={{paddingBottom: 10}} />
+      <CountFilter style={{paddingBottom: 10}} onCountSelect={onCountSelect} />
       <FilterModal setter={setter} getter={getter} close={CloseModal} />
     </View>
   );

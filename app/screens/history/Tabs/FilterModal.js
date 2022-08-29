@@ -1,6 +1,5 @@
 import {StyleSheet, Text, View, Modal} from 'react-native';
 import React, {useState} from 'react';
-import {getTemperatureUnit} from 'react-native-localize';
 import {
   ROBOTO_MEDIUM,
   SECONDARY_COLOR,

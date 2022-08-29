@@ -1,6 +1,5 @@
 import React, {useCallback, useState} from 'react';
 import {View, Text, Image} from 'react-native';
-import {SvgXml} from 'react-native-svg';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {Selector as userSelector} from '../../store/redux/user/index';
@@ -19,16 +18,13 @@ import GlobalStyles, {
   CONTAINER_PADDINGTOP,
   PADDING_HORIZONTAL,
 } from '../../styles/GlobalStyles';
-import {GIRL_PROFILE} from '../../constants/ImageConstant';
 import {HP, WP} from '../../styles/Dimesions';
 import {
-  BLACK_70,
-  GREEN_LIGHT,
   MONTSERRAT_REGULAR,
   ROBOTO_MEDIUM,
   WHITE,
 } from '../../styles/Fonts&Colors';
-import {CIRCLE, ERROR} from '../../constants/IconConstant';
+import CountFilter from '../../component/CountFilter';
 
 const MyProfile = ({navigation}) => {
   const walletDetails = useSelector(walletSelector.WALLET_DETAILS);
@@ -41,6 +37,11 @@ const MyProfile = ({navigation}) => {
       });
     };
   });
+
+  const onCountSelect = value => {
+    console.log(value);
+    // dispatch(getMyPaymentHistory());
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -58,13 +59,13 @@ const MyProfile = ({navigation}) => {
               source={{
                 uri: myProfileDetails.data.data.ProfileImage,
               }}
-              defaultSource={GIRL_PROFILE}
               style={styles.profileImg}
               resizeMode="cover"
             />
             <View>
               <Text style={styles.name}>
-                {myProfileDetails.data.data.Username}
+                {myProfileDetails.data.data.Firstname}{' '}
+                {myProfileDetails.data.data.Lastname}
               </Text>
               <Text style={styles.email}>
                 {myProfileDetails.data.data.email}
@@ -74,7 +75,7 @@ const MyProfile = ({navigation}) => {
                 callBack={() =>
                   navigateTo('EditProfile')({
                     profileImg: myProfileDetails.data.data.ProfileImage,
-                    userName: myProfileDetails.data.data.UserName,
+                    userName: myProfileDetails.data.data.Firstname,
                     email: myProfileDetails.data.data.email,
                   })
                 }>
@@ -144,6 +145,7 @@ const MyProfile = ({navigation}) => {
         <CardViewDivider style={{marginVertical: HP(30)}} />
         <ProfilePaymentHistory />
       </Container>
+      <CountFilter onCountSelect={onCountSelect} />
     </View>
   );
 };

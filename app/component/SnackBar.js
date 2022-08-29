@@ -6,16 +6,18 @@ import {
   WHITE,
 } from '../styles/Fonts&Colors';
 
-const SnackBar = (text, duration = null, action) => {
+const SnackBar = (text, autoDismiss = true, action = false) => {
   return Snackbar.show({
     text: text,
     backgroundColor: WHITE,
     textColor: BLACK_COLOR_90,
     fontFamily: ROBOTO_MEDIUM,
     numberOfLines: 2,
-    duration: duration ? duration : Snackbar.LENGTH_LONG,
-    action: {
-      ...action,
+    duration: autoDismiss ? Snackbar.LENGTH_LONG : Snackbar.LENGTH_INDEFINITE,
+    action: action && {
+      text: 'Ok',
+      textColor: 'black',
+      onPress: () => Snackbar.dismiss(),
     },
   });
 };

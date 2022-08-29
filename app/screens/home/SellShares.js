@@ -1,5 +1,6 @@
 import {View, Text, Image} from 'react-native';
 import React, {useCallback, useState} from 'react';
+import {useDispatch} from 'react-redux';
 
 import CommonHeader from '../../component/CommonHeader';
 import Container from '../../component/Container';
@@ -9,7 +10,6 @@ import RowContainer from '../../component/RowContainer';
 import FieldInput from '../auth/common/FieldInput';
 import ActionButton from '../../component/ActionButton';
 import WarningBanner from '../../component/WarningBanner';
-import TestData from './Testdata.json';
 
 import {WP, HP} from '../../styles/Dimesions';
 import GlobalStyles, {
@@ -24,7 +24,10 @@ import {
   SECONDARY_COLOR,
   WHITE,
 } from '../../styles/Fonts&Colors';
-import {ARROWSHARES_SVG, ARROW_DOWN, CLOCK} from '../../constants/IconConstant';
+import {ARROWSHARES_SVG, CLOCK} from '../../constants/IconConstant';
+import {isFeildValid} from '../../utils/Validation';
+import sellStock from '../../services/stock/SellStocks';
+import Loader from '../../component/Loader';
 
 const data = [
   {
@@ -44,14 +47,50 @@ const data = [
   },
 ];
 
-const SellShares = () => {
+function ShareShowCard(props) {
+  return (
+    <RowContainer
+      style={{
+        alingItems: 'center',
+        paddingVertical: HP(8),
+      }}>
+      <Text
+        numberOfLines={1}
+        style={{
+          width: '50%',
+          fontFamily: ROBOTO_REGULAR,
+          color: WHITE,
+          alignSelf: 'flex-start',
+        }}>
+        {props.title}
+      </Text>
+      <Text
+        style={{
+          textAlign: 'center',
+          width: '50%',
+          fontFamily: ROBOTO_REGULAR,
+          color: SECONDARY_COLOR,
+        }}>
+        {props.item}
+      </Text>
+    </RowContainer>
+  );
+}
+
+const SellShares = ({route, navigation}) => {
+  const {title, created_at, CodeId, stockAmout, stock_id, totalShare, isSell} =
+    route.params;
+
   const [getter, setter] = useState({
     ammount: '',
+    isLoading: false,
   });
 
   const [error, setError] = useState({
     ammounError: '',
   });
+
+  const dispatch = useDispatch();
 
   const onChangeText = useCallback(
     (text, key) => {
@@ -63,6 +102,22 @@ const SellShares = () => {
     [getter, setter],
   );
 
+  const onSellShare = () => {
+    const [ammount] = isFeildValid(getter.ammount);
+    if (ammount == '') {
+      dispatch(sellStock(getter.ammount, CodeId, setter, navigation));
+      setError(prev => ({
+        ...prev,
+        ammounError: '',
+      }));
+    } else {
+      setError(prev => ({
+        ...prev,
+        ammounError: ammount,
+      }));
+    }
+  };
+
   return (
     <View style={{flex: 1}}>
       <CommonHeader title="Sell Shares" />
@@ -70,54 +125,49 @@ const SellShares = () => {
         scrollViewContainerStyle={{
           paddingTop: CONTAINER_PADDINGTOP,
         }}>
-        {TestData.map((item, index) => {
-          return (
-            <View
-              key={item.id}
+        <View
+          style={[
+            styles.itemContainer,
+            {
+              backgroundColor: '#01C4000F',
+            },
+          ]}>
+          <View>
+            <Text style={styles.itemContainerLeftTitTxt}>{title}</Text>
+            <RowContainer style={{marginTop: HP(10), alignItems: 'center'}}>
+              <Image
+                source={CLOCK}
+                style={{
+                  width: 14,
+                  height: 14,
+                  tintColor: WHITE,
+                  resizeMode: 'center',
+                }}
+              />
+              <Text style={styles.itemContainerLeftSubTitTxt}>
+                {created_at}
+              </Text>
+            </RowContainer>
+          </View>
+          <View>
+            <Text
               style={[
-                styles.itemContainer,
-                {
-                  backgroundColor: index % 2 === 0 ? '#01C4000F' : undefined,
-                },
+                styles.itemContainerLeftTitTxt,
+                {alignSelf: 'flex-end', fontSize: WP(14)},
               ]}>
-              <View>
-                <Text style={styles.itemContainerLeftTitTxt}>{item.title}</Text>
-                <RowContainer style={{marginTop: HP(10), alignItems: 'center'}}>
-                  <Image
-                    source={CLOCK}
-                    style={{
-                      width: 14,
-                      height: 14,
-                      tintColor: WHITE,
-                      marginRight: 13,
-                    }}
-                  />
-                  <Text style={styles.itemContainerLeftSubTitTxt}>
-                    {item.time}
-                  </Text>
-                </RowContainer>
-              </View>
-              <View>
-                <Text
-                  style={[
-                    styles.itemContainerLeftTitTxt,
-                    {alignSelf: 'flex-end', fontSize: WP(14)},
-                  ]}>
-                  {item.value}
-                </Text>
-                <Text
-                  style={{
-                    marginTop: HP(10),
-                    color: SECONDARY_COLOR,
-                    fontFamily: ROBOTO_MEDIUM,
-                    fontSize: WP(12),
-                  }}>
-                  {item.statistics}
-                </Text>
-              </View>
-            </View>
-          );
-        })}
+              {stockAmout}
+            </Text>
+            {/* <Text
+              style={{
+                marginTop: HP(10),
+                color: SECONDARY_COLOR,
+                fontFamily: ROBOTO_MEDIUM,
+                fontSize: WP(12),
+              }}>
+              {item.statistics}
+            </Text> */}
+          </View>
+        </View>
         <CardViewDivider
           style={{
             marginVertical: HP(15),
@@ -134,7 +184,7 @@ const SellShares = () => {
                 color: '#FA963A',
                 fontSize: WP(30),
               }}>
-              800
+              {totalShare || 0}
             </Text>
             <Text
               style={{
@@ -147,7 +197,11 @@ const SellShares = () => {
             </Text>
           </View>
           <View>
-            <Text
+            {/**
+             * current price per Share
+             */}
+
+            {/* <Text
               style={{
                 alignSelf: 'flex-end',
                 fontFamily: ROBOTO_MEDIUM,
@@ -166,7 +220,7 @@ const SellShares = () => {
                 fontSize: WP(15),
               }}>
               {`Current Price\nper share`}
-            </Text>
+            </Text> */}
           </View>
         </RowContainer>
         <CardViewDivider
@@ -176,6 +230,8 @@ const SellShares = () => {
           }}
         />
         <FieldInput
+          keyboardType={'number-pad'}
+          editable={getter.isLoading ? false : true}
           errorMessage={error.ammounError}
           placeholder={'20'}
           containerStyle={{marginHorizontal: PADDING_HORIZONTAL}}
@@ -196,49 +252,34 @@ const SellShares = () => {
           }}
           title={'Enter Quantity Of Shares which you want’s to sell'}
         />
-
         <CardViewDivider
           style={{
             marginVertical: HP(30),
           }}
         />
         <View style={{paddingHorizontal: PADDING_HORIZONTAL}}>
-          <View
-            style={[
-              GlobalStyles.dropShadow,
-              {
-                borderWidth: 0,
-                paddingHorizontal: PADDING_HORIZONTAL,
-                paddingVertical: HP(12),
-              },
-            ]}>
-            {data.map(item => {
-              return (
-                <RowContainer
-                  style={{alingItems: 'center', paddingVertical: HP(8)}}>
-                  <Text
-                    numberOfLines={1}
-                    style={{
-                      width: '50%',
-                      fontFamily: ROBOTO_REGULAR,
-                      color: WHITE,
-                      alignSelf: 'flex-start',
-                    }}>
-                    {item.name}
-                  </Text>
-                  <Text
-                    style={{
-                      textAlign: 'center',
-                      width: '50%',
-                      fontFamily: ROBOTO_REGULAR,
-                      color: SECONDARY_COLOR,
-                    }}>
-                    {item.value}
-                  </Text>
-                </RowContainer>
-              );
-            })}
-          </View>
+          {totalShare > 0 && (
+            <View
+              style={[
+                GlobalStyles.dropShadow,
+                {
+                  borderWidth: 0,
+                  paddingHorizontal: PADDING_HORIZONTAL,
+                  paddingVertical: HP(12),
+                },
+              ]}>
+              <ShareShowCard
+                title={'Number of Shares'}
+                item={totalShared}></ShareShowCard>
+              <ShareShowCard
+                title={'Price per share'}
+                item={'Price_Per_Share'}></ShareShowCard>
+              <ShareShowCard
+                item={'Total Price'}
+                title={'Total Price'}></ShareShowCard>
+              ;
+            </View>
+          )}
         </View>
         <CardViewDivider
           style={{
@@ -246,10 +287,16 @@ const SellShares = () => {
           }}
         />
         <ActionButton
+          callBack={() => onSellShare()}
+          disabled={getter.isLoading ? true : false}
           style={{
             width: WP(127),
           }}>
-          <Text style={styles.bigActionBtnTxt}>Sell Now</Text>
+          {getter.isLoading ? (
+            <Loader />
+          ) : (
+            <Text style={styles.bigActionBtnTxt}>Sell Now</Text>
+          )}
         </ActionButton>
       </Container>
     </View>

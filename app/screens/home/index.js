@@ -34,7 +34,7 @@ const Home = ({navigation}) => {
 
   const dispatch = useDispatch();
 
-  console.log(myPortfolio.data);
+  // console.log(myPortfolio.data);
 
   useEffect(() => {
     dispatch(GetMyStockPortfolio());

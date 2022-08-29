@@ -12,7 +12,7 @@ import Loader from '../../component/Loader';
 import RowContainer from '../../component/RowContainer';
 import ActionButton from '../../component/ActionButton';
 
-import {Selector} from '../../store/redux/dashboard';
+import {Selector as dashBoardSelector} from '../../store/redux/dashboard';
 
 import {HP, WINDOW_HEIGHT, WP} from '../../styles/Dimesions';
 import {
@@ -75,9 +75,9 @@ function Shares({title, color, screenName = '', data = {}, navigation}) {
 }
 
 const Portfolio = ({route, navigation}) => {
-  const {CodeId, stockAmout, title, created_at} = route.params;
+  const {CodeId, stockAmout, title, created_at, stock_id} = route.params;
 
-  const stockView = useSelector(Selector.STOCK_VIEW);
+  const stockView = useSelector(dashBoardSelector.STOCK_VIEW);
 
   const dispatch = useDispatch();
 
@@ -154,7 +154,16 @@ const Portfolio = ({route, navigation}) => {
               navigation={navigation}
               screenName={'SellShares'}
               color={BLACK_01}
-              title={'Sell'}></Shares>
+              title={'Sell'}
+              data={{
+                title,
+                created_at,
+                CodeId,
+                stockAmout,
+                stock_id,
+                totalShare: stockView.totalshare,
+                isSell: stockView.is_sell,
+              }}></Shares>
             <Shares
               navigation={navigation}
               screenName={'BuyShares'}
@@ -165,6 +174,7 @@ const Portfolio = ({route, navigation}) => {
                 created_at,
                 CodeId,
                 stockAmout,
+                stock_id,
               }}></Shares>
           </RowContainer>
         </Container>
