@@ -3,9 +3,13 @@ import {getItem} from '../utils/AsyncStorage';
 import {AUTH_LOGIN} from '../constants/AppConstant';
 
 export const getRequest = async url => {
+  const token = await getItem(AUTH_LOGIN);
   return await axios.request({
     method: 'get',
-    url: url_1,
+    url: url,
+    // headers: {
+    //   Authorization: `Bearer ${token}`,
+    // },
   });
 };
 

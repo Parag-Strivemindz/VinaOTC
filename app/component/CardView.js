@@ -112,14 +112,7 @@ const CardView = ({callback, url, data}) => {
       <RowContainer
         callback={() => {
           if (callback != undefined) {
-            const closurefunction = callback();
-            closurefunction({
-              CodeId: code,
-              stockAmout: stock_amount,
-              title: title,
-              created_at: created_at,
-              stock_id,
-            });
+            callback();
           }
         }}>
         {RenderBack(url)}

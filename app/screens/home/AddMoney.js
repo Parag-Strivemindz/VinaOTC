@@ -17,6 +17,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import getBankInfoList from '../../services/bank/BankInfoList';
 import {Selector} from '../../store/redux/bank/index';
+import {Selector as supportAndHelp} from '../../store/redux/setting/index';
 
 import {isFeildValid} from '../../utils/Validation';
 import styles from './styles';
@@ -54,6 +55,7 @@ import {
 } from '../../constants/IconConstant';
 import Loader from '../../component/Loader';
 import DepositeFunds from '../../services/bank/DepositeFunds';
+import ContactUs from '../../services/setting/ContactUs';
 
 const filerItems = [
   {
@@ -185,7 +187,9 @@ const FindAttachment = ({close, callback}) => {
 };
 
 function AddMoney({navigation, route}) {
-  const bankInfo = useSelector(Selector.BankInfoList);
+  // const bankInfo = useSelector(Selector.BankInfoList);
+  const helpandSupport = useSelector(supportAndHelp.CONTACT_US);
+
   const [getter, setter] = useState({
     ammount: '',
     attachment: {
@@ -202,7 +206,7 @@ function AddMoney({navigation, route}) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getBankInfoList());
+    dispatch(ContactUs());
   }, []);
 
   const [error, setError] = useState({
@@ -274,7 +278,6 @@ function AddMoney({navigation, route}) {
   };
 
   const onFundDeposite = useCallback(() => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const [ammount] = isFeildValid(getter.ammount);
     // getter.attachment.uri != '' add this later
     if ((ammount == '', getter.attachment.uri != '')) {
@@ -366,9 +369,9 @@ function AddMoney({navigation, route}) {
          * Bank Details
          */}
         <View style={{paddingHorizontal: PADDING_HORIZONTAL}}>
-          {bankInfo.data ? (
-            bankInfo.data.data &&
-            bankInfo.data.data.map((item, index) => {
+          {helpandSupport.data ? (
+            helpandSupport.data.data &&
+            helpandSupport.data.data.bank_list.map((item, index) => {
               return (
                 <View
                   key={index.toString()}
@@ -399,7 +402,7 @@ function AddMoney({navigation, route}) {
                 </View>
               );
             })
-          ) : bankInfo.isLoading ? (
+          ) : helpandSupport.isLoading ? (
             <Loader size={'large'} color={SECONDARY_COLOR} />
           ) : null}
         </View>

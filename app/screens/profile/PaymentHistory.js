@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Text, View, InteractionManager} from 'react-native';
+import {Text, View, InteractionManager, Pressable} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import PropTypes from 'prop-types';
 import Animated, {
@@ -20,8 +20,14 @@ import ActionButton from '../../component/ActionButton';
 import CardViewDivider from '../../component/CardViewDivider';
 import Loader from '../../component/Loader';
 
+import GlobalStyles from '../../styles/GlobalStyles';
 import styles from './styles';
-import {CIRCLE, FILLTER_EQUALIZER, WALLET} from '../../constants/IconConstant';
+import {
+  CIRCLE,
+  ERROR,
+  FILLTER_EQUALIZER,
+  WALLET,
+} from '../../constants/IconConstant';
 import {PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
 import {
   BLACK_70,
@@ -31,7 +37,7 @@ import {
   SECONDARY_COLOR,
   WHITE,
 } from '../../styles/Fonts&Colors';
-import {HP} from '../../styles/Dimesions';
+import {HP, WP} from '../../styles/Dimesions';
 
 const filerItems = [
   {
@@ -63,6 +69,7 @@ const PaymentFilter = ({selectedItem, close, callback}) => {
           }}>
           Filter by
         </Text>
+
         <SvgXml
           xml={ERROR}
           onPress={() => close()}
@@ -136,14 +143,24 @@ const ProfilePaymentHistory = ({numberOfItems}) => {
     <View style={{paddingHorizontal: PADDING_HORIZONTAL}}>
       <RowContainer style={{marginBottom: HP(30)}}>
         <Text style={styles.paymentHistory}>PAYMENT HISTORY</Text>
-        <SvgXml
-          xml={FILLTER_EQUALIZER}
-          width={15}
-          height={15}
-          onPress={() => {
-            callback();
-          }}
-        />
+        <Pressable
+          onPress={close}
+          android_ripple={{
+            borderless: true,
+            radius: 20,
+          }}>
+          <SvgXml
+            hitSlop={{
+              left: 10,
+              right: 10,
+              top: 10,
+              bottom: 10,
+            }}
+            xml={FILLTER_EQUALIZER}
+            width={20}
+            height={20}
+          />
+        </Pressable>
       </RowContainer>
       {myPaymentHistory.data ? (
         myPaymentHistory.data.data.map((item, index) => {

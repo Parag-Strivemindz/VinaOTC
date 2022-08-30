@@ -16,6 +16,7 @@ import {PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
 const AllPortfolio = ({navigation, route}) => {
   const {walletDetails, allPortfolio, navigateTo} = route.params;
 
+  console.log(JSON.stringify(allPortfolio.data[0].code) + ' fromAllPorfolio');
   const rightItem = () => <SvgXml xml={ARROW_DIGONAL} onPress={() => {}} />;
 
   return (
@@ -57,8 +58,8 @@ const AllPortfolio = ({navigation, route}) => {
                   key={index.toString()}
                   data={item}
                   callback={() =>
-                    navigateTo('Portfolio', {
-                      stockId: allPortfolio.stock_id,
+                    navigateTo('Portfolio')({
+                      CodeID: item.code,
                     })
                   }
                 />

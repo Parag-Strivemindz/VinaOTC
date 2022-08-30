@@ -14,7 +14,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import strings from '../../utils/Localization';
 import {loginUser} from '../../services/auth';
-import {emailVerification} from '../../utils/Validation';
+import {emailVerification, passwordVerification} from '../../utils/Validation';
 import FieldInput from './common/FieldInput';
 import CommonAuthComponent from './common/ImageHeader';
 import ActionButton from '../../component/ActionButton';
@@ -90,9 +90,10 @@ const Login = ({navigation}) => {
   useFocusEffect(emptyState);
 
   const makeLoginCall = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const isValid = emailVerification(getter.email);
-    if (isValid == '' && getter.password != '') {
+    const [passwordError] = passwordVerification(getter.password);
+
+    if (isValid == '' && passwordError == '') {
       dispatch(loginUser(getter.email, getter.password));
       setter(prev => ({
         ...prev,
@@ -103,10 +104,7 @@ const Login = ({navigation}) => {
       setter(prev => ({
         ...prev,
         emailError: isValid,
-        passwordError:
-          getter.password == ''
-            ? `${strings.emptyFldErr}${strings.Password}`
-            : '',
+        passwordError: passwordError,
       }));
     }
   };

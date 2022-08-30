@@ -1,5 +1,6 @@
-import {View, Text, LayoutAnimation} from 'react-native';
+import {View, Text} from 'react-native';
 import React, {useCallback, useState} from 'react';
+import {useDispatch} from 'react-redux';
 
 import {isFeildValid, NumberVerification} from '../../utils/Validation';
 import Container from '../../component/Container';
@@ -21,6 +22,8 @@ import GlobalStyles, {
   PADDING_VERTICAL,
 } from '../../styles/GlobalStyles';
 import {HP, WP} from '../../styles/Dimesions';
+import WithDrawFundAction from '../../services/stock/Withdraw';
+import Loader from '../../component/Loader';
 
 const WithdrawPayment = () => {
   const [getter, setter] = useState({
@@ -31,6 +34,7 @@ const WithdrawPayment = () => {
     bankName: '',
     branchCode: '',
     branchAddress: '',
+    isLoading: false,
   });
 
   const [error, setError] = useState({
@@ -43,6 +47,8 @@ const WithdrawPayment = () => {
     branchAddressError: '',
   });
 
+  const dispatch = useDispatch();
+
   const onChangeText = useCallback(
     (text, key) => {
       setter(prev => ({
@@ -54,20 +60,21 @@ const WithdrawPayment = () => {
   );
 
   const onWithdrawHandler = useCallback(() => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const [acHolder, bankname, branchaddress] = isFeildValid(
       getter.accountHolder,
       getter.bankName,
       getter.branchAddress,
     );
 
-    const [acnumber, ifsccode, branchcode] = NumberVerification(
-      getter.accountNumber,
-      getter.ifscCode,
-      getter.branchCode,
-    );
+    const [ammountError] = isFeildValid(getter.ammount);
 
+    const [acnumber, branchcode, ifsccode] = NumberVerification(
+      getter.accountNumber,
+      getter.branchCode,
+      getter.ifscCode,
+    );
     if (
+      ammountError == '' &&
       acHolder == '' &&
       bankname == '' &&
       branchaddress == '' &&
@@ -75,9 +82,11 @@ const WithdrawPayment = () => {
       ifsccode == '' &&
       branchcode == ''
     ) {
+      dispatch(WithDrawFundAction(getter, setter));
       //make api call here
       setError(prev => ({
         ...prev,
+        ammounError: '',
         accountNumberError: '',
         ifscCodeError: '',
         accountHolderError: '',
@@ -88,6 +97,7 @@ const WithdrawPayment = () => {
     } else {
       setError(prev => ({
         ...prev,
+        ammounError: ammountError,
         accountNumberError: acnumber,
         ifscCodeError: ifsccode,
         accountHolderError: acHolder,
@@ -119,17 +129,13 @@ const WithdrawPayment = () => {
             Please Enter ammout that you wants to Deposit
           </Text>
           <FieldInput
+            keyboardType={'number-pad'}
             containerStyle={{
               marginTop: HP(10),
             }}
             errorMessage={error.ammounError}
             value={getter.ammount}
-            onChangeText={text => {
-              setter(prev => ({
-                ...prev,
-                ammount: text,
-              }));
-            }}
+            onChangeText={text => onChangeText(text, 'ammount')}
             placeholder={'500'}
             style={{
               color: WHITE,
@@ -150,6 +156,7 @@ const WithdrawPayment = () => {
             }}>
             <Text style={styles.fieldPlaceholder}>Account Number</Text>
             <FieldInput
+              keyboardType={'number-pad'}
               containerStyle={{marginTop: HP(10)}}
               placeholder={'1254 2145 2548 2578'}
               errorMessage={error.accountNumberError}
@@ -212,7 +219,7 @@ const WithdrawPayment = () => {
             <FieldInput
               containerStyle={{marginTop: HP(10)}}
               placeholder={'1254'}
-              errorMessage={error.accountNumberError}
+              errorMessage={error.branchCodeError}
               placeholdercolor={WHITE_50}
               style={styles.filedInputTxt}
               value={getter.branchCode}
@@ -227,7 +234,7 @@ const WithdrawPayment = () => {
             <FieldInput
               containerStyle={{marginTop: HP(10)}}
               placeholder={'7845'}
-              errorMessage={error.accountNumberError}
+              errorMessage={error.branchAddressError}
               placeholdercolor={WHITE_50}
               style={styles.filedInputTxt}
               value={getter.branchAddress}
@@ -236,18 +243,23 @@ const WithdrawPayment = () => {
           </View>
         </View>
         <ActionButton
+          disabled={getter.isLoading ? true : false}
           callBack={() => onWithdrawHandler()}
           style={{
             width: WP(155),
             marginTop: HP(20),
           }}>
-          <Text
-            style={{
-              fontFamily: ROBOTO_REGULAR,
-              color: WHITE,
-            }}>
-            Withdraw Funds
-          </Text>
+          {getter.isLoading ? (
+            <Loader />
+          ) : (
+            <Text
+              style={{
+                fontFamily: ROBOTO_REGULAR,
+                color: WHITE,
+              }}>
+              Withdraw Funds
+            </Text>
+          )}
         </ActionButton>
       </Container>
     </View>

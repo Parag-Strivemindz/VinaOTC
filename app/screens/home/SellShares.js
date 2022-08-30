@@ -78,7 +78,7 @@ function ShareShowCard(props) {
 }
 
 const SellShares = ({route, navigation}) => {
-  const {title, created_at, CodeId, stockAmout, stock_id, totalShare, isSell} =
+  const {title, created_at, CodeID, stockAmout, stock_id, totalShare, isSell} =
     route.params;
 
   const [getter, setter] = useState({
@@ -105,7 +105,7 @@ const SellShares = ({route, navigation}) => {
   const onSellShare = () => {
     const [ammount] = isFeildValid(getter.ammount);
     if (ammount == '') {
-      dispatch(sellStock(getter.ammount, CodeId, setter, navigation));
+      dispatch(sellStock(getter.ammount, CodeID, setter, navigation));
       setError(prev => ({
         ...prev,
         ammounError: '',

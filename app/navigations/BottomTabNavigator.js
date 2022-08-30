@@ -1,8 +1,10 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, View, Animated} from 'react-native';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import {
+  getFocusedRouteNameFromRoute,
+  useFocusEffect,
+} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useFocusEffect} from '@react-navigation/native';
 
 import HomeStack from './Home';
 import SettingStack from './settings';
@@ -21,26 +23,33 @@ import PaymentHistory from '../screens/history';
 const Tab = createBottomTabNavigator();
 
 const getRouteName = route => {
-  const hideOnRoute = ['Chat'];
+  const hideOnRoute = ['home', 'Setting', 'Profile'];
   const routeName = getFocusedRouteNameFromRoute(route);
   if (routeName != undefined) {
-    if (routeName.includes('Chat')) {
-      return 'none';
-    }
-    return 'flex';
+    const onHide = hideOnRoute.indexOf(routeName);
+    return onHide != -1 ? 'flex' : 'none';
   }
 };
 
-const TabBarIcon = ({focused, src}) => {
-  const ActiveBar = useRef(new Animated.Value(0)).current;
-
-  useFocusEffect(() => {
-    Animated.timing(ActiveBar, {
-      toValue: focused ? 1 : 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  });
+const TabBarIcon = ({focused, route, src}) => {
+  // const routeName = getFocusedRouteNameFromRoute(route);
+  const [first, setfirst] = useState(focused);
+  const ActiveBar = new Animated.Value(1);
+  const routeStack = [
+    'HomeStack',
+    'SettingStack',
+    'PaymentHistory',
+    'ProfileStack',
+  ];
+  // console.log(f);
+  // useFocusEffect(() => {
+  //   console.log(first + ' first');
+  //   Animated.timing(ActiveBar, {
+  //     toValue: first ? 1 : 0,
+  //     duration: 200,
+  //     useNativeDriver: true,
+  //   }).start();
+  // });
 
   return (
     <View>
@@ -59,7 +68,11 @@ const TabBarIcon = ({focused, src}) => {
             borderColor: 'orange',
             transform: [
               {
-                scale: ActiveBar,
+                scale: ActiveBar.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, 1],
+                  extrapolate: 'clamp',
+                }),
               },
             ],
             borderBottomWidth: 2,
@@ -82,42 +95,47 @@ const BottomTab = () => (
     <Tab.Screen
       name="HomeStack"
       component={HomeStack}
-      options={{
+      options={({route}) => ({
+        tabBarStyle: {
+          display: getRouteName(route),
+        },
         tabBarIcon: ({focused}) => (
-          <TabBarIcon focused={focused} src={HOME_SVG} />
+          <TabBarIcon focused={focused} route={route} src={HOME_SVG} />
         ),
-      }}
+      })}
     />
     <Tab.Screen
       name="SettingStack"
       component={SettingStack}
       options={({route, navigation}) => ({
         tabBarStyle: {
-          ...styles.tabBarContainer,
           display: getRouteName(route),
         },
         tabBarIcon: ({focused}) => (
-          <TabBarIcon focused={focused} src={SETTING_SVG} />
+          <TabBarIcon focused={focused} route={route} src={SETTING_SVG} />
         ),
       })}
     />
     <Tab.Screen
       name="PaymentHistory"
       component={PaymentHistory}
-      options={{
+      options={({route}) => ({
         tabBarIcon: ({focused}) => (
-          <TabBarIcon focused={focused} src={POSTCARD_SVG} />
+          <TabBarIcon focused={focused} route={route} src={POSTCARD_SVG} />
         ),
-      }}
+      })}
     />
     <Tab.Screen
       name="ProfileStack"
       component={ProfileStack}
-      options={{
+      options={({route}) => ({
+        tabBarStyle: {
+          display: getRouteName(route),
+        },
         tabBarIcon: ({focused}) => (
-          <TabBarIcon focused={focused} src={USER_SVG} />
+          <TabBarIcon focused={focused} route={route} src={USER_SVG} />
         ),
-      }}
+      })}
     />
   </Tab.Navigator>
 );

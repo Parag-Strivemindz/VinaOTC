@@ -18,6 +18,7 @@ import Animated, {
   SlideOutDown,
   SlideOutUp,
   SlideInRight,
+  Layout,
 } from 'react-native-reanimated';
 
 import {HP} from '../../../styles/Dimesions';
@@ -134,6 +135,7 @@ const FieldInput = ({
 
   return (
     <View
+      View
       style={{
         ...containerStyle,
       }}>
@@ -142,7 +144,7 @@ const FieldInput = ({
           style={[
             styles.container,
             {
-              borderWidth: errorMessage != '' ? 1 : 1,
+              borderWidth: 1,
               borderColor: errorMessage != '' ? 'red' : WHITE_50,
             },
           ]}>
@@ -152,7 +154,8 @@ const FieldInput = ({
       {errorMessage != '' && (
         <AnimatedError
           style={[styles.erroMessageTxt]}
-          entering={SlideInDown.easing(Easing.linear).duration(500)}
+          entering={FadeIn}
+          // layout={Layout.}
           exiting={FadeOut}>
           {errorMessage}
         </AnimatedError>
@@ -194,7 +197,7 @@ const styles = StyleSheet.create({
   },
 });
 
-FieldInput.Proptypes = {
+FieldInput.propTypes = {
   value: Proptypes.string.isRequired,
   onChangeText: Proptypes.func.isRequired,
   placeholder: Proptypes.string.isRequired,

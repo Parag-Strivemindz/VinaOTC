@@ -1,13 +1,19 @@
 import React from 'react';
+import {useEffect} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {Neomorph, NeomorphFlex, Shadow} from 'react-native-neomorph-shadows';
+import {useDispatch, useSelector} from 'react-redux';
 
 import CommonHeader from '../../component/CommonHeader';
 import Container from '../../component/Container';
+import Loader from '../../component/Loader';
 import RowContainer from '../../component/RowContainer';
-import {HP, WINDOW_WIDTH, WP} from '../../styles/Dimesions';
+import getNotification from '../../services/user/Notification';
+import {Selector} from '../../store/redux/user';
+import {HP, WINDOW_HEIGHT, WINDOW_WIDTH, WP} from '../../styles/Dimesions';
 
 import {
+  MONTSERRAT_MEDIUM,
   MONTSERRAT_REGULAR,
   ROBOTO_BOLD,
   ROBOTO_MEDIUM,
@@ -56,83 +62,108 @@ const data = [
 ];
 
 function Notification() {
+  const notification = useSelector(Selector.GET_NOTIFICATION);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getNotification());
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <CommonHeader title="Notification" />
-      <Container
-        scrollViewContainerStyle={{
-          paddingTop: CONTAINER_PADDINGTOP,
-          paddingHorizontal: PADDING_HORIZONTAL,
-        }}>
-        <View>
-          {data.map(item => {
-            return (
-              <View
-                key={item.id}
-                style={[
-                  GlobalStyles.dropShadow,
-                  {
-                    // shadowOffset: {width: 10, height: 10},
-                    marginTop: HP(20),
-                    padding: 15,
-                    // shadowOpacity: 0.2,
-                    // shadowRadius: 10,
-                    borderRadius: 10,
-                    borderWidth: 0,
-                    width: WINDOW_WIDTH * 0.9,
-                    borderTopLeftRadius: 20,
-                  },
-                ]}>
-                <RowContainer
-                  style={{
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                  }}>
-                  <Neumor
-                    inner={true}
-                    darkShadow={'#000000'}
-                    lightShadow={WHITE}
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text style={styles.text}>SM</Text>
-                  </Neumor>
-                  <View style={{marginLeft: WP(15)}}>
-                    <Text
+      {notification.data ? (
+        notification.data.data && (
+          <Container
+            scrollViewContainerStyle={{
+              paddingTop: CONTAINER_PADDINGTOP,
+              paddingHorizontal: PADDING_HORIZONTAL,
+            }}>
+            <View>
+              {notification.data.data.map(item => {
+                return (
+                  <View
+                    key={item.notification_id}
+                    style={[
+                      GlobalStyles.dropShadow,
+                      {
+                        // shadowOffset: {width: 10, height: 10},
+                        marginTop: HP(20),
+                        padding: 15,
+                        // shadowOpacity: 0.2,
+                        // shadowRadius: 10,
+                        borderRadius: 10,
+                        borderWidth: 0,
+                        width: WINDOW_WIDTH * 0.9,
+                        borderTopLeftRadius: 20,
+                      },
+                    ]}>
+                    <RowContainer
                       style={{
-                        color: SECONDARY_COLOR,
-                        fontFamily: ROBOTO_MEDIUM,
-                        fontSize: WP(17),
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
                       }}>
-                      {item.sender}
-                    </Text>
+                      <Neumor
+                        inner={true}
+                        darkShadow={'#000000'}
+                        lightShadow={WHITE}
+                        style={{
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={styles.text}>SM</Text>
+                      </Neumor>
+                      <View style={{marginLeft: WP(15)}}>
+                        <Text
+                          style={{
+                            color: SECONDARY_COLOR,
+                            fontFamily: ROBOTO_MEDIUM,
+                            fontSize: WP(17),
+                          }}>
+                          {item.title}
+                        </Text>
+                        <Text
+                          style={{
+                            fontFamily: ROBOTO_REGULAR,
+                            color: WHITE,
+                            fontSize: WP(10),
+                            marginTop: HP(2),
+                          }}>
+                          {item.created_at}
+                        </Text>
+                      </View>
+                    </RowContainer>
                     <Text
                       style={{
-                        fontFamily: ROBOTO_REGULAR,
+                        lineHeight: 20,
+                        marginTop: HP(20),
+                        fontFamily: MONTSERRAT_REGULAR,
                         color: WHITE,
-                        fontSize: WP(10),
-                        marginTop: HP(2),
+                        fontSize: WP(13),
                       }}>
-                      {item.time}
+                      {item.message}
                     </Text>
                   </View>
-                </RowContainer>
-                <Text
-                  style={{
-                    lineHeight: 20,
-                    marginTop: HP(20),
-                    fontFamily: MONTSERRAT_REGULAR,
-                    color: WHITE,
-                    fontSize: WP(13),
-                  }}>
-                  {item.message}
-                </Text>
-              </View>
-            );
-          })}
-        </View>
-      </Container>
+                );
+              })}
+            </View>
+          </Container>
+        )
+      ) : notification.isLoading ? (
+        <Loader />
+      ) : (
+        <Text
+          style={{
+            color: WHITE,
+            fontFamily: MONTSERRAT_MEDIUM,
+            alignSelf: 'center',
+            marginTop: WINDOW_HEIGHT / 2,
+            fontSize: WP(12),
+          }}>
+          You don't have any notification
+        </Text>
+      )}
     </View>
   );
 }

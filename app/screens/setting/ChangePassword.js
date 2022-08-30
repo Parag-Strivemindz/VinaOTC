@@ -1,15 +1,15 @@
-import {
-  View,
-  Text,
-  Image,
-  UIManager,
-  Platform,
-  LayoutAnimation,
-} from 'react-native';
+import {View, Text} from 'react-native';
 import React, {useState, useCallback} from 'react';
+import {useDispatch} from 'react-redux';
+
+import ChangePasswordAction from '../../services/setting/ChangePassword';
+
 import Container from '../../component/Container';
 import FieldInput from '../auth/common/FieldInput';
+import ActionButton from '../../component/ActionButton';
+import CommonHeader from '../../component/CommonHeader';
 import {passwordVerification} from '../../utils/Validation';
+
 import {
   HEADER_HEIGHT,
   PADDING_HORIZONTAL,
@@ -17,26 +17,15 @@ import {
 } from '../../styles/GlobalStyles';
 import {LOCK_SVG} from '../../constants/ImageConstant';
 import {WP, HP} from '../../styles/Dimesions';
-import ActionButton from '../../component/ActionButton';
-import CommonHeader from '../../component/CommonHeader';
-import {
-  ROBOTO_REGULAR,
-  WHITE,
-  WHITE_50,
-  WHITE_80,
-} from '../../styles/Fonts&Colors';
-
-if (Platform.OS === 'android') {
-  if (UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-}
+import {ROBOTO_REGULAR, WHITE, WHITE_80} from '../../styles/Fonts&Colors';
+import Loader from '../../component/Loader';
 
 const ChangePassword = () => {
   const [getter, setter] = useState({
     password: '',
     newPassword: '',
     confirmPassword: '',
+    isLoading: false,
   });
 
   const [error, setError] = useState({
@@ -45,15 +34,24 @@ const ChangePassword = () => {
     confirmPasswordError: '',
   });
 
-  const Submit = useCallback(() => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    const [passwordError, confirmPasswordError, isEqual] = passwordVerification(
-      getter.password,
-      getter.confirmPassword,
-    );
+  const dispatch = useDispatch();
 
-    if (passwordError == '' && confirmPasswordError == '' && isEqual == '') {
+  const Submit = useCallback(() => {
+    const [newpasswordError, confirmPasswordError, isEqual] =
+      passwordVerification(getter.newPassword, getter.confirmPassword);
+    const iscurrentPasswordError = getter.password >= 8 ? true : false;
+    console.log(iscurrentPasswordError + ' currentPasswordError');
+    if (
+      newpasswordError == '' &&
+      confirmPasswordError == '' &&
+      isEqual == '' &&
+      iscurrentPasswordError
+    ) {
+      console.log('called');
       //make api call here
+      dispatch(
+        ChangePasswordAction(getter.password, getter.newPassword, setter),
+      );
       setError(prev => ({
         ...prev,
         passwordError: '',
@@ -63,7 +61,10 @@ const ChangePassword = () => {
     } else {
       setError(prev => ({
         ...prev,
-        newPasswordError: passwordError,
+        passwordError: iscurrentPasswordError
+          ? ''
+          : "Password field Cant't be Empty",
+        newPasswordError: newpasswordError,
         confirmPasswordError: confirmPasswordError || isEqual,
       }));
     }
@@ -79,11 +80,17 @@ const ChangePassword = () => {
           paddingTop: HEADER_HEIGHT + PADDING_VERTICAL,
         }}>
         <FieldInput
+          onChangeText={text => {
+            setter(prev => ({
+              ...prev,
+              password: text,
+            }));
+          }}
+          value={getter.password}
           containerStyle={{
             marginTop: HP(15),
           }}
-          defaultValue={'********'}
-          editable={false}
+          placeholder={'Password'}
           iconLeft={LOCK_SVG}
           showhideIcon={true}
           errorMessage={error.passwordError}
@@ -97,10 +104,10 @@ const ChangePassword = () => {
           onChangeText={text =>
             setter(prev => ({
               ...prev,
-              password: text,
+              newPassword: text,
             }))
           }
-          value={getter.password}
+          value={getter.newPassword}
           iconLeft={LOCK_SVG}
           showhideIcon={true}
           errorMessage={error.newPasswordError}
@@ -125,14 +132,18 @@ const ChangePassword = () => {
         <ActionButton
           callBack={Submit}
           style={{width: WP(187), alignSelf: 'center', marginTop: HP(50)}}>
-          <Text
-            style={{
-              fontFamily: ROBOTO_REGULAR,
-              fontSize: WP(16),
-              color: WHITE,
-            }}>
-            Update Password
-          </Text>
+          {getter.isLoading ? (
+            <Loader />
+          ) : (
+            <Text
+              style={{
+                fontFamily: ROBOTO_REGULAR,
+                fontSize: WP(16),
+                color: WHITE,
+              }}>
+              Update Password
+            </Text>
+          )}
         </ActionButton>
       </Container>
     </View>

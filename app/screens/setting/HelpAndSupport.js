@@ -6,19 +6,26 @@ import {
   Platform,
   UIManager,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {SvgXml} from 'react-native-svg';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
+import {Selector as ContactusSelector} from '../../store/redux/setting/index';
+import ContactUs from '../../services/setting/ContactUs';
+import GetInTouch from '../../services/setting/GetInTouch';
+
+import ActionButton from '../../component/ActionButton';
 import FieldInput from '../auth/common/FieldInput';
 import Container from '../../component/Container';
 import CommonHeader from '../../component/CommonHeader';
 import HifenDivider from '../../component/HifenDivider';
-import {HELPANDSUPPORT} from '../../constants/ImageConstant';
-import {HEADER_HEIGHT, PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
-import {HP, WP} from '../../styles/Dimesions';
+import {EMAIL_SVG, HELPANDSUPPORT} from '../../constants/ImageConstant';
 import RowContainer from '../../component/RowContainer';
+
+import {HP, WP} from '../../styles/Dimesions';
+import {emailVerification, isFeildValid} from '../../utils/Validation';
 import {LOCATION, PHONE} from '../../constants/IconConstant';
+import {HEADER_HEIGHT, PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
 import {
   POPPINS_MEDIUM,
   POPPINS_REGULAR,
@@ -28,9 +35,7 @@ import {
   WHITE,
   WHITE_50,
 } from '../../styles/Fonts&Colors';
-import {useCallback} from 'react';
-import {emailVerification, isFeildValid} from '../../utils/Validation';
-import ActionButton from '../../component/ActionButton';
+import Loader from '../../component/Loader';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -38,16 +43,13 @@ if (Platform.OS === 'android') {
   }
 }
 const HelpAndSupport = () => {
-  const [isRegister, setRegister] = useState({
-    isRegister: false,
-    isLoading: false,
-  });
-  const dispatch = useDispatch();
+  const contactUs = useSelector(ContactusSelector.CONTACT_US);
 
   const [getter, setter] = useState({
     fullName: '',
     Email: '',
     yourMessage: '',
+    isLoading: false,
   });
 
   const [error, setError] = useState({
@@ -56,14 +58,26 @@ const HelpAndSupport = () => {
     yourMessageError: '',
   });
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (contactUs.data == null) {
+      dispatch(ContactUs());
+    }
+  }, []);
+
   const Submit = useCallback(() => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const isEmailValid = emailVerification(getter.Email);
+    const [fullName, yourMessage] = isFeildValid(
+      getter.fullName,
+      getter.yourMessage,
+    );
 
-    const [fullName] = isFeildValid(getter.fullName);
-
-    if (isEmailValid == '' && fullName == '' && getter.yourMessage == '') {
+    if (isEmailValid == '' && fullName == '' && yourMessage == '') {
       //make api call here
+      dispatch(
+        GetInTouch(getter.fullName, getter.Email, getter.yourMessage, setter),
+      );
       setError(prev => ({
         ...prev,
         emailError: '',
@@ -75,7 +89,7 @@ const HelpAndSupport = () => {
         ...prev,
         emailError: isEmailValid,
         fullNameErro: fullName,
-        yourMessageError: `Field can't be empty`,
+        yourMessageError: yourMessage,
       }));
     }
     //check if any field is empty or invalid
@@ -97,13 +111,24 @@ const HelpAndSupport = () => {
           <HifenDivider style={{alignSelf: 'flex-start', marginTop: 0}} />
           <RowContainer style={{alignSelf: 'flex-start', marginTop: HP(22)}}>
             <SvgXml xml={PHONE} style={{marginRight: 20}} />
-            <Text style={styles.phone}>0926718080</Text>
+            <Text style={styles.phone}>
+              {contactUs.data ? contactUs.data.data.mobile_no : 'Not Avilable'}
+            </Text>
+          </RowContainer>
+          <RowContainer style={{alignSelf: 'flex-start', marginTop: HP(22)}}>
+            <SvgXml xml={EMAIL_SVG} style={{marginRight: 20}} />
+            <Text style={styles.regularTxt}>
+              {contactUs.data ? contactUs.data.data.email : 'Not Avilable'}
+            </Text>
           </RowContainer>
           <RowContainer style={{alignSelf: 'flex-start', marginTop: HP(22)}}>
             <SvgXml xml={LOCATION} style={{marginRight: 20}} />
             <Text style={styles.regularTxt}>
-              Registered Office:7, Crown Yard Bedgebury, Cranbrook, Kent, United
-              Kingdom 2QZ
+              {contactUs.data
+                ? contactUs.data.data.branch_address.concat(
+                    contactUs.data.data.address,
+                  )
+                : 'Not Avilable'}
             </Text>
           </RowContainer>
         </View>
@@ -120,6 +145,7 @@ const HelpAndSupport = () => {
             <HifenDivider style={{width: 22, marginTop: 0}} />
           </RowContainer>
           <FieldInput
+            editable={getter.isLoading ? false : true}
             style={styles.inputField}
             placeholdercolor={WHITE_50}
             containerStyle={{marginTop: HP(15)}}
@@ -129,6 +155,7 @@ const HelpAndSupport = () => {
             onChangeText={text => setter(prev => ({...prev, fullName: text}))}
           />
           <FieldInput
+            editable={getter.isLoading ? false : true}
             style={styles.inputField}
             placeholdercolor={WHITE_50}
             containerStyle={{marginTop: HP(15)}}
@@ -138,6 +165,7 @@ const HelpAndSupport = () => {
             onChangeText={text => setter(prev => ({...prev, Email: text}))}
           />
           <FieldInput
+            editable={getter.isLoading ? false : true}
             style={styles.inputField}
             placeholdercolor={WHITE_50}
             containerStyle={{marginTop: HP(15)}}
@@ -149,9 +177,14 @@ const HelpAndSupport = () => {
             }
           />
           <ActionButton
+            disabled={getter.isLoading ? true : false}
             callBack={Submit}
             style={{width: WP(187), alignSelf: 'center', marginTop: HP(30)}}>
-            <Text style={styles.btnTxt}>Submit</Text>
+            {getter.isLoading ? (
+              <Loader />
+            ) : (
+              <Text style={styles.btnTxt}>Submit</Text>
+            )}
           </ActionButton>
         </View>
       </Container>
