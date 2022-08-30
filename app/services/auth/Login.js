@@ -11,7 +11,7 @@ export function errorhandler(error) {
     // that falls out of the range of 2xx
     // console.log(JSON.stringify(error.response) + ' server Response');
     if (error.response.data) {
-      SnackBar(error.response.data.message);
+      SnackBar('Something Went Wrong');
       console.log(error.response.data);
       // alert(error.response.data.message);
     }

@@ -17,9 +17,9 @@ const HomeStack = () => (
     <Stack.Screen name="home" component={Home} />
     <Stack.Screen name="AllPortfolio" component={AllPortfolio} />
     <Stack.Screen name="Portfolio" component={Portfolio} />
-    <Stack.Screen name="BuyShares" component={BuyShares} />
     <Stack.Screen name="AddMoney" component={AddMoney} />
     <Stack.Screen name="SellShares" component={SellShares} />
+    <Stack.Screen name="BuyShares" component={BuyShares} />
   </Stack.Navigator>
 );
 

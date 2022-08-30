@@ -15,7 +15,6 @@ import {LAUNCH_SCREEN} from './constants/ImageConstant';
 const AppIndex = () => {
   const [loader, isLoader] = useState(false);
   const userInfo = useSelector(Selector.User_Info);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -43,7 +42,7 @@ const AppIndex = () => {
     <ImageBackground
       source={LAUNCH_SCREEN}
       style={{flex: 1}}
-      // resizeMode=""
+      resizeMode="stretch"
       imageStyle={{flex: 1}}></ImageBackground>
   );
 };

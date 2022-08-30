@@ -21,14 +21,11 @@ import PaymentHistory from '../screens/history';
 const Tab = createBottomTabNavigator();
 
 const getRouteName = route => {
-  const hideOnRoute = ['Chat'];
+  const hideOnRoute = ['Chat', 'PrivacyPolicy'];
   const routeName = getFocusedRouteNameFromRoute(route);
-  if (routeName != undefined) {
-    if (routeName.includes('Chat')) {
-      return 'none';
-    }
-    return 'flex';
-  }
+  const indexValue = hideOnRoute.indexOf(routeName);
+  // console.log(routeName);
+  return indexValue != -1 ? 'none' : 'flex';
 };
 
 const TabBarIcon = ({focused, src}) => {
@@ -92,7 +89,7 @@ const BottomTab = () => (
       name="SettingStack"
       component={SettingStack}
       options={({route, navigation}) => ({
-        tabBarStyle: {
+           tabBarStyle: {
           ...styles.tabBarContainer,
           display: getRouteName(route),
         },
