@@ -73,14 +73,14 @@ function Notification() {
   return (
     <View style={{flex: 1}}>
       <CommonHeader title="Notification" />
-      {notification.data ? (
-        notification.data.data && (
-          <Container
-            scrollViewContainerStyle={{
-              paddingTop: CONTAINER_PADDINGTOP,
-              paddingHorizontal: PADDING_HORIZONTAL,
-            }}>
-            <View>
+      <Container
+        scrollViewContainerStyle={{
+          paddingTop: CONTAINER_PADDINGTOP,
+          paddingHorizontal: PADDING_HORIZONTAL,
+        }}>
+        {notification.data ? (
+          notification.data.data && (
+            <>
               {notification.data.data.map(item => {
                 return (
                   <View
@@ -147,23 +147,27 @@ function Notification() {
                   </View>
                 );
               })}
-            </View>
-          </Container>
-        )
-      ) : notification.isLoading ? (
-        <Loader />
-      ) : (
-        <Text
-          style={{
-            color: WHITE,
-            fontFamily: MONTSERRAT_MEDIUM,
-            alignSelf: 'center',
-            marginTop: WINDOW_HEIGHT / 2,
-            fontSize: WP(12),
-          }}>
-          You don't have any notification
-        </Text>
-      )}
+            </>
+          )
+        ) : notification.isLoading ? (
+          <Loader
+            size={'large'}
+            color={SECONDARY_COLOR}
+            style={{marginTop: WINDOW_HEIGHT / 2}}
+          />
+        ) : (
+          <Text
+            style={{
+              color: WHITE,
+              fontFamily: MONTSERRAT_MEDIUM,
+              alignSelf: 'center',
+              marginTop: WINDOW_HEIGHT / 2,
+              fontSize: WP(12),
+            }}>
+            You don't have any notification
+          </Text>
+        )}
+      </Container>
     </View>
   );
 }

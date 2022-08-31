@@ -20,6 +20,7 @@ const initialState = {
     isLoading: false,
     data: null,
     error: null,
+    noRecordFound: false,
   },
   getNotification: {
     isLoading: false,

@@ -13,7 +13,7 @@ import ActionButton from '../../../component/ActionButton';
 import {HP, WINDOW_WIDTH, WP} from '../../../styles/Dimesions';
 import Calander from '../../../component/Calander';
 
-const FilterModal = ({setter, getter, close}) => {
+const FilterModal = ({setter, dateSetter, close, getter}) => {
   const [open, setOpen] = useState({
     open: false,
     from: '',
@@ -91,7 +91,7 @@ const FilterModal = ({setter, getter, close}) => {
                       open: !prev.open,
                     }));
                   }}>
-                  {dateFormat(getter.from.date)}
+                  {dateFormat(dateSetter.from.date)}
                 </Text>
               </ActionButton>
             </RowContainer>
@@ -114,7 +114,7 @@ const FilterModal = ({setter, getter, close}) => {
                       open: !prev.open,
                     }));
                   }}>
-                  {dateFormat(getter.to.date)}
+                  {dateFormat(dateSetter.to.date)}
                 </Text>
               </ActionButton>
             </RowContainer>
@@ -145,7 +145,7 @@ const FilterModal = ({setter, getter, close}) => {
         <Calander
           setDate={setter}
           setOpen={setOpen}
-          date={getter.from.date}
+          date={dateSetter.from.date}
           open={open}
         />
       </View>

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, Pressable, Modal, StyleSheet} from 'react-native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {SvgXml} from 'react-native-svg';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import ActionButton from './ActionButton';
 import RowContainer from './RowContainer';
@@ -17,13 +17,16 @@ import {
   WHITE_30,
 } from '../styles/Fonts&Colors';
 
-const CountFilter = ({style, onCountSelect}) => {
+const CountFilter = ({
+  style,
+  numberOfItems,
+  paymentSetter,
+  disableLeftButton,
+  disableRightButton,
+}) => {
   const [getter, setter] = useState({
-    countValue: 5,
     isVisible: false,
   });
-
-  const dispatch = useDispatch();
 
   const numberItem = [
     {
@@ -48,10 +51,12 @@ const CountFilter = ({style, onCountSelect}) => {
     try {
       setter(prev => ({
         ...prev,
-        countValue: value,
         isVisible: false,
       }));
-      onCountSelect(value);
+      paymentSetter(prev => ({
+        ...prev,
+        numberOfItemOnPage: value,
+      }));
     } catch (error) {
       console.log(error);
     }
@@ -97,7 +102,7 @@ const CountFilter = ({style, onCountSelect}) => {
             backgroundColor: 'transparent',
             justifyContent: 'flex-end',
             alignItems: 'center',
-            paddingBottom: tabBarHeight,
+            paddingBottom: tabBarHeight || HP(50),
           }}>
           <View
             style={{
@@ -118,7 +123,7 @@ const CountFilter = ({style, onCountSelect}) => {
                   alignItems: 'center',
                 }}>
                 <Text>{item.value}</Text>
-                {index == 0 && <ArrowDown />}
+                {/* {index == 0 && <ArrowDown />} */}
               </Pressable>
             ))}
           </View>
@@ -128,16 +133,38 @@ const CountFilter = ({style, onCountSelect}) => {
   };
 
   return (
-    <View style={{backgroundColor: BACKGROUND_COLOR, ...style}}>
-      <RowContainer style={{paddingHorizontal: 20, marginTop: 20}}>
-        <ActionButton style={{width: WP(90), height: HP(36), padding: 5}}>
+    <View
+      style={{
+        height: HP(50),
+        backgroundColor: BACKGROUND_COLOR,
+        justifyContent: 'center',
+        ...style,
+      }}>
+      <RowContainer style={{paddingHorizontal: 20}}>
+        <ActionButton
+          disabled={disableLeftButton}
+          style={{width: WP(90), height: HP(36), padding: 5}}
+          callBack={() =>
+            paymentSetter(prev => ({
+              ...prev,
+              pageNumber: prev.pageNumber - 1,
+            }))
+          }>
           <Text style={styles.actionBtnTxt}>Previous</Text>
         </ActionButton>
         <ActionButton callBack={showMenu} style={styles.actionBtn}>
-          <Text>{getter.countValue}</Text>
+          <Text style={{color: 'white'}}>{numberOfItems}</Text>
           <ArrowDown />
         </ActionButton>
-        <ActionButton style={{width: WP(90), height: HP(36), padding: 5}}>
+        <ActionButton
+          disabled={disableRightButton}
+          callBack={() =>
+            paymentSetter(prev => ({
+              ...prev,
+              pageNumber: prev.pageNumber + 1,
+            }))
+          }
+          style={{width: WP(90), height: HP(36), padding: 5}}>
           <Text style={styles.actionBtnTxt}>Next</Text>
         </ActionButton>
       </RowContainer>

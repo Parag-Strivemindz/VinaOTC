@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Text, View, InteractionManager, Pressable} from 'react-native';
+import {Text, View, InteractionManager, Pressable, Image} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import PropTypes from 'prop-types';
 import Animated, {
@@ -23,6 +23,7 @@ import Loader from '../../component/Loader';
 import GlobalStyles from '../../styles/GlobalStyles';
 import styles from './styles';
 import {
+  BUTTON_SELECTED,
   CIRCLE,
   ERROR,
   FILLTER_EQUALIZER,
@@ -43,31 +44,42 @@ const filerItems = [
   {
     id: '1',
     name: 'All',
+    value: undefined,
   },
   {
     id: '2',
-    name: 'Deposit',
+    name: 'Credit',
+    value: 'Credit',
   },
   {
     id: '3',
-    name: 'Withdraw',
+    name: 'Debit',
+    value: 'Debit',
   },
 ];
+const selectedItemCircle = () => (
+  <Image
+    source={BUTTON_SELECTED}
+    style={{width: 20, height: 20, tintColor: SECONDARY_COLOR}}
+    resizeMode="center"
+  />
+);
 
-const PaymentFilter = ({selectedItem, close, callback}) => {
+const PaymentFilter = ({selectedItem = 'All', close, callback}) => {
   return (
     <View style={[GlobalStyles.modalContainer]}>
       <RowContainer
         style={{
           paddingHorizontal: PADDING_HORIZONTAL,
-          // paddingVertical: HP(15),
         }}>
         <Text
           style={{
             color: BLACK_70,
             fontFamily: ROBOTO_MEDIUM,
+            fontSize: WP(18),
+            marginBottom: 10,
           }}>
-          Filter by
+          Filter By
         </Text>
 
         <SvgXml
@@ -83,7 +95,7 @@ const PaymentFilter = ({selectedItem, close, callback}) => {
       </RowContainer>
       {filerItems.map((item, index) => (
         <RowContainer
-          callback={() => callback(item.name)}
+          callback={() => callback(item.value)}
           key={index.toString()}
           style={{
             ...styles.rowFilteItemContainer,
@@ -92,7 +104,7 @@ const PaymentFilter = ({selectedItem, close, callback}) => {
           }}>
           <RowContainer style={{alignItems: 'center'}}>
             {selectedItem === item.name ? (
-              <SvgXml xml={CIRCLE} />
+              selectedItemCircle()
             ) : (
               <SvgXml xml={CIRCLE} />
             )}
@@ -111,18 +123,18 @@ const PaymentFilter = ({selectedItem, close, callback}) => {
   );
 };
 
-const ProfilePaymentHistory = ({numberOfItems}) => {
+const ProfilePaymentHistory = ({numberOfItems, pageNumber}) => {
   const myPaymentHistory = useSelector(Selector.My_Payment_History);
   const [getter, setter] = useState({
     isVisible: false,
-    filterItem: '',
+    filterItem: undefined,
   });
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getMyPaymentHistory(undefined, numberOfItems));
-  }, [numberOfItems]);
+    dispatch(getMyPaymentHistory(pageNumber, numberOfItems, getter.filterItem));
+  }, [numberOfItems, pageNumber, getter.filterItem]);
 
   const onFilterSelect = value => {
     setter(prev => ({
@@ -165,43 +177,47 @@ const ProfilePaymentHistory = ({numberOfItems}) => {
       {myPaymentHistory.data ? (
         myPaymentHistory.data.data.map((item, index) => {
           return (
-            <Animated.View
-              key={item.wallet_id.toString()}
-              entering={SlideInLeft.delay(100)}
-              // exiting={SlideOutRight}
-              layout={Layout.mass(10).delay(index * 10)}>
-              <RowContainer>
+            <React.Fragment key={item.wallet_id.toString()}>
+              <Animated.View
+                key={item.wallet_id.toString()}
+                entering={SlideInLeft.delay(100)}
+                // exiting={SlideOutRight}
+                layout={Layout.mass(10).delay(index * 10)}>
                 <RowContainer>
-                  <ActionButton
+                  <RowContainer>
+                    <ActionButton
+                      style={{
+                        ...styles.walletContainer,
+                        backgroundColor:
+                          item.type == 'credit' ? SECONDARY_COLOR : '#E94E1B',
+                      }}>
+                      <SvgXml xml={WALLET} />
+                    </ActionButton>
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                      }}>
+                      <Text style={styles.payment_type}>
+                        Payment {item.type}
+                      </Text>
+                      <Text style={styles.payment_time}>{item.created_at}</Text>
+                    </View>
+                  </RowContainer>
+                  <Text
                     style={{
-                      ...styles.walletContainer,
-                      backgroundColor:
-                        item.type == 'credit' ? '#E94E1B' : SECONDARY_COLOR,
+                      color:
+                        item.type == 'credit'
+                          ? SECONDARY_COLOR
+                          : 'rgba(233, 78, 27, 1)',
                     }}>
-                    <SvgXml xml={WALLET} />
-                  </ActionButton>
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                    }}>
-                    <Text style={styles.payment_type}>Payment {item.type}</Text>
-                    <Text style={styles.payment_time}>{item.created_at}</Text>
-                  </View>
+                    {item.type == 'credit'
+                      ? `-${item.amount}`
+                      : `+${item.amount}`}
+                  </Text>
                 </RowContainer>
-                <Text
-                  style={{
-                    color:
-                      item.type == 'credit'
-                        ? 'rgba(233, 78, 27, 1)'
-                        : SECONDARY_COLOR,
-                  }}>
-                  {item.type == 'credit'
-                    ? `-${item.amount}`
-                    : `+${item.amount}`}
-                </Text>
-              </RowContainer>
-              <CardViewDivider style={{marginVertical: HP(20)}} />
-            </Animated.View>
+                <CardViewDivider style={{marginVertical: HP(20)}} />
+              </Animated.View>
+            </React.Fragment>
           );
         })
       ) : myPaymentHistory.isLoading ? (
@@ -213,7 +229,18 @@ const ProfilePaymentHistory = ({numberOfItems}) => {
             fontFamily: MONTSERRAT_MEDIUM,
             fontSize: 12,
           }}>
-          Payment is not Available
+          PaymentHistory is not Available
+        </Text>
+      )}
+      {myPaymentHistory.isLoading && (
+        <Text
+          style={{
+            alignSelf: 'center',
+            color: 'white',
+            fontFamily: MONTSERRAT_MEDIUM,
+            fontSize: WP(15),
+          }}>
+          Loading....
         </Text>
       )}
       <CommonFilterModal close={close} isVisible={getter.isVisible}>
@@ -228,11 +255,13 @@ const ProfilePaymentHistory = ({numberOfItems}) => {
 };
 
 ProfilePaymentHistory.propTypes = {
-  numberOfItems: PropTypes.number,
+  numberOfItems: PropTypes.number.isRequired,
+  pageNumber: PropTypes.number.isRequired,
 };
 
 ProfilePaymentHistory.defaultProps = {
   numberOfItems: 10,
+  pageNumber: 0,
 };
 
 export default ProfilePaymentHistory;

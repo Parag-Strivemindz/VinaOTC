@@ -15,7 +15,7 @@ function Container({containerStyles, scrollViewContainerStyle, children}) {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
-          paddingBottom,
+          paddingBottom: paddingBottom || HP(50),
           ...scrollViewContainerStyle,
         }}>
         {children}

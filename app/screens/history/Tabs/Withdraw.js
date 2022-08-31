@@ -2,6 +2,8 @@ import {View, Text} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {SvgXml} from 'react-native-svg';
 
+import {useSelector, useDispatch} from 'react-redux';
+
 import styles from './styles';
 import RowContainer from '../../../component/RowContainer';
 import CardViewDivider from '../../../component/CardViewDivider';
@@ -30,9 +32,7 @@ const WithDrawal = () => {
     },
   });
 
-  useEffect(() => {
-    console.log(getter);
-  }, [getter, setter]);
+  useEffect(() => {}, [getter, setter]);
 
   const CloseModal = useCallback(() => {
     setter(prev => ({

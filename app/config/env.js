@@ -17,6 +17,8 @@ import {
   changePassword,
   withdrawFund,
   getNotification,
+  withdrawalList,
+  depositList,
 } from '../constants/ApiConstants';
 
 console.log(DEV_API_URL_IDENTITY);
@@ -46,6 +48,8 @@ const devEnviromentVariables = {
   GET_IN_TOUCH: `${DEV_API_URL_IDENTITY}/${getintouch}`,
   WITHDRAW_FUND: `${DEV_API_URL_IDENTITY}/${withdrawFund}`,
   GETNOTIFICATION: `${DEV_API_URL_IDENTITY}/${getNotification}`,
+  WITHDRAWALLIST: `${DEV_API_URL_IDENTITY}/${withdrawalList}`,
+  DEPOSITLIST: `${DEV_API_URL_IDENTITY}/${depositList}`,
 };
 
 //make config for productionEnviroment

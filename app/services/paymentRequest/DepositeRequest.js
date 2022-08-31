@@ -1,7 +1,7 @@
 import SnackBar from '../../component/SnackBar';
 import env from '../../config/env';
 import {USER_ID} from '../../constants/AppConstant';
-import {MY_PAYMENT_HISTORY} from '../../store/redux/user/ActionTypes';
+import {DEPOSITE_REQUEST} from '../../store/redux/paymentRequest/ActionTypes';
 import {getItem} from '../../utils/AsyncStorage';
 import {postRequestWithHeader} from '../../utils/AxiosRequest';
 import {errorhandler} from '../dashboard';
@@ -45,18 +45,18 @@ export function responseHandler(
   }
 }
 
-const getMyPaymentHistory =
+const getMyDepositeList =
   (pageNumber = 1, itemFetchPerPage = 10, filterType) =>
   async (dispatch, getState) => {
     try {
       const {
-        user: {myPaymentHistory},
+        payment: {deposite_request},
       } = getState();
 
       dispatch({
-        type: MY_PAYMENT_HISTORY,
+        type: DEPOSITE_REQUEST,
         payload: {
-          ...myPaymentHistory,
+          ...deposite_request,
           isLoading: true,
         },
       });
@@ -77,18 +77,18 @@ const getMyPaymentHistory =
 
       const params = filterType ? withFilterType : notwithFilterType;
 
-      postRequestWithHeader(env.MY_PAYMENT_HISTORY, params)
+      postRequestWithHeader(env.DEPOSITLIST, params)
         .then(res => {
           // console.log(state.user.myPaymentHistory.data + ' getState');
           responseHandler(
             res.data,
-            MY_PAYMENT_HISTORY,
+            DEPOSITE_REQUEST,
             dispatch,
-            myPaymentHistory,
+            deposite_request,
           );
         })
         .catch(e => {
-          errorhandler(e, MY_PAYMENT_HISTORY, dispatch);
+          errorhandler(e, DEPOSITE_REQUEST, dispatch);
         });
     } catch (e) {
       console.error(e + ' coming from UserInfo');
@@ -97,4 +97,4 @@ const getMyPaymentHistory =
     }
   };
 
-export default getMyPaymentHistory;
+export default getMyDepositeList;

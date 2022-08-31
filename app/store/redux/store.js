@@ -11,6 +11,7 @@ import Localization from './localization/reducers';
 import userInfoReducer from './user/reducers';
 import bankInfo from './bank/reducers';
 import Setting from './setting/reducers';
+import paymentRequest from './paymentRequest/reducers';
 
 const middleware = [thunk];
 
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   user: userInfoReducer,
   bank: bankInfo,
   Setting,
+  payment: paymentRequest,
 });
 
 export default store = createStore(rootReducer, enhancer);
