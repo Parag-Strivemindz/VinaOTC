@@ -1,7 +1,7 @@
 import SnackBar from '../../component/SnackBar';
 import env from '../../config/env';
 import {USER_ID} from '../../constants/AppConstant';
-import {WITHDRAW_REQUEST} from '../../store/redux/paymentRequest/ActionTypes';
+import {GET_NOTIFICATION} from '../../store/redux/user/ActionTypes';
 import {getItem} from '../../utils/AsyncStorage';
 import {postRequestWithHeader} from '../../utils/AxiosRequest';
 import {errorhandler} from '../dashboard';
@@ -11,6 +11,7 @@ export function responseHandler(
   type,
   dispatch,
   previousState,
+  index,
   showSnakbar = false,
 ) {
   try {
@@ -23,16 +24,20 @@ export function responseHandler(
           noRecordFound: true,
         },
       });
-      SnackBar('No More Record Found', false, true);
+      SnackBar(res.message, false, true);
     }
     if (res.status === 200) {
+      console.log(previousState.data.data[index]);
       // console.log(res);
+      previousState.data.data[index].is_read = 1;
+      console.log(previousState.data.data[index]);
+
       dispatch({
         type: type,
         payload: {
           isLoading: false,
           data: {
-            ...res,
+            data: [...previousState.data.data],
           },
           error: null,
           noRecordFound: false,
@@ -45,52 +50,41 @@ export function responseHandler(
   }
 }
 
-const getMyWithDrawRequest =
-  (pageNumber = 1, itemFetchPerPage = 10, filterType) =>
-  async (dispatch, getState) => {
+const readNotification =
+  (notificationId, index) => async (dispatch, getState) => {
     try {
       const {
-        payment: {withdraw_request},
+        user: {getNotification},
       } = getState();
-
       dispatch({
-        type: WITHDRAW_REQUEST,
+        type: GET_NOTIFICATION,
         payload: {
-          ...withdraw_request,
+          ...getNotification,
           isLoading: true,
         },
       });
+      console.log(notificationId + ' notification_id');
+      console.log(index + ' index');
       const userId = await getItem(USER_ID);
-
-      const params = filterType
-        ? {
-            UserID: userId,
-            start: pageNumber,
-            length: itemFetchPerPage,
-            ...filterType,
-          }
-        : {
-            UserID: userId,
-            start: pageNumber,
-            length: itemFetchPerPage,
-          };
-
-      postRequestWithHeader(env.WITHDRAWALLIST, params)
+      postRequestWithHeader(env.READ_NOTIFICATION, {
+        UserID: userId,
+        notification_id: notificationId,
+      })
         .then(res => {
-          // console.log(state.user.myPaymentHistory.data + ' getState');
           responseHandler(
             res.data,
-            WITHDRAW_REQUEST,
+            GET_NOTIFICATION,
             dispatch,
-            withdraw_request,
+            getNotification,
+            index,
           );
         })
         .catch(e => {
-          errorhandler(e, WITHDRAW_REQUEST, dispatch);
+          errorhandler(e, GET_NOTIFICATION, dispatch);
         });
     } catch (e) {
-      console.error(e + ' coming from witdraw');
+      console.error(e + ' coming from ReadNotification');
     }
   };
 
-export default getMyWithDrawRequest;
+export default readNotification;

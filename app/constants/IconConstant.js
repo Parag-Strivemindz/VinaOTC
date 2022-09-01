@@ -41,8 +41,10 @@ import FILE_SVG from '../assets/icons/file.svg';
 import CAMERA_SVG from '../assets/icons/camera.svg';
 import RIGHT_ARROW_PNG from '../assets/icons/right-arrows.png';
 import BUTTON_SELECTED from '../assets/icons/button.png';
+import READ_INDICATOR from '../assets/icons/readindicator.svg';
 
 export {
+  READ_INDICATOR,
   BUTTON_SELECTED,
   RIGHT_ARROW_PNG,
   FILE_SVG,

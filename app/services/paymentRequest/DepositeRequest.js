@@ -62,20 +62,18 @@ const getMyDepositeList =
       });
       const userId = await getItem(USER_ID);
 
-      const withFilterType = {
-        UserID: userId,
-        start: pageNumber,
-        length: itemFetchPerPage,
-        type: filterType,
-      };
-
-      const notwithFilterType = {
-        UserID: userId,
-        start: pageNumber,
-        length: itemFetchPerPage,
-      };
-
-      const params = filterType ? withFilterType : notwithFilterType;
+      const params = filterType
+        ? {
+            UserID: userId,
+            start: pageNumber,
+            length: itemFetchPerPage,
+            ...filterType,
+          }
+        : {
+            UserID: userId,
+            start: pageNumber,
+            length: itemFetchPerPage,
+          };
 
       postRequestWithHeader(env.DEPOSITLIST, params)
         .then(res => {
@@ -91,9 +89,7 @@ const getMyDepositeList =
           errorhandler(e, DEPOSITE_REQUEST, dispatch);
         });
     } catch (e) {
-      console.error(e + ' coming from UserInfo');
-    } finally {
-      console.log('finally');
+      console.error(e + ' coming from deposite');
     }
   };
 

@@ -131,8 +131,11 @@ const Portfolio = ({route, navigation}) => {
                   fontFamily: MONTSERRAT_REGULAR,
                   fontSize: WP(12),
                 }}>
-                {stockView.data.data.created_at.slice(-9)} |{' '}
-                <Text>{CodeID}</Text> |<Text> Real Time Currency in</Text>
+                {stockView.data.data.created_at.slice(
+                  0,
+                  stockView.data.data.created_at.indexOf('T'),
+                )}{' '}
+                | <Text>{CodeID}</Text> |<Text> Real Time Currency in</Text>
               </Text>
             </View>
           </View>
@@ -151,7 +154,7 @@ const Portfolio = ({route, navigation}) => {
             <Shares
               navigation={navigation}
               screenName={'SellShares'}
-              color={BLACK_01}
+              color={'black'}
               title={'Sell'}
               data={{
                 title: stockView.data.data.name,

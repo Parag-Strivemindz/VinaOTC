@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, Pressable} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {SvgXml} from 'react-native-svg';
 import {useSelector, useDispatch} from 'react-redux';
@@ -10,8 +10,8 @@ import RowContainer from '../../../component/RowContainer';
 import CardViewDivider from '../../../component/CardViewDivider';
 import Container from '../../../component/Container';
 import CountFilter from '../../../component/CountFilter';
-import {stocks} from '..';
 import FilterModal from './FilterModal';
+import FilterItem from './RenderFilterItemList';
 
 import styles from './styles';
 import {
@@ -19,49 +19,14 @@ import {
   PADDING_VERTICAL,
 } from '../../../styles/GlobalStyles';
 import {FILLTER_EQUALIZER} from '../../../constants/IconConstant';
-import {HP, WINDOW_HEIGHT} from '../../../styles/Dimesions';
+import {HP, WINDOW_HEIGHT, WP} from '../../../styles/Dimesions';
 import {
   BACKGROUND_COLOR,
+  MONTSERRAT_MEDIUM,
   ROBOTO_MEDIUM,
   SECONDARY_COLOR,
 } from '../../../styles/Fonts&Colors';
 import Loader from '../../../component/Loader';
-
-const FilterItem = ({requestData}) => {
-  return (
-    <View>
-      {requestData.map((item, index) => {
-        return (
-          <RowContainer
-            key={item.id}
-            style={{
-              ...styles.itemContainer,
-              backgroundColor: index % 2 === 0 ? '#01C4000F' : undefined,
-            }}>
-            <View>
-              <Text style={styles.itemContainerLeftTitTxt}>
-                {item.total_price}
-              </Text>
-              <Text style={styles.itemContainerLeftSubTitTxt}>
-                {item.created_at}
-              </Text>
-            </View>
-            <Text
-              style={{
-                ...styles.status,
-                color:
-                  item.status == 'Approved'
-                    ? SECONDARY_COLOR
-                    : 'rgba(233,78,27,1)',
-              }}>
-              {item.status}
-            </Text>
-          </RowContainer>
-        );
-      })}
-    </View>
-  );
-};
 
 const Deposit = () => {
   const DepositeRequest = useSelector(paymentRequestSelector.DEPOSITE_REQUEST);
@@ -70,33 +35,10 @@ const Deposit = () => {
     isVisible: false,
   });
 
-  const [dateFilter, setdateFilter] = useState({
-    from: {
-      date: new Date(),
-      name: 'from',
-    },
-    to: {
-      date: new Date(),
-      name: 'to',
-    },
-  });
-
   const [pageFilter, setPageFilter] = useState({
     pageNumber: 0,
     numberOfItemOnPage: 10,
   });
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(
-      getMyDepositeList(
-        pageFilter.pageNumber,
-        pageFilter.numberOfItemOnPage,
-        dateFilter,
-      ),
-    );
-  }, [setdateFilter, setPageFilter]);
 
   const CloseModal = useCallback(() => {
     setter(prev => ({
@@ -105,12 +47,48 @@ const Deposit = () => {
     }));
   }, []);
 
+  const dispatch = useDispatch();
+
+  const fetchRequestList = useCallback(filterType => {
+    CloseModal();
+    if (filterType) {
+      dispatch(
+        getMyDepositeList(
+          pageFilter.pageNumber,
+          pageFilter.numberOfItemOnPage,
+          filterType,
+        ),
+      );
+    } else {
+      dispatch(
+        getMyDepositeList(pageFilter.pageNumber, pageFilter.numberOfItemOnPage),
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    dispatch(
+      getMyDepositeList(pageFilter.pageNumber, pageFilter.numberOfItemOnPage),
+    );
+  }, [pageFilter, setPageFilter]);
+
   return (
     <View style={{flex: 1, backgroundColor: BACKGROUND_COLOR}}>
       <CardViewDivider style={{marginVertical: PADDING_VERTICAL}} />
       <RowContainer style={{paddingHorizontal: PADDING_HORIZONTAL}}>
         <Text style={styles.filter}>Filter</Text>
-        <SvgXml xml={FILLTER_EQUALIZER} width={16} onPress={CloseModal} />
+        <Pressable
+          android_ripple={{
+            borderless: true,
+            // radius: 100,
+          }}>
+          <SvgXml
+            xml={FILLTER_EQUALIZER}
+            width={20}
+            height={20}
+            onPress={CloseModal}
+          />
+        </Pressable>
       </RowContainer>
       <Container containerStyles={{paddingTop: HP(15)}}>
         {DepositeRequest.data ? (
@@ -129,17 +107,29 @@ const Deposit = () => {
             No Request Is Found
           </Text>
         )}
+        {DepositeRequest.isLoading && (
+          <Text
+            style={{
+              alignSelf: 'center',
+              color: 'white',
+              fontFamily: MONTSERRAT_MEDIUM,
+              fontSize: WP(15),
+            }}>
+            Loading....
+          </Text>
+        )}
       </Container>
       <CountFilter
+        disableLeftButton={pageFilter.pageNumber == 1 ? true : false}
+        disableRightButton={DepositeRequest.noRecordFound}
         style={{paddingBottom: 10}}
-        numberOfItems={getter.numberOfItemOnPage}
+        numberOfItems={pageFilter.numberOfItemOnPage}
         paymentSetter={setPageFilter}
       />
       <FilterModal
-        setter={setdateFilter}
-        dateSetter={dateFilter}
         close={CloseModal}
-        getter={getter}
+        visible={getter.isVisible}
+        onSearch={fetchRequestList}
       />
     </View>
   );

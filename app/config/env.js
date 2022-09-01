@@ -19,6 +19,7 @@ import {
   getNotification,
   withdrawalList,
   depositList,
+  readnotification,
 } from '../constants/ApiConstants';
 
 console.log(DEV_API_URL_IDENTITY);
@@ -50,6 +51,7 @@ const devEnviromentVariables = {
   GETNOTIFICATION: `${DEV_API_URL_IDENTITY}/${getNotification}`,
   WITHDRAWALLIST: `${DEV_API_URL_IDENTITY}/${withdrawalList}`,
   DEPOSITLIST: `${DEV_API_URL_IDENTITY}/${depositList}`,
+  READ_NOTIFICATION: `${DEV_API_URL_IDENTITY}/${readnotification}`,
 };
 
 //make config for productionEnviroment

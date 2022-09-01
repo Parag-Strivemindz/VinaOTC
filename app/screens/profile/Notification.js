@@ -1,14 +1,20 @@
 import React from 'react';
 import {useEffect} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Pressable, Image} from 'react-native';
 import {Neomorph, NeomorphFlex, Shadow} from 'react-native-neomorph-shadows';
+import {SvgXml} from 'react-native-svg';
 import {useDispatch, useSelector} from 'react-redux';
 
 import CommonHeader from '../../component/CommonHeader';
 import Container from '../../component/Container';
 import Loader from '../../component/Loader';
 import RowContainer from '../../component/RowContainer';
+import {READ_INDICATOR} from '../../constants/IconConstant';
+import {EMAIL_SVG} from '../../constants/ImageConstant';
+
 import getNotification from '../../services/user/Notification';
+import readNotification from '../../services/user/ReadNotification';
+
 import {Selector} from '../../store/redux/user';
 import {HP, WINDOW_HEIGHT, WINDOW_WIDTH, WP} from '../../styles/Dimesions';
 
@@ -20,6 +26,7 @@ import {
   ROBOTO_REGULAR,
   SECONDARY_COLOR,
   WHITE,
+  WHITE_80,
 } from '../../styles/Fonts&Colors';
 import GlobalStyles, {
   CONTAINER_PADDINGTOP,
@@ -81,9 +88,12 @@ function Notification() {
         {notification.data ? (
           notification.data.data && (
             <>
-              {notification.data.data.map(item => {
+              {notification.data.data.map((item, index) => {
                 return (
-                  <View
+                  <Pressable
+                    onPress={() => {
+                      dispatch(readNotification(item.notification_id, index));
+                    }}
                     key={item.notification_id}
                     style={[
                       GlobalStyles.dropShadow,
@@ -96,43 +106,65 @@ function Notification() {
                         borderRadius: 10,
                         borderWidth: 0,
                         width: WINDOW_WIDTH * 0.9,
-                        borderTopLeftRadius: 20,
+                        borderTopLeftRadius: 30,
                       },
                     ]}>
                     <RowContainer
+                      onPress={() => {
+                        dispatch(readNotification(item.notification_id, index));
+                      }}
                       style={{
-                        justifyContent: 'flex-start',
+                        justifyContent: 'space-between',
                         alignItems: 'center',
                       }}>
-                      <Neumor
-                        inner={true}
-                        darkShadow={'#000000'}
-                        lightShadow={WHITE}
-                        style={{
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
-                        <Text style={styles.text}>SM</Text>
-                      </Neumor>
-                      <View style={{marginLeft: WP(15)}}>
-                        <Text
+                      <View
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Neumor
+                          inner={true}
+                          darkShadow={'#000000'}
+                          lightShadow={WHITE}
                           style={{
-                            color: SECONDARY_COLOR,
-                            fontFamily: ROBOTO_MEDIUM,
-                            fontSize: WP(17),
+                            justifyContent: 'center',
+                            alignItems: 'center',
                           }}>
-                          {item.title}
-                        </Text>
-                        <Text
-                          style={{
-                            fontFamily: ROBOTO_REGULAR,
-                            color: WHITE,
-                            fontSize: WP(10),
-                            marginTop: HP(2),
-                          }}>
-                          {item.created_at}
-                        </Text>
+                          <SvgXml
+                            xml={EMAIL_SVG}
+                            stroke={WHITE_80}
+                            width={20}
+                            height={20}
+                          />
+                        </Neumor>
+                        <View style={{marginLeft: WP(15)}}>
+                          <Text
+                            style={{
+                              color: SECONDARY_COLOR,
+                              fontFamily: ROBOTO_MEDIUM,
+                              fontSize: WP(17),
+                            }}>
+                            {item.title}
+                          </Text>
+                          <Text
+                            style={{
+                              fontFamily: ROBOTO_REGULAR,
+                              color: WHITE,
+                              fontSize: WP(10),
+                              marginTop: HP(2),
+                            }}>
+                            {item.created_at}
+                          </Text>
+                        </View>
                       </View>
+
+                      {!Boolean(item.is_read) && (
+                        <SvgXml
+                          xml={READ_INDICATOR}
+                          style={{
+                            tintColor: SECONDARY_COLOR,
+                            width: 15,
+                            height: 15,
+                          }}
+                        />
+                      )}
                     </RowContainer>
                     <Text
                       style={{
@@ -144,7 +176,7 @@ function Notification() {
                       }}>
                       {item.message}
                     </Text>
-                  </View>
+                  </Pressable>
                 );
               })}
             </>

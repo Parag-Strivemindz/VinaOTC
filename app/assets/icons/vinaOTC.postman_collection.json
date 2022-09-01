@@ -1,0 +1,930 @@
+{
+	"info": {
+		"_postman_id": "471d7ce1-9aec-42c1-9f5d-7a8177cee4f9",
+		"name": "vinaOTC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "loginApi",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "Email",
+							"value": "himanshu12@yopmail.com",
+							"type": "text"
+						},
+						{
+							"key": "Password",
+							"value": "87654321",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/login",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "forgotPassword",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "Email",
+							"value": "sm@yopmail.com",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/forgot",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"forgot"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "registerApi",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "FullName",
+							"value": "demo",
+							"type": "default"
+						},
+						{
+							"key": "Email",
+							"value": "demo@yopmail.com",
+							"type": "default"
+						},
+						{
+							"key": "Password",
+							"value": "12345678",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/registration",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"registration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateProfilePic",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": "34",
+							"type": "default"
+						},
+						{
+							"key": "FullName",
+							"value": "smcj",
+							"type": "default"
+						},
+						{
+							"key": "Email",
+							"value": "sm@yopmail.com",
+							"type": "default"
+						},
+						{
+							"key": "ProfileImage",
+							"type": "file",
+							"src": "/C:/Users/b/Downloads/extra/images/car.webp"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/updateprofile?api_token=5SotPRzbmhtQMZGsaMGjrVfdhzg8N33uC4PBxX1CjQOo2MzIKvyiQqpIWvQB",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"updateprofile"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "5SotPRzbmhtQMZGsaMGjrVfdhzg8N33uC4PBxX1CjQOo2MzIKvyiQqpIWvQB"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logoutApi",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": " 36",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/logout_user?api_token=X5HSbBkInytD4ZwJGyP2jQdm1MTmcHS91Qplb6HTt6zh6mJTUDBMJxij5njY",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"logout_user"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "X5HSbBkInytD4ZwJGyP2jQdm1MTmcHS91Qplb6HTt6zh6mJTUDBMJxij5njY"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getProfileApi",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": " 15",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/get_profile_details?api_token=Lw8GYFNlTv7ip2ri0rAPzIosP9BLeRfVCz7c35UamUxnVre09XJBslCzcKel",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"get_profile_details"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "Lw8GYFNlTv7ip2ri0rAPzIosP9BLeRfVCz7c35UamUxnVre09XJBslCzcKel"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getnotification",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": "36\n",
+							"type": "default"
+						},
+						{
+							"key": "",
+							"value": "",
+							"type": "default",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/get_notification?api_token=tlCC54XozzQiVqJNztp0rCH89M94eCJNphfwWQzOgA2rusDFcgvDtDpNQEIi",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"get_notification"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "tlCC54XozzQiVqJNztp0rCH89M94eCJNphfwWQzOgA2rusDFcgvDtDpNQEIi"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBankInfo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": "15",
+							"type": "default"
+						},
+						{
+							"key": "BankAccountNo",
+							"value": "1234567890",
+							"type": "default"
+						},
+						{
+							"key": "IFSCCode",
+							"value": "HDFC2414",
+							"type": "default"
+						},
+						{
+							"key": "AccountHolderName",
+							"value": "Himanshu Jhankal",
+							"type": "default"
+						},
+						{
+							"key": "BankName",
+							"value": "HSFC Bank",
+							"type": "default"
+						},
+						{
+							"key": "BranchCode",
+							"value": "302020",
+							"type": "default"
+						},
+						{
+							"key": "BankAddress",
+							"value": "Jtm Mall JagatPura Jaipur",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/add_bank_info?api_token=1E1bekS13m3GtY6GfYT5XnDz34RK0O48lhWyzTMX1qkTKTHX7GF47xzHMhgv",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"add_bank_info"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "1E1bekS13m3GtY6GfYT5XnDz34RK0O48lhWyzTMX1qkTKTHX7GF47xzHMhgv"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bankInfoList",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": "15",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/bank_info_list?api_token=1E1bekS13m3GtY6GfYT5XnDz34RK0O48lhWyzTMX1qkTKTHX7GF47xzHMhgv",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"bank_info_list"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "1E1bekS13m3GtY6GfYT5XnDz34RK0O48lhWyzTMX1qkTKTHX7GF47xzHMhgv"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bankInfoView",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "bank_id",
+							"value": "8",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/bank_info_view?api_token=1E1bekS13m3GtY6GfYT5XnDz34RK0O48lhWyzTMX1qkTKTHX7GF47xzHMhgv",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"bank_info_view"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "1E1bekS13m3GtY6GfYT5XnDz34RK0O48lhWyzTMX1qkTKTHX7GF47xzHMhgv"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "withdrawFund",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": "15",
+							"type": "text"
+						},
+						{
+							"key": "Amount",
+							"value": "500",
+							"type": "text"
+						},
+						{
+							"key": "BankAccountNo",
+							"value": "1234567890",
+							"type": "text"
+						},
+						{
+							"key": "IFSCCode",
+							"value": "HDFC2414",
+							"type": "text"
+						},
+						{
+							"key": "AccountHolderName",
+							"value": "Himanshu Jhankal",
+							"type": "text"
+						},
+						{
+							"key": "BankName",
+							"value": "HSFC Bank",
+							"type": "text"
+						},
+						{
+							"key": "BranchCode",
+							"value": "302020",
+							"type": "text"
+						},
+						{
+							"key": "BankAddress",
+							"value": "Jtm Mall JagatPura Jaipur",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/withdraw_funds",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"withdraw_funds"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "walletDetails",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": "15",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/wallets_details?api_token= \"eDns1Z6ngaAu1uslvqLOFvrZUFJvUGICdMW55xUkdZvIGFjMjyEIxHnsL0iG\"",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"wallets_details"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": " \"eDns1Z6ngaAu1uslvqLOFvrZUFJvUGICdMW55xUkdZvIGFjMjyEIxHnsL0iG\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "paymentHistory",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": "36",
+							"type": "default"
+						},
+						{
+							"key": "start",
+							"value": "1",
+							"type": "default"
+						},
+						{
+							"key": "length",
+							"value": "50",
+							"type": "default"
+						},
+						{
+							"key": "type",
+							"value": "credit",
+							"type": "default",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/payment_history?api_token=tlCC54XozzQiVqJNztp0rCH89M94eCJNphfwWQzOgA2rusDFcgvDtDpNQEIi",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"payment_history"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "tlCC54XozzQiVqJNztp0rCH89M94eCJNphfwWQzOgA2rusDFcgvDtDpNQEIi"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "privacyPolicy",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": "36",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/privacy_policy",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"privacy_policy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "myStockPortfolio",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": "63",
+							"type": "text"
+						},
+						{
+							"key": "AllData",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "UserID",
+							"value": " 63,",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "CodeID",
+							"value": " HNX:HNXINDEX",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/my_stocks_portfolio?api_token=X5HSbBkInytD4ZwJGyP2jQdm1MTmcHS91Qplb6HTt6zh6mJTUDBMJxij5njY",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"my_stocks_portfolio"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "X5HSbBkInytD4ZwJGyP2jQdm1MTmcHS91Qplb6HTt6zh6mJTUDBMJxij5njY"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "depositList",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": "36",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/deposits_list?api_token=RYI7jNXaeIJeFtJmh9wJX7F0jDtxAKnY6KNhWd7dkffBJ9Fskxqj8GxhucPq",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"deposits_list"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "RYI7jNXaeIJeFtJmh9wJX7F0jDtxAKnY6KNhWd7dkffBJ9Fskxqj8GxhucPq"
+						},
+						{
+							"key": "start",
+							"value": "2",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "withdrawList",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": "36",
+							"type": "text"
+						},
+						{
+							"key": "start",
+							"value": "1",
+							"type": "default"
+						},
+						{
+							"key": "length",
+							"value": "10",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/withdrawal_list?api_token=RYI7jNXaeIJeFtJmh9wJX7F0jDtxAKnY6KNhWd7dkffBJ9Fskxqj8GxhucPq",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"withdrawal_list"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "RYI7jNXaeIJeFtJmh9wJX7F0jDtxAKnY6KNhWd7dkffBJ9Fskxqj8GxhucPq"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "mySellStock",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": "36",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/my_sell_stocks?api_token=RYI7jNXaeIJeFtJmh9wJX7F0jDtxAKnY6KNhWd7dkffBJ9Fskxqj8GxhucPq",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"my_sell_stocks"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "RYI7jNXaeIJeFtJmh9wJX7F0jDtxAKnY6KNhWd7dkffBJ9Fskxqj8GxhucPq"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "readNotification",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "notification_id",
+							"value": "13",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/read_notification?api_token=tlCC54XozzQiVqJNztp0rCH89M94eCJNphfwWQzOgA2rusDFcgvDtDpNQEIi",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"read_notification"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "tlCC54XozzQiVqJNztp0rCH89M94eCJNphfwWQzOgA2rusDFcgvDtDpNQEIi"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "webChat",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "contactUs",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/contact_us",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"contact_us"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Stocklist",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "UserID",
+							"value": "36",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vinaotc.strivemindz.com/public/api/sotcks_listing?api_token=tlCC54XozzQiVqJNztp0rCH89M94eCJNphfwWQzOgA2rusDFcgvDtDpNQEIi",
+					"protocol": "https",
+					"host": [
+						"vinaotc",
+						"strivemindz",
+						"com"
+					],
+					"path": [
+						"public",
+						"api",
+						"sotcks_listing"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "tlCC54XozzQiVqJNztp0rCH89M94eCJNphfwWQzOgA2rusDFcgvDtDpNQEIi"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -2,13 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Text, View, InteractionManager, Pressable, Image} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import PropTypes from 'prop-types';
-import Animated, {
-  SlideInLeft,
-  SlideOutRight,
-  Layout,
-  LayoutAnimation,
-  Easing,
-} from 'react-native-reanimated';
+import Animated, {SlideInLeft, Layout} from 'react-native-reanimated';
 
 import getMyPaymentHistory from '../../services/user/MyPaymentHistory';
 import {Selector} from '../../store/redux/user';
@@ -102,7 +96,9 @@ const PaymentFilter = ({selectedItem = 'All', close, callback}) => {
             backgroundColor: selectedItem === item.name ? GREEN_LIGHT : WHITE,
             // marginTop: HP(15),
           }}>
-          <RowContainer style={{alignItems: 'center'}}>
+          <RowContainer
+            style={{alignItems: 'center'}}
+            callback={() => callback(item.value)}>
             {selectedItem === item.name ? (
               selectedItemCircle()
             ) : (
@@ -200,7 +196,9 @@ const ProfilePaymentHistory = ({numberOfItems, pageNumber}) => {
                       <Text style={styles.payment_type}>
                         Payment {item.type}
                       </Text>
-                      <Text style={styles.payment_time}>{item.created_at}</Text>
+                      <Text style={styles.payment_time}>
+                        {item.created_at.slice(0, item.created_at.indexOf('T'))}
+                      </Text>
                     </View>
                   </RowContainer>
                   <Text

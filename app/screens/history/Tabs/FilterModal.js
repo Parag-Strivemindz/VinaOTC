@@ -1,4 +1,12 @@
-import {StyleSheet, Text, View, Modal} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  Pressable,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useState} from 'react';
 import {
   ROBOTO_MEDIUM,
@@ -13,11 +21,43 @@ import ActionButton from '../../../component/ActionButton';
 import {HP, WINDOW_WIDTH, WP} from '../../../styles/Dimesions';
 import Calander from '../../../component/Calander';
 
-const FilterModal = ({setter, dateSetter, close, getter}) => {
+// function RandomFilter({
+//   setter,
+//   datePicker,
+//   close,
+//   visible,
+//   setOpen,
+//   open,
+//   dateFormat,
+// }) {
+//   return (
+
+//   );
+// }
+
+const FilterModal = ({close, visible, onSearch}) => {
   const [open, setOpen] = useState({
     open: false,
     from: '',
   });
+
+  const [dateFilter, setDateFilter] = useState({
+    from: {
+      start_date: new Date(),
+      name: 'from',
+    },
+    to: {
+      to_date: new Date(),
+      name: 'to',
+    },
+  });
+
+  const closeModal = () => {
+    setOpen(prev => ({
+      ...prev,
+      open: prev.open ? false : prev.open,
+    }));
+  };
 
   function dateFormat(date) {
     try {
@@ -30,19 +70,20 @@ const FilterModal = ({setter, dateSetter, close, getter}) => {
       console.log(e);
     }
   }
-
   return (
     <Modal
       transparent
       animationType="fade"
-      visible={getter.isVisible}
+      visible={visible ? visible : false}
       onRequestClose={close}>
-      <View
+      <Pressable
+        onPress={close}
         style={{
           flex: 1,
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'rgba(0,0,0,0.2)',
+          flex: 1,
         }}>
         <View
           style={{
@@ -91,7 +132,8 @@ const FilterModal = ({setter, dateSetter, close, getter}) => {
                       open: !prev.open,
                     }));
                   }}>
-                  {dateFormat(dateSetter.from.date)}
+                  {dateFilter != undefined &&
+                    dateFormat(dateFilter.from.start_date)}
                 </Text>
               </ActionButton>
             </RowContainer>
@@ -114,7 +156,7 @@ const FilterModal = ({setter, dateSetter, close, getter}) => {
                       open: !prev.open,
                     }));
                   }}>
-                  {dateFormat(dateSetter.to.date)}
+                  {dateFilter != undefined && dateFormat(dateFilter.to.to_date)}
                 </Text>
               </ActionButton>
             </RowContainer>
@@ -125,6 +167,20 @@ const FilterModal = ({setter, dateSetter, close, getter}) => {
               paddingHorizontal: PADDING_HORIZONTAL,
             }}>
             <ActionButton
+              callBack={() => {
+                onSearch();
+                setDateFilter(prev => ({
+                  ...prev,
+                  from: {
+                    start_date: new Date(),
+                    name: 'from',
+                  },
+                  to: {
+                    to_date: new Date(),
+                    name: 'to',
+                  },
+                }));
+              }}
               style={{
                 ...styles.resetBtn,
                 borderWidth: 0.5,
@@ -134,6 +190,12 @@ const FilterModal = ({setter, dateSetter, close, getter}) => {
               <Text style={[styles.titletxt]}>Reset</Text>
             </ActionButton>
             <ActionButton
+              callBack={() => {
+                onSearch({
+                  start_date: dateFilter.from.start_date,
+                  to_date: dateFilter.to.to_date,
+                });
+              }}
               style={{
                 ...styles.resetBtn,
                 backgroundColor: SECONDARY_COLOR,
@@ -142,13 +204,17 @@ const FilterModal = ({setter, dateSetter, close, getter}) => {
             </ActionButton>
           </RowContainer>
         </View>
-        <Calander
-          setDate={setter}
-          setOpen={setOpen}
-          date={dateSetter.from.date}
-          open={open}
-        />
-      </View>
+      </Pressable>
+      <Calander
+        setDate={setDateFilter}
+        setOpen={closeModal}
+        date={
+          open.from === 'from'
+            ? dateFilter.from.start_date
+            : dateFilter.to.to_date
+        }
+        open={open}
+      />
     </Modal>
   );
 };

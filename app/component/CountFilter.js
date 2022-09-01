@@ -27,7 +27,7 @@ const CountFilter = ({
   const [getter, setter] = useState({
     isVisible: false,
   });
-
+  // console.log(numberOfItems + ' numberOfItems');
   const numberItem = [
     {
       id: '1',
@@ -122,7 +122,7 @@ const CountFilter = ({
                   marginVertical: 8,
                   alignItems: 'center',
                 }}>
-                <Text>{item.value}</Text>
+                <Text style={{color: 'white'}}>{item.value}</Text>
                 {/* {index == 0 && <ArrowDown />} */}
               </Pressable>
             ))}
