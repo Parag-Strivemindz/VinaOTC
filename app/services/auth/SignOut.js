@@ -5,8 +5,9 @@ import {getItem, removeItem} from '../../utils/AsyncStorage';
 import {postRequestWithHeader} from '../../utils/AxiosRequest';
 import {errorhandler} from './Login';
 
-export default SignOut = () => async (dispatch, getState) => {
+export default SignOut = setLoader => async (dispatch, getState) => {
   try {
+    setLoader(true);
     const userId = await getItem(USER_ID);
     postRequestWithHeader(env.LOGOUT, {UserID: userId})
       .then(res => {
@@ -21,8 +22,10 @@ export default SignOut = () => async (dispatch, getState) => {
         const removeAuthToken = removeItem(AUTH_LOGIN);
         const removeUserId = removeItem(USER_ID);
         Promise.all([removeAuthToken, removeUserId]);
+        setLoader(false);
       })
       .catch(err => {
+        setLoader(false);
         errorhandler(err);
         dispatch({
           type: USER_INFO,

@@ -20,7 +20,7 @@ import {
   PADDING_HORIZONTAL,
 } from '../../styles/GlobalStyles';
 import {
-  BLACK_01,
+  BACKGROUND_COLOR,
   LIGHT_ORANGE,
   MONTSERRAT_MEDIUM,
   MONTSERRAT_REGULAR,
@@ -86,8 +86,8 @@ const Portfolio = ({route, navigation}) => {
   }, [CodeID]);
 
   return (
-    <View style={{flex: 1}}>
-      <CommonHeader title={''} />
+    <View style={{flex: 1, backgroundColor: BACKGROUND_COLOR}}>
+      <CommonHeader title={''} navigateBack={'home'} />
       {stockView.data ? (
         <Container
           scrollViewContainerStyle={{

@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {View, Text, Image} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import {Selector as userSelector} from '../../store/redux/user/index';
 import {Selector as walletSelector} from '../../store/redux/dashboard/index';

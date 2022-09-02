@@ -1,6 +1,7 @@
-import {Image, Text, View} from 'react-native';
-import React, {useCallback, useEffect} from 'react';
+import {BackHandler, Image, Text, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
 
 import GetMyStockPortfolio from '../../services/dashboard/GetMyStockPortfolio';
 import getStockList from '../../services/dashboard/GetStockList';
@@ -18,6 +19,7 @@ import StockWebView from '../../component/StockWebView';
 import {SECONDARY_COLOR} from '../../styles/Fonts&Colors';
 import styles from './styles';
 import {HP} from '../../styles/Dimesions';
+import WantToExit from '../../component/WantToExit';
 
 const Home = ({navigation}) => {
   const myPortfolio = useSelector(Selector.My_Stock_Portfolio);
@@ -31,6 +33,33 @@ const Home = ({navigation}) => {
       });
     };
   }, []);
+
+  const [getter, setter] = useState({
+    isVisible: false,
+  });
+
+  const onClose = useCallback(() => {
+    setter(prev => ({...prev, isVisible: !prev.isVisible}));
+  }, [getter, setter]);
+
+  const onQuite = () => {
+    onClose();
+    BackHandler.exitApp();
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log('called');
+      const unsubscribe = BackHandler.addEventListener(
+        'hardwareBackPress',
+        () => {
+          onClose();
+          return true;
+        },
+      );
+      return () => unsubscribe.remove();
+    }),
+  );
 
   const dispatch = useDispatch();
 
@@ -138,6 +167,11 @@ const Home = ({navigation}) => {
           <HomeTab />
           */}
       </Container>
+      <WantToExit
+        isVisible={getter.isVisible}
+        onClose={onClose}
+        onQuit={onQuite}
+      />
     </View>
   );
 };

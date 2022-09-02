@@ -1,10 +1,14 @@
-import {View} from 'react-native';
+import {BackHandler, View} from 'react-native';
 import React from 'react';
 import HistoryTabs from '../../navigations/paymenhistory/index';
 
 import Header from '../../component/Header';
 import GlobalStyles, {CONTAINER_PADDINGTOP} from '../../styles/GlobalStyles';
 import {BACKGROUND_COLOR} from '../../styles/Fonts&Colors';
+import {useState} from 'react';
+import WantToExit from '../../component/WantToExit';
+import {useFocusEffect} from '@react-navigation/native';
+import {useCallback} from 'react';
 
 export const stocks = [
   {
@@ -48,6 +52,41 @@ export const stocks = [
 // };
 
 const PaymentHistory = () => {
+  const [getter, setter] = useState({
+    isVisible: false,
+  });
+  const onClose = () => setter(prev => ({...prev, isVisible: !prev.isVisible}));
+
+  const onQuite = () => {
+    BackHandler.exitApp();
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log('called');
+      const unsubscribe = BackHandler.addEventListener(
+        'hardwareBackPress',
+        () => {
+          onClose();
+          return true;
+        },
+      );
+      return () => unsubscribe.remove();
+    }),
+  );
+  // useEffect(() => {
+  //   const unsubscribe = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     () => {
+  //       onClose();
+  //       return true;
+  //     },
+  //   );
+  //   return () => {
+  //     unsubscribe.remove();
+  //   };
+  // }, []);
+
   return (
     <View
       style={{
@@ -57,6 +96,11 @@ const PaymentHistory = () => {
       }}>
       <Header />
       <HistoryTabs />
+      <WantToExit
+        isVisible={getter.isVisible}
+        onClose={onClose}
+        onQuit={onQuite}
+      />
     </View>
   );
 };

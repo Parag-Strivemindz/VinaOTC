@@ -11,10 +11,10 @@ import {WP} from '../styles/Dimesions';
 import {BACKGROUND_COLOR, POPPINS_MEDIUM, WHITE} from '../styles/Fonts&Colors';
 import {HEADER_HEIGHT} from '../styles/GlobalStyles';
 
-const CommonHeader = ({title, rightItem}) => {
+const CommonHeader = ({title, rightItem, navigateBack}) => {
   const navigate = useNavigation();
 
-  const navigateBack = () => navigate.goBack();
+  const onBackClick = () => navigate.goBack();
 
   return (
     <View style={styles.container}>
@@ -24,7 +24,7 @@ const CommonHeader = ({title, rightItem}) => {
             right: 20,
             left: 20,
           }}
-          onPress={navigateBack}
+          onPress={onBackClick}
           xml={ARROW_BACK}
           style={styles.icon}
           // viewBox={`0 0 ${100} ${100}`}

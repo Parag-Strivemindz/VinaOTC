@@ -79,7 +79,6 @@ const FilterModal = ({close, visible, onSearch}) => {
       <Pressable
         onPress={close}
         style={{
-          flex: 1,
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'rgba(0,0,0,0.2)',

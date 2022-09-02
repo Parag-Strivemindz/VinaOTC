@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, ImageBackground} from 'react-native';
+import {StyleSheet, ImageBackground, BackHandler} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -10,18 +10,17 @@ import {getItem} from './utils/AsyncStorage';
 import {Selector} from './store/redux/user/index';
 import {getUserInfo} from './services/user/Index';
 import {LAUNCH_SCREEN} from './constants/ImageConstant';
+import WantToExit from './component/WantToExit';
 
 const AppIndex = () => {
   const [loader, isLoader] = useState(false);
+
   const userInfo = useSelector(Selector.User_Info);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    SplashScreen.hide();
     getItem(AUTH_LOGIN).then(res => {
-      if (!res) {
-        SplashScreen.hide();
-      } else {
+      if (res) {
         dispatch(getUserInfo(isLoader));
       }
     });
@@ -38,11 +37,13 @@ const AppIndex = () => {
   }
 
   return (
-    <ImageBackground
-      source={LAUNCH_SCREEN}
-      style={{flex: 1}}
-      resizeMode="cover"
-      imageStyle={{flex: 1}}></ImageBackground>
+    <>
+      <ImageBackground
+        source={LAUNCH_SCREEN}
+        style={{flex: 1}}
+        resizeMode="cover"
+        imageStyle={{flex: 1}}></ImageBackground>
+    </>
   );
 };
 

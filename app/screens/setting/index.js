@@ -1,5 +1,5 @@
-import {Text, View} from 'react-native';
-import React from 'react';
+import {BackHandler, Text, View} from 'react-native';
+import React, {useState} from 'react';
 import {SvgXml} from 'react-native-svg';
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -20,6 +20,7 @@ import {
   BACKGROUND_COLOR,
   MONTSERRAT_MEDIUM,
   MONTSERRAT_REGULAR,
+  SECONDARY_COLOR,
   WHITE,
   WHITE_50,
 } from '../../styles/Fonts&Colors';
@@ -30,16 +31,57 @@ import {
   PADDING_HORIZONTAL,
   PADDING_VERTICAL,
 } from '../../styles/GlobalStyles';
-import {Selector} from '../../store/redux/user';
+import {Selector as UserSelector} from '../../store/redux/user';
+import Loader from '../../component/Loader';
+import WantToExit from '../../component/WantToExit';
+import {useFocusEffect} from '@react-navigation/native';
+import {useCallback} from 'react';
 
 const Setting = ({navigation}) => {
-  const userInfo = useSelector(Selector.User_Info);
+  const userInfo = useSelector(UserSelector.User_Info);
+
+  const [isLoader, setLoader] = useState(false);
 
   const navigateTo = screenName => {
     navigation.navigate(screenName);
   };
 
   const dispatch = useDispatch();
+
+  const [getter, setter] = useState({
+    isVisible: false,
+  });
+  const onClose = () => setter(prev => ({...prev, isVisible: !prev.isVisible}));
+
+  const onQuite = () => {
+    BackHandler.exitApp();
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log('called');
+      const unsubscribe = BackHandler.addEventListener(
+        'hardwareBackPress',
+        () => {
+          onClose();
+          return true;
+        },
+      );
+      return () => unsubscribe.remove();
+    }),
+  );
+  // useEffect(() => {
+  //   const unsubscribe = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     () => {
+  //       onClose();
+  //       return true;
+  //     },
+  //   );
+  //   return () => {
+  //     unsubscribe.remove();
+  //   };
+  // }, []);
 
   const ItemContainer = ({icon, title, callback}) => {
     return (
@@ -106,11 +148,15 @@ const Setting = ({navigation}) => {
           icon={UNLOCK}
           title={'Change Password'}
         />
-        <ItemContainer
-          icon={LOGOUT}
-          title={'Log Me Out'}
-          callback={() => dispatch(SignOut())}
-        />
+        {isLoader ? (
+          <Loader size={'large'} color={SECONDARY_COLOR} />
+        ) : (
+          <ItemContainer
+            icon={LOGOUT}
+            title={'Log Me Out'}
+            callback={() => dispatch(SignOut(setLoader))}
+          />
+        )}
         <View
           style={{
             width: '100%',
@@ -129,6 +175,11 @@ const Setting = ({navigation}) => {
           </Text>
         </View>
       </Container>
+      <WantToExit
+        isVisible={getter.isVisible}
+        onClose={onClose}
+        onQuit={onQuite}
+      />
     </View>
   );
 };

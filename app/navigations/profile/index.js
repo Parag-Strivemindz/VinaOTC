@@ -6,6 +6,9 @@ import EditProfile from '../../screens/profile/EditProfile';
 import AddFund from '../../screens/profile/AddFund';
 import WithdrawPayment from '../../screens/profile/WithdrawPayment';
 import Notification from '../../screens/profile/Notification';
+import AddMoney from '../../screens/home/AddMoney';
+import Portfolio from '../../screens/home/Portfolio';
+import AllPortfolio from '../../screens/home/AllPortfolio';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +16,7 @@ const ProfileStack = () => (
   <Stack.Navigator
     screenOptions={{
       headerShown: false,
+      animation: 'none',
     }}>
     <Stack.Screen name="Profile" component={Profile} />
     <Stack.Screen name="MyProfile" component={MyProfile} />
@@ -20,6 +24,9 @@ const ProfileStack = () => (
     <Stack.Screen name="AddFund" component={AddFund} />
     <Stack.Screen name="WithdrawPayment" component={WithdrawPayment} />
     <Stack.Screen name="Notification" component={Notification} />
+    <Stack.Screen name="AddMoney" component={AddMoney} />
+    <Stack.Screen name="Portfolio" component={Portfolio} />
+    <Stack.Screen name="AllPortfolio" component={AllPortfolio} />
   </Stack.Navigator>
 );
 

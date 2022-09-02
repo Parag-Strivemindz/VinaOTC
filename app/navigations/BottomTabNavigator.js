@@ -1,16 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, View, Animated} from 'react-native';
-import {
-  getFocusedRouteNameFromRoute,
-  useFocusEffect,
-} from '@react-navigation/native';
+import {StyleSheet, View, Animated, BackHandler} from 'react-native';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import HomeStack from './Home';
 import SettingStack from './settings';
 import ProfileStack from './profile';
 import {SvgXml} from 'react-native-svg';
-import {SECONDARY_COLOR, WHITE} from '../styles/Fonts&Colors';
+import {BACKGROUND_COLOR, SECONDARY_COLOR, WHITE} from '../styles/Fonts&Colors';
 
 import {
   HOME_SVG,
@@ -19,6 +16,7 @@ import {
   USER_SVG,
 } from '../constants/IconConstant';
 import PaymentHistory from '../screens/history';
+import WantToExit from '../component/WantToExit';
 
 const Tab = createBottomTabNavigator();
 
@@ -58,65 +56,85 @@ const TabBarIcon = ({focused, route, src}) => {
   );
 };
 
-const BottomTab = () => (
-  <Tab.Navigator
-    screenOptions={{
-      headerShown: false,
-      tabBarShowLabel: false,
-    }}>
-    <Tab.Screen
-      name="HomeStack"
-      component={HomeStack}
-      options={({route}) => ({
-        tabBarStyle: {
-          display: getRouteName(route),
-        },
-        tabBarIcon: ({focused}) => (
-          <TabBarIcon focused={focused} route={route} src={HOME_SVG} />
-        ),
-      })}
-    />
-    <Tab.Screen
-      name="SettingStack"
-      component={SettingStack}
-      options={({route, navigation}) => ({
-        tabBarStyle: {
-          display: getRouteName(route),
-        },
-        tabBarIcon: ({focused}) => (
-          <TabBarIcon focused={focused} route={route} src={SETTING_SVG} />
-        ),
-      })}
-    />
+const BottomTab = () => {
+  return (
+    <>
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarShowLabel: false,
+          tabBarStyle: {
+            backgroundColor: BACKGROUND_COLOR,
+          },
+        }}>
+        <Tab.Screen
+          name="HomeStack"
+          component={HomeStack}
+          options={({route}) => ({
+            tabBarStyle: {
+              ...styles.tabbarContainer,
+              display: getRouteName(route),
+            },
+            tabBarIcon: ({focused}) => (
+              <TabBarIcon focused={focused} route={route} src={HOME_SVG} />
+            ),
+          })}
+        />
+        <Tab.Screen
+          name="SettingStack"
+          component={SettingStack}
+          options={({route, navigation}) => ({
+            tabBarStyle: {
+              ...styles.tabbarContainer,
 
-    <Tab.Screen
-      name="PaymentHistory"
-      component={PaymentHistory}
-      options={({route}) => ({
-        tabBarIcon: ({focused}) => (
-          <TabBarIcon focused={focused} route={route} src={POSTCARD_SVG} />
-        ),
-      })}
-    />
-    <Tab.Screen
-      name="ProfileStack"
-      component={ProfileStack}
-      options={({route}) => ({
-        tabBarStyle: {
-          display: getRouteName(route),
-        },
-        tabBarIcon: ({focused}) => (
-          <TabBarIcon focused={focused} route={route} src={USER_SVG} />
-        ),
-      })}
-    />
-  </Tab.Navigator>
-);
+              display: getRouteName(route),
+            },
+            tabBarIcon: ({focused}) => (
+              <TabBarIcon focused={focused} route={route} src={SETTING_SVG} />
+            ),
+          })}
+        />
+
+        <Tab.Screen
+          name="PaymentHistory"
+          component={PaymentHistory}
+          options={({route}) => ({
+            tabBarStyle: {
+              ...styles.tabbarContainer,
+            },
+            tabBarIcon: ({focused}) => (
+              <TabBarIcon focused={focused} route={route} src={POSTCARD_SVG} />
+            ),
+          })}
+        />
+        <Tab.Screen
+          name="ProfileStack"
+          component={ProfileStack}
+          options={({route}) => ({
+            tabBarStyle: {
+              ...styles.tabbarContainer,
+
+              display: getRouteName(route),
+            },
+            tabBarIcon: ({focused}) => (
+              <TabBarIcon focused={focused} route={route} src={USER_SVG} />
+            ),
+          })}
+        />
+      </Tab.Navigator>
+    </>
+  );
+};
 const styles = StyleSheet.create({
   tabImg: {
     width: '100%',
     height: '100%',
     // marginBottom: 5,
+  },
+  tabbarContainer: {
+    backgroundColor: BACKGROUND_COLOR,
+    elevation: 0,
+    borderTopWidth: 0,
   },
 });
 

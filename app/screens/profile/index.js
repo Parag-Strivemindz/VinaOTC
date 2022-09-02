@@ -1,7 +1,8 @@
-import {Image, Text, View} from 'react-native';
-import React, {useCallback, useEffect} from 'react';
+import {BackHandler, Image, Text, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {SvgXml} from 'react-native-svg';
+import {useFocusEffect} from '@react-navigation/native';
 
 import {Selector as dashboardSelector} from '../../store/redux/dashboard/index';
 import {Selector as userSelector} from '../../store/redux/user/index';
@@ -21,13 +22,13 @@ import GlobalStyles, {
 } from '../../styles/GlobalStyles';
 import {ARROW_DOWN, NOTIFICATION_SVG} from '../../constants/IconConstant';
 import {HP, WP} from '../../styles/Dimesions';
-import {GIRL_PROFILE} from '../../constants/ImageConstant';
 import {
   MONTSERRAT_MEDIUM,
   WHITE,
   SECONDARY_COLOR,
 } from '../../styles/Fonts&Colors';
 import Loader from '../../component/Loader';
+import WantToExit from '../../component/WantToExit';
 
 const Profile = ({navigation}) => {
   const myPortfolio = useSelector(dashboardSelector.My_Stock_Portfolio);
@@ -40,6 +41,40 @@ const Profile = ({navigation}) => {
       navigation.navigate(screenName, {
         ...params,
       });
+    };
+  }, []);
+
+  const [getter, setter] = useState({
+    isVisible: false,
+  });
+
+  const onClose = () => {
+    setter(prev => ({...prev, isVisible: !prev.isVisible}));
+  };
+
+  const onQuite = () => {
+    setter(prev => ({...prev, isVisible: !prev.isVisible}));
+    return true;
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log('called');
+      BackHandler.addEventListener('hardwareBackPress', onQuite);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onQuite);
+    }, [onQuite]),
+  );
+
+  useEffect(() => {
+    const unsubscribe = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        return true;
+      },
+    );
+    return () => {
+      unsubscribe.remove();
     };
   }, []);
 
@@ -160,6 +195,11 @@ const Profile = ({navigation}) => {
           </View>
         </View>
       </Container>
+      <WantToExit
+        isVisible={getter.isVisible}
+        onClose={onClose}
+        onQuit={onQuite}
+      />
     </View>
   );
 };

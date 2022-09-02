@@ -60,4 +60,4 @@ const prodEnviromentVariables = {
   REGISTER: `${PROD_API_URL_IDENTITY}/api/register`,
 };
 
-export default __DEV__ ? devEnviromentVariables : prodEnviromentVariables;
+export default __DEV__ ? devEnviromentVariables : devEnviromentVariables;

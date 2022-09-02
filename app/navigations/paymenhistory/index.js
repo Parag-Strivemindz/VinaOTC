@@ -5,8 +5,6 @@ import WithDrawal from '../../screens/history/Tabs/Withdraw';
 import Deposit from '../../screens/history/Tabs/Deposit';
 import {
   BACKGROUND_COLOR,
-  BORDER_WHITE,
-  LIGHT_WHITE,
   ROBOTO_REGULAR,
   SECONDARY_COLOR,
   WHITE,
@@ -62,7 +60,7 @@ function HistoryTabs() {
           //   shadowColor: WHITE,
           //   shadowOpacity: 10,
           // },
-          tabBarScrollEnabled: false,
+          swipeEnabled: false,
           tabBarLabel: ({focused}) => (
             <Tabbar
               focused={focused}
@@ -76,7 +74,7 @@ function HistoryTabs() {
         name="WithDrawal"
         component={WithDrawal}
         options={{
-          tabBarScrollEnabled: false,
+          swipeEnabled: false,
           tabBarLabel: ({focused}) => (
             <Tabbar
               focused={focused}

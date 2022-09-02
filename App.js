@@ -1,12 +1,8 @@
-import {
-  DefaultTheme,
-  NavigationContainer,
-  DarkTheme,
-} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import React, {useEffect, useState, useMemo} from 'react';
+import {useNetInfo} from '@react-native-community/netinfo';
 
-import {StatusBar, View} from 'react-native';
+import {BackHandler, StatusBar, View} from 'react-native';
 import {Provider} from 'react-redux';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppIndex from './app/AppIndex';
@@ -17,6 +13,9 @@ import * as RNLocalize from 'react-native-localize';
 import {getItem} from './app/utils/AsyncStorage';
 import {APP_LANGUAGE} from './app/constants/AppConstant';
 import ShowNetworkError from './app/component/NetworkError';
+import SplashScreen from 'react-native-splash-screen';
+import WantToExit from './app/component/WantToExit';
+import {useCallback} from 'react';
 
 const App = () => {
   const netInfo = useNetInfo();
@@ -35,17 +34,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(state => {
-      console.log('Connection type', state.type);
-      console.log('Is connected?', state.isConnected);
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, [third]);
-  // Unsubscribe
-
-  useEffect(() => {
+    SplashScreen.hide();
     function changeLanguage() {
       const locals = RNLocalize.getLocales();
       console.log(locals + ' locals');
@@ -69,10 +58,9 @@ const App = () => {
     return () => RNLocalize.removeEventListener('change', changeLanguage);
   }, []);
 
-  const [isDark, setIsDark] = useState(false);
   return (
     <View style={{flex: 1, backgroundColor: BACKGROUND_COLOR}}>
-      <NavigationContainer theme={DarkTheme}>
+      <NavigationContainer>
         <Provider store={store}>
           <SafeAreaProvider>
             <StatusBar

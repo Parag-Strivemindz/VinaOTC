@@ -52,6 +52,8 @@ import {
   ERROR,
   RADIO,
   ATTACH_SVG,
+  FILE_SVG,
+  CAMERA_SVG,
 } from '../../constants/IconConstant';
 import Loader from '../../component/Loader';
 import DepositeFunds from '../../services/bank/DepositeFunds';
@@ -61,10 +63,12 @@ const filerItems = [
   {
     id: '1',
     name: FILE,
+    image: FILE_SVG,
   },
   {
     id: '2',
     name: CAMERA,
+    image: CAMERA_SVG,
   },
 ];
 
@@ -170,12 +174,13 @@ const FindAttachment = ({close, callback}) => {
             // marginTop: HP(15),
           }}>
           <RowContainer style={{alignItems: 'center'}}>
-            <SvgXml xml={CIRCLE} />
+            <SvgXml xml={item.image} />
             <Text
               style={{
                 marginLeft: WP(15),
                 color: BLACK_70,
                 fontFamily: ROBOTO_MEDIUM,
+                textTransform: 'capitalize',
               }}>
               {item.name}
             </Text>
@@ -312,6 +317,7 @@ function AddMoney({navigation, route}) {
   return (
     <View style={{flex: 1}}>
       <CommonHeader
+        navigateBack={'Add Money'}
         title={'Add Money'}
         rightItem={
           route.params &&

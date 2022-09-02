@@ -1,5 +1,5 @@
 import {View, Text, Image} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SvgXml} from 'react-native-svg';
 
 import RowContainer from '../../component/RowContainer';
