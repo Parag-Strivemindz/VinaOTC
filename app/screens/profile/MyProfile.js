@@ -29,6 +29,12 @@ import CountFilter from '../../component/CountFilter';
 const MyProfile = ({navigation}) => {
   const walletDetails = useSelector(walletSelector.WALLET_DETAILS);
   const myProfileDetails = useSelector(userSelector.User_Info);
+  const myPaymentHistory = useSelector(userSelector.My_Payment_History);
+
+  const [getter, setter] = useState({
+    pageNumber: 0,
+    numberOfItemOnPage: 10,
+  });
 
   const navigateTo = useCallback(screenName => {
     return (params = {}) => {
@@ -36,12 +42,7 @@ const MyProfile = ({navigation}) => {
         ...params,
       });
     };
-  });
-
-  const onCountSelect = value => {
-    console.log(value);
-    // dispatch(getMyPaymentHistory());
-  };
+  }, []);
 
   return (
     <View style={{flex: 1}}>
@@ -143,9 +144,17 @@ const MyProfile = ({navigation}) => {
           </RowContainer>
         </RowContainer>
         <CardViewDivider style={{marginVertical: HP(30)}} />
-        <ProfilePaymentHistory />
+        <ProfilePaymentHistory
+          numberOfItems={getter.numberOfItemOnPage}
+          pageNumber={getter.pageNumber}
+        />
       </Container>
-      <CountFilter onCountSelect={onCountSelect} />
+      <CountFilter
+        numberOfItems={getter.numberOfItemOnPage}
+        paymentSetter={setter}
+        disableLeftButton={getter.pageNumber == 1 ? true : false}
+        disableRightButton={myPaymentHistory.noRecordFound}
+      />
     </View>
   );
 };

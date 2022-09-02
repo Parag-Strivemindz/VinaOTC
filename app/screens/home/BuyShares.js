@@ -82,7 +82,7 @@ const BuyShares = ({navigation, route}) => {
   const walletDetails = useSelector(Selector.WALLET_DETAILS);
   const stockView = useSelector(Selector.STOCK_VIEW);
 
-  const {title, created_at, CodeId, stockAmout, stock_id} = route.params;
+  const {title, created_at, CodeID, stockAmout, stock_id} = route.params;
 
   const [getter, setter] = useState({
     ammount: '',
@@ -160,7 +160,7 @@ const BuyShares = ({navigation, route}) => {
                 }}
               />
               <Text style={styles.itemContainerLeftSubTitTxt}>
-                {created_at.slice(-9)} |<Text> {CodeId}</Text>
+                {created_at.slice(-9)} |<Text> {CodeID}</Text>
               </Text>
             </RowContainer>
           </View>

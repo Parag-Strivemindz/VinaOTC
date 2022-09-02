@@ -116,7 +116,11 @@ const Home = ({navigation}) => {
                   <CardView
                     key={index.toString()}
                     data={item}
-                    callback={() => navigateTo('Portfolio')}
+                    callback={() =>
+                      navigateTo('Portfolio')({
+                        CodeID: item.code,
+                      })
+                    }
                   />
                 );
               })

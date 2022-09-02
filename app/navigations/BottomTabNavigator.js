@@ -1,8 +1,10 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, View, Animated} from 'react-native';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import {
+  getFocusedRouteNameFromRoute,
+  useFocusEffect,
+} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useFocusEffect} from '@react-navigation/native';
 
 import HomeStack from './Home';
 import SettingStack from './settings';
@@ -21,24 +23,15 @@ import PaymentHistory from '../screens/history';
 const Tab = createBottomTabNavigator();
 
 const getRouteName = route => {
-  const hideOnRoute = ['Chat', 'PrivacyPolicy'];
+  const hideOnRoute = ['home', 'Setting', 'Profile'];
   const routeName = getFocusedRouteNameFromRoute(route);
-  const indexValue = hideOnRoute.indexOf(routeName);
-  // console.log(routeName);
-  return indexValue != -1 ? 'none' : 'flex';
+  if (routeName != undefined) {
+    const onHide = hideOnRoute.indexOf(routeName);
+    return onHide != -1 ? 'flex' : 'none';
+  }
 };
 
-const TabBarIcon = ({focused, src}) => {
-  const ActiveBar = useRef(new Animated.Value(0)).current;
-
-  useFocusEffect(() => {
-    Animated.timing(ActiveBar, {
-      toValue: focused ? 1 : 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  });
-
+const TabBarIcon = ({focused, route, src}) => {
   return (
     <View>
       <SvgXml
@@ -54,11 +47,6 @@ const TabBarIcon = ({focused, src}) => {
             position: 'absolute',
             //   height: 10,
             borderColor: 'orange',
-            transform: [
-              {
-                scale: ActiveBar,
-              },
-            ],
             borderBottomWidth: 2,
             borderBottomColor: SECONDARY_COLOR,
             alignSelf: 'center',
@@ -79,42 +67,48 @@ const BottomTab = () => (
     <Tab.Screen
       name="HomeStack"
       component={HomeStack}
-      options={{
+      options={({route}) => ({
+        tabBarStyle: {
+          display: getRouteName(route),
+        },
         tabBarIcon: ({focused}) => (
-          <TabBarIcon focused={focused} src={HOME_SVG} />
+          <TabBarIcon focused={focused} route={route} src={HOME_SVG} />
         ),
-      }}
+      })}
     />
     <Tab.Screen
       name="SettingStack"
       component={SettingStack}
       options={({route, navigation}) => ({
-           tabBarStyle: {
-          ...styles.tabBarContainer,
+        tabBarStyle: {
           display: getRouteName(route),
         },
         tabBarIcon: ({focused}) => (
-          <TabBarIcon focused={focused} src={SETTING_SVG} />
+          <TabBarIcon focused={focused} route={route} src={SETTING_SVG} />
+        ),
+      })}
+    />
+
+    <Tab.Screen
+      name="PaymentHistory"
+      component={PaymentHistory}
+      options={({route}) => ({
+        tabBarIcon: ({focused}) => (
+          <TabBarIcon focused={focused} route={route} src={POSTCARD_SVG} />
         ),
       })}
     />
     <Tab.Screen
-      name="PaymentHistory"
-      component={PaymentHistory}
-      options={{
-        tabBarIcon: ({focused}) => (
-          <TabBarIcon focused={focused} src={POSTCARD_SVG} />
-        ),
-      }}
-    />
-    <Tab.Screen
       name="ProfileStack"
       component={ProfileStack}
-      options={{
+      options={({route}) => ({
+        tabBarStyle: {
+          display: getRouteName(route),
+        },
         tabBarIcon: ({focused}) => (
-          <TabBarIcon focused={focused} src={USER_SVG} />
+          <TabBarIcon focused={focused} route={route} src={USER_SVG} />
         ),
-      }}
+      })}
     />
   </Tab.Navigator>
 );

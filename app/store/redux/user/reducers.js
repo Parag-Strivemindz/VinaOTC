@@ -1,4 +1,9 @@
-import {USER_INFO, MY_SELL_STOCKS, MY_PAYMENT_HISTORY} from './ActionTypes';
+import {
+  USER_INFO,
+  MY_SELL_STOCKS,
+  MY_PAYMENT_HISTORY,
+  GET_NOTIFICATION,
+} from './ActionTypes';
 
 const initialState = {
   userInfo: {
@@ -12,6 +17,12 @@ const initialState = {
     error: null,
   },
   myPaymentHistory: {
+    isLoading: false,
+    data: null,
+    error: null,
+    noRecordFound: false,
+  },
+  getNotification: {
     isLoading: false,
     data: null,
     error: null,
@@ -41,6 +52,14 @@ export default (state = initialState, action) => {
         ...state,
         myPaymentHistory: {
           ...state.myPaymentHistory,
+          ...action.payload,
+        },
+      };
+    case GET_NOTIFICATION:
+      return {
+        ...state,
+        getNotification: {
+          ...state.getNotification,
           ...action.payload,
         },
       };

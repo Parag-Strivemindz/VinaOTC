@@ -4,15 +4,12 @@ import DatePicker from 'react-native-date-picker';
 
 const Calander = ({setDate, setOpen, date, open}) => {
   const SelecteData = date => {
-    setOpen(prev => ({
-      ...prev,
-      open: !prev.open,
-    }));
+    setOpen();
     if (open.from == 'from') {
       setDate(prev => ({
         ...prev,
         from: {
-          date: date,
+          start_date: date,
           name: 'from',
         },
       }));
@@ -20,7 +17,7 @@ const Calander = ({setDate, setOpen, date, open}) => {
       setDate(prev => ({
         ...prev,
         to: {
-          date: date,
+          to_date: date,
           name: 'to',
         },
       }));
@@ -32,17 +29,11 @@ const Calander = ({setDate, setOpen, date, open}) => {
       <DatePicker
         locale="en"
         mode="date"
-        androidVariant="nativeAndroid"
         modal
         open={open.open}
         date={date}
         onConfirm={SelecteData}
-        onCancel={() => {
-          setOpen(prev => ({
-            ...prev,
-            open: !prev.open,
-          }));
-        }}
+        onCancel={() => setOpen()}
       />
     </>
   );

@@ -9,7 +9,6 @@ import BottomTab from './navigations/BottomTabNavigator';
 import {getItem} from './utils/AsyncStorage';
 import {Selector} from './store/redux/user/index';
 import {getUserInfo} from './services/user/Index';
-import Loader from './component/Loader';
 import {LAUNCH_SCREEN} from './constants/ImageConstant';
 
 const AppIndex = () => {
@@ -42,7 +41,7 @@ const AppIndex = () => {
     <ImageBackground
       source={LAUNCH_SCREEN}
       style={{flex: 1}}
-      resizeMode="stretch"
+      resizeMode="cover"
       imageStyle={{flex: 1}}></ImageBackground>
   );
 };

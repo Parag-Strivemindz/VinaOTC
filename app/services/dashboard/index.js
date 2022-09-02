@@ -39,7 +39,7 @@ export function responseHandler(res, type, dispatch, showSnakbar = false) {
       SnackBar(res.message);
     }
     if (res.status === 200) {
-      console.log(res);
+      // console.log(res);
       dispatch({
         type: type,
         payload: {

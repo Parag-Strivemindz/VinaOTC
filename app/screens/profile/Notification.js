@@ -1,19 +1,32 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {useEffect} from 'react';
+import {Text, View, StyleSheet, Pressable, Image} from 'react-native';
 import {Neomorph, NeomorphFlex, Shadow} from 'react-native-neomorph-shadows';
+import {SvgXml} from 'react-native-svg';
+import {useDispatch, useSelector} from 'react-redux';
 
 import CommonHeader from '../../component/CommonHeader';
 import Container from '../../component/Container';
+import Loader from '../../component/Loader';
 import RowContainer from '../../component/RowContainer';
-import {HP, WINDOW_WIDTH, WP} from '../../styles/Dimesions';
+import {READ_INDICATOR} from '../../constants/IconConstant';
+import {EMAIL_SVG} from '../../constants/ImageConstant';
+
+import getNotification from '../../services/user/Notification';
+import readNotification from '../../services/user/ReadNotification';
+
+import {Selector} from '../../store/redux/user';
+import {HP, WINDOW_HEIGHT, WINDOW_WIDTH, WP} from '../../styles/Dimesions';
 
 import {
+  MONTSERRAT_MEDIUM,
   MONTSERRAT_REGULAR,
   ROBOTO_BOLD,
   ROBOTO_MEDIUM,
   ROBOTO_REGULAR,
   SECONDARY_COLOR,
   WHITE,
+  WHITE_80,
 } from '../../styles/Fonts&Colors';
 import GlobalStyles, {
   CONTAINER_PADDINGTOP,
@@ -56,6 +69,14 @@ const data = [
 ];
 
 function Notification() {
+  const notification = useSelector(Selector.GET_NOTIFICATION);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getNotification());
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <CommonHeader title="Notification" />
@@ -64,74 +85,120 @@ function Notification() {
           paddingTop: CONTAINER_PADDINGTOP,
           paddingHorizontal: PADDING_HORIZONTAL,
         }}>
-        <View>
-          {data.map(item => {
-            return (
-              <View
-                key={item.id}
-                style={[
-                  GlobalStyles.dropShadow,
-                  {
-                    // shadowOffset: {width: 10, height: 10},
-                    marginTop: HP(20),
-                    padding: 15,
-                    // shadowOpacity: 0.2,
-                    // shadowRadius: 10,
-                    borderRadius: 10,
-                    borderWidth: 0,
-                    width: WINDOW_WIDTH * 0.9,
-                    borderTopLeftRadius: 20,
-                  },
-                ]}>
-                <RowContainer
-                  style={{
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                  }}>
-                  <Neumor
-                    inner={true}
-                    darkShadow={'#000000'}
-                    lightShadow={WHITE}
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text style={styles.text}>SM</Text>
-                  </Neumor>
-                  <View style={{marginLeft: WP(15)}}>
-                    <Text
+        {notification.data ? (
+          notification.data.data && (
+            <>
+              {notification.data.data.map((item, index) => {
+                return (
+                  <Pressable
+                    onPress={() => {
+                      dispatch(readNotification(item.notification_id, index));
+                    }}
+                    key={item.notification_id}
+                    style={[
+                      GlobalStyles.dropShadow,
+                      {
+                        // shadowOffset: {width: 10, height: 10},
+                        marginTop: HP(20),
+                        padding: 15,
+                        // shadowOpacity: 0.2,
+                        // shadowRadius: 10,
+                        borderRadius: 10,
+                        borderWidth: 0,
+                        width: WINDOW_WIDTH * 0.9,
+                        borderTopLeftRadius: 30,
+                      },
+                    ]}>
+                    <RowContainer
+                      onPress={() => {
+                        dispatch(readNotification(item.notification_id, index));
+                      }}
                       style={{
-                        color: SECONDARY_COLOR,
-                        fontFamily: ROBOTO_MEDIUM,
-                        fontSize: WP(17),
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
                       }}>
-                      {item.sender}
-                    </Text>
+                      <View
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Neumor
+                          inner={true}
+                          darkShadow={'#000000'}
+                          lightShadow={WHITE}
+                          style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}>
+                          <SvgXml
+                            xml={EMAIL_SVG}
+                            stroke={WHITE_80}
+                            width={20}
+                            height={20}
+                          />
+                        </Neumor>
+                        <View style={{marginLeft: WP(15)}}>
+                          <Text
+                            style={{
+                              color: SECONDARY_COLOR,
+                              fontFamily: ROBOTO_MEDIUM,
+                              fontSize: WP(17),
+                            }}>
+                            {item.title}
+                          </Text>
+                          <Text
+                            style={{
+                              fontFamily: ROBOTO_REGULAR,
+                              color: WHITE,
+                              fontSize: WP(10),
+                              marginTop: HP(2),
+                            }}>
+                            {item.created_at}
+                          </Text>
+                        </View>
+                      </View>
+
+                      {!Boolean(item.is_read) && (
+                        <SvgXml
+                          xml={READ_INDICATOR}
+                          style={{
+                            tintColor: SECONDARY_COLOR,
+                            width: 15,
+                            height: 15,
+                          }}
+                        />
+                      )}
+                    </RowContainer>
                     <Text
                       style={{
-                        fontFamily: ROBOTO_REGULAR,
+                        lineHeight: 20,
+                        marginTop: HP(20),
+                        fontFamily: MONTSERRAT_REGULAR,
                         color: WHITE,
-                        fontSize: WP(10),
-                        marginTop: HP(2),
+                        fontSize: WP(13),
                       }}>
-                      {item.time}
+                      {item.message}
                     </Text>
-                  </View>
-                </RowContainer>
-                <Text
-                  style={{
-                    lineHeight: 20,
-                    marginTop: HP(20),
-                    fontFamily: MONTSERRAT_REGULAR,
-                    color: WHITE,
-                    fontSize: WP(13),
-                  }}>
-                  {item.message}
-                </Text>
-              </View>
-            );
-          })}
-        </View>
+                  </Pressable>
+                );
+              })}
+            </>
+          )
+        ) : notification.isLoading ? (
+          <Loader
+            size={'large'}
+            color={SECONDARY_COLOR}
+            style={{marginTop: WINDOW_HEIGHT / 2}}
+          />
+        ) : (
+          <Text
+            style={{
+              color: WHITE,
+              fontFamily: MONTSERRAT_MEDIUM,
+              alignSelf: 'center',
+              marginTop: WINDOW_HEIGHT / 2,
+              fontSize: WP(12),
+            }}>
+            You don't have any notification
+          </Text>
+        )}
       </Container>
     </View>
   );

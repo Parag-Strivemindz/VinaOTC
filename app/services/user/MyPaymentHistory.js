@@ -1,30 +1,91 @@
+import SnackBar from '../../component/SnackBar';
 import env from '../../config/env';
 import {USER_ID} from '../../constants/AppConstant';
 import {MY_PAYMENT_HISTORY} from '../../store/redux/user/ActionTypes';
 import {getItem} from '../../utils/AsyncStorage';
 import {postRequestWithHeader} from '../../utils/AxiosRequest';
-import {errorhandler, responseHandler} from '../dashboard';
+import {errorhandler} from '../dashboard';
+
+export function responseHandler(
+  res,
+  type,
+  dispatch,
+  previousState,
+  showSnakbar = false,
+) {
+  try {
+    if (res.status === 400 || res.status === 401) {
+      dispatch({
+        type: type,
+        payload: {
+          ...previousState,
+          isLoading: false,
+          noRecordFound: true,
+        },
+      });
+      SnackBar('No More Record Found', false, true);
+    }
+    if (res.status === 200) {
+      // console.log(res);
+      dispatch({
+        type: type,
+        payload: {
+          isLoading: false,
+          data: {
+            ...res,
+          },
+          error: null,
+          noRecordFound: false,
+        },
+      });
+      if (showSnakbar) SnackBar(res.message);
+    }
+  } catch (error) {
+    console.error(`${error} of ${type} from response Hander`);
+  }
+}
 
 const getMyPaymentHistory =
-  (start = 0, end = 10) =>
-  async dispatch => {
+  (pageNumber = 1, itemFetchPerPage = 10, filterType) =>
+  async (dispatch, getState) => {
     try {
+      const {
+        user: {myPaymentHistory},
+      } = getState();
+
       dispatch({
         type: MY_PAYMENT_HISTORY,
         payload: {
+          ...myPaymentHistory,
           isLoading: true,
-          data: null,
-          error: null,
         },
       });
       const userId = await getItem(USER_ID);
-      postRequestWithHeader(env.MY_PAYMENT_HISTORY, {
+
+      const withFilterType = {
         UserID: userId,
-        start: start,
-        end: end,
-      })
+        start: pageNumber,
+        length: itemFetchPerPage,
+        type: filterType,
+      };
+
+      const notwithFilterType = {
+        UserID: userId,
+        start: pageNumber,
+        length: itemFetchPerPage,
+      };
+
+      const params = filterType ? withFilterType : notwithFilterType;
+
+      postRequestWithHeader(env.MY_PAYMENT_HISTORY, params)
         .then(res => {
-          responseHandler(res.data, MY_PAYMENT_HISTORY, dispatch);
+          // console.log(state.user.myPaymentHistory.data + ' getState');
+          responseHandler(
+            res.data,
+            MY_PAYMENT_HISTORY,
+            dispatch,
+            myPaymentHistory,
+          );
         })
         .catch(e => {
           errorhandler(e, MY_PAYMENT_HISTORY, dispatch);

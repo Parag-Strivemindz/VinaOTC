@@ -12,6 +12,14 @@ import {
   updateProfile,
   buyStock,
   sellStock,
+  contactus,
+  getintouch,
+  changePassword,
+  withdrawFund,
+  getNotification,
+  withdrawalList,
+  depositList,
+  readnotification,
 } from '../constants/ApiConstants';
 
 console.log(DEV_API_URL_IDENTITY);
@@ -23,7 +31,7 @@ const devEnviromentVariables = {
   FORGET_PASSWORD: `${DEV_API_URL_IDENTITY}/forgot`,
   VERIFY_FORGOT_OTP: `${DEV_API_URL_IDENTITY}/verify-forgot-otp`,
   RESET_PASSWORD: `${DEV_API_URL_IDENTITY}/reset-password`,
-  CHANGE_PASSWORD: `${DEV_API_URL_IDENTITY}/change-password`,
+  CHANGE_PASSWORD: `${DEV_API_URL_IDENTITY}/${changePassword}`,
   GET_PROFILE_DETAILS: `${DEV_API_URL_IDENTITY}/get_profile_details`,
   LOGOUT: `${DEV_API_URL_IDENTITY}/logout_user`,
   MY_STOCKS_PORTFOLIO: `${DEV_API_URL_IDENTITY}/${myStockPortfolioApi}`,
@@ -37,6 +45,13 @@ const devEnviromentVariables = {
   UPDATE_PROFILE: `${DEV_API_URL_IDENTITY}/${updateProfile}`,
   BUY_STOCKS: `${DEV_API_URL_IDENTITY}/${buyStock}`,
   SELL_STOCKS: `${DEV_API_URL_IDENTITY}/${sellStock}`,
+  CONTACT_US: `${DEV_API_URL_IDENTITY}/${contactus}`,
+  GET_IN_TOUCH: `${DEV_API_URL_IDENTITY}/${getintouch}`,
+  WITHDRAW_FUND: `${DEV_API_URL_IDENTITY}/${withdrawFund}`,
+  GETNOTIFICATION: `${DEV_API_URL_IDENTITY}/${getNotification}`,
+  WITHDRAWALLIST: `${DEV_API_URL_IDENTITY}/${withdrawalList}`,
+  DEPOSITLIST: `${DEV_API_URL_IDENTITY}/${depositList}`,
+  READ_NOTIFICATION: `${DEV_API_URL_IDENTITY}/${readnotification}`,
 };
 
 //make config for productionEnviroment

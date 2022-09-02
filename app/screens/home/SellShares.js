@@ -78,7 +78,7 @@ function ShareShowCard(props) {
 }
 
 const SellShares = ({route, navigation}) => {
-  const {title, created_at, CodeId, stockAmout, stock_id, totalShare, isSell} =
+  const {title, created_at, CodeID, stockAmout, stock_id, totalShare, isSell} =
     route.params;
 
   const [getter, setter] = useState({
@@ -105,7 +105,7 @@ const SellShares = ({route, navigation}) => {
   const onSellShare = () => {
     const [ammount] = isFeildValid(getter.ammount);
     if (ammount == '') {
-      dispatch(sellStock(getter.ammount, CodeId, setter, navigation));
+      dispatch(sellStock(getter.ammount, CodeID, setter, navigation));
       setError(prev => ({
         ...prev,
         ammounError: '',
@@ -134,7 +134,12 @@ const SellShares = ({route, navigation}) => {
           ]}>
           <View>
             <Text style={styles.itemContainerLeftTitTxt}>{title}</Text>
-            <RowContainer style={{marginTop: HP(10), alignItems: 'center'}}>
+            <RowContainer
+              style={{
+                marginTop: HP(10),
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+              }}>
               <Image
                 source={CLOCK}
                 style={{
@@ -142,10 +147,11 @@ const SellShares = ({route, navigation}) => {
                   height: 14,
                   tintColor: WHITE,
                   resizeMode: 'center',
+                  marginRight: WP(10),
                 }}
               />
               <Text style={styles.itemContainerLeftSubTitTxt}>
-                {created_at}
+                {created_at.slice(0, created_at.indexOf('T'))}
               </Text>
             </RowContainer>
           </View>
@@ -270,7 +276,7 @@ const SellShares = ({route, navigation}) => {
               ]}>
               <ShareShowCard
                 title={'Number of Shares'}
-                item={totalShared}></ShareShowCard>
+                item={totalShare}></ShareShowCard>
               <ShareShowCard
                 title={'Price per share'}
                 item={'Price_Per_Share'}></ShareShowCard>

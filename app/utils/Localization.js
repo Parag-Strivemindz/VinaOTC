@@ -18,8 +18,7 @@ export default strings = new LocalizedStrings({
     please: 'Please',
     enter: 'Enter',
     id: 'id',
-    passwordErr:
-      'At least 8 characters must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number',
+    passwordErr: 'password must contain 8 character',
     confirmPassErr: `confirmPassword can't be empty`,
     confirmPassword: 'Confirm Password',
     equalPassErr: 'Password must be equal to confirm password',
@@ -47,8 +46,7 @@ export default strings = new LocalizedStrings({
     please: 'Xin vui lòng',
     enter: 'đi vào',
     id: 'id',
-    passwordErr:
-      'Ít nhất 8 ký tự phải chứa ít nhất 1 chữ cái viết hoa, 1 chữ cái viết thường và 1 số',
+    passwordErr: 'mật khẩu phải chứa 8 ký tự',
     confirmPassErr: 'xác nhận Mật khẩu không được để trống',
     equalPassErr: 'Mật khẩu phải bằng để xác nhận mật khẩu',
     emailAddrErr: 'Địa chỉ email không hợp lệ',
@@ -73,8 +71,7 @@ export default strings = new LocalizedStrings({
     please: '请',
     enter: '进入',
     id: 'id',
-    passwordErr:
-      '至少 8 个字符必须包含至少 1 个大写字母、1 个小写字母和 1 个数字',
+    passwordErr: '密码必须包含 8 个字符',
     confirmPassErr: '确认密码不能为空',
     equalPassErr: '密码必须等于确认密码',
     emailAddrErr: '电子邮件地址无效',

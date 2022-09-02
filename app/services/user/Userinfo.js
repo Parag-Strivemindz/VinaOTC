@@ -1,6 +1,7 @@
 import {errorhandler, responseHandler} from '../dashboard';
 import env from '../../config/env';
 
+import NeworkError from '../../services/network/checkNetwork';
 import {USER_ID} from '../../constants/AppConstant';
 import {USER_INFO} from '../../store/redux/user/ActionTypes';
 import {getItem} from '../../utils/AsyncStorage';
@@ -20,9 +21,8 @@ const getUserInfo = isLoader => async dispatch => {
         isLoader(false);
       });
   } catch (e) {
+    dispatch(NeworkError());
     console.error(e + ' coming from UserInfo');
-  } finally {
-    console.log('finally');
   }
 };
 

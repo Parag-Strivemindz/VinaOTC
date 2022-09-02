@@ -33,6 +33,7 @@ const Profile = ({navigation}) => {
   const myPortfolio = useSelector(dashboardSelector.My_Stock_Portfolio);
   const walletDetails = useSelector(dashboardSelector.WALLET_DETAILS);
   const mySellStock = useSelector(userSelector.My_Sell_Stocks);
+  const myProfileDetails = useSelector(userSelector.User_Info);
 
   const navigateTo = useCallback(screenName => {
     return (params = {}) => {
@@ -64,11 +65,12 @@ const Profile = ({navigation}) => {
             paddingHorizontal: 15,
             height: HP(63),
           }}>
-          <RowContainer style={{alignItems: 'center'}}>
+          <RowContainer
+            style={{alignItems: 'center'}}
+            callback={() => navigateTo('MyProfile')()}>
             <Image
-              source={GIRL_PROFILE}
-              style={{width: 30, height: 30, marginRight: 15}}
-              resizeMode="center"
+              source={{uri: myProfileDetails.data.data.ProfileImage}}
+              style={{width: 40, height: 40, marginRight: 15, borderRadius: 20}}
             />
             <Text
               style={{
@@ -118,7 +120,11 @@ const Profile = ({navigation}) => {
                   <CardView
                     key={index.toString()}
                     data={item}
-                    callback={() => navigateTo('Portfolio')()}
+                    callback={() =>
+                      navigateTo('Portfolio')({
+                        CodeID: item.code,
+                      })
+                    }
                   />
                 );
               })
@@ -132,10 +138,10 @@ const Profile = ({navigation}) => {
         <RowContainer
           style={{alignItems: 'center', paddingHorizontal: PADDING_HORIZONTAL}}>
           <RowContainer>
-            <Text style={[styles.blockHeaderTxt]}>HISTORY</Text>
+            <Text style={[styles.blockHeaderTxt]}>SELL HISTORY</Text>
             <HifenDivider style={styles.hiffenDividerRow} />
           </RowContainer>
-          <Text style={styles.seeAllTxt}>See All</Text>
+          {/* <Text style={styles.seeAllTxt}>See All</Text> */}
         </RowContainer>
         <View
           style={{marginTop: HP(22), paddingHorizontal: PADDING_HORIZONTAL}}>

@@ -75,17 +75,15 @@ function Shares({title, color, screenName = '', data = {}, navigation}) {
 }
 
 const Portfolio = ({route, navigation}) => {
-  const {CodeId, stockAmout, title, created_at, stock_id} = route.params;
-
+  const {CodeID} = route.params;
   const stockView = useSelector(dashBoardSelector.STOCK_VIEW);
+  console.log(CodeID + ' CodeID');
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getStockView(CodeId));
-  }, [CodeId]);
-
-  // console.log(stockView);
+    dispatch(getStockView(CodeID));
+  }, [CodeID]);
 
   return (
     <View style={{flex: 1}}>
@@ -106,7 +104,7 @@ const Portfolio = ({route, navigation}) => {
                 color: WHITE,
                 fontSize: WP(32),
               }}>
-              {stockAmout}
+              {stockView.data.data.amount}
             </Text>
             <Text
               style={{
@@ -114,7 +112,7 @@ const Portfolio = ({route, navigation}) => {
                 fontFamily: MONTSERRAT_REGULAR,
                 marginVertical: HP(10),
               }}>
-              {title}
+              {stockView.data.data.name}
             </Text>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
@@ -133,8 +131,11 @@ const Portfolio = ({route, navigation}) => {
                   fontFamily: MONTSERRAT_REGULAR,
                   fontSize: WP(12),
                 }}>
-                {created_at.slice(-9)} | <Text>{CodeId}</Text> |
-                <Text> Real Time Currency in</Text>
+                {stockView.data.data.created_at.slice(
+                  0,
+                  stockView.data.data.created_at.indexOf('T'),
+                )}{' '}
+                | <Text>{CodeID}</Text> |<Text> Real Time Currency in</Text>
               </Text>
             </View>
           </View>
@@ -153,14 +154,14 @@ const Portfolio = ({route, navigation}) => {
             <Shares
               navigation={navigation}
               screenName={'SellShares'}
-              color={BLACK_01}
+              color={'black'}
               title={'Sell'}
               data={{
-                title,
-                created_at,
-                CodeId,
-                stockAmout,
-                stock_id,
+                title: stockView.data.data.name,
+                created_at: stockView.data.data.created_at,
+                CodeID,
+                stockAmout: stockView.data.data.amount,
+                stock_id: stockView.data.data.stock_id,
                 totalShare: stockView.totalshare,
                 isSell: stockView.is_sell,
               }}></Shares>
@@ -170,11 +171,11 @@ const Portfolio = ({route, navigation}) => {
               color={'#0096FF'}
               title={'Buy'}
               data={{
-                title,
-                created_at,
-                CodeId,
-                stockAmout,
-                stock_id,
+                title: stockView.data.data.name,
+                created_at: stockView.data.data.created_at,
+                CodeID,
+                stockAmout: stockView.data.data.amount,
+                stock_id: stockView.data.data.stock_id,
               }}></Shares>
           </RowContainer>
         </Container>

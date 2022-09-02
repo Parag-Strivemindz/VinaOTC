@@ -34,15 +34,13 @@ const PrivacyPolicy = () => {
   }
 
   return (
-    <View style={{flex: 1}}>
-      {/* <CommonHeader title="Privacy Policy" /> */}
+    <View style={{flex: 1, backgroundColor: 'white'}}>
+      <CommonHeader title="Privacy Policy" />
       <WebView
         // style={{backgroundColor: 'white'}}
-        containerStyle={
-          {
-            // marginTop: CONTAINER_PADDINGTOP,
-          }
-        }
+        containerStyle={{
+          paddingTop: CONTAINER_PADDINGTOP,
+        }}
         onError={({event}) => {
           console.log(event);
         }}

@@ -4,6 +4,8 @@ import {
   DarkTheme,
 } from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
+import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
+
 import {StatusBar, View} from 'react-native';
 import {Provider} from 'react-redux';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -14,8 +16,11 @@ import strings from './app/utils/Localization';
 import * as RNLocalize from 'react-native-localize';
 import {getItem} from './app/utils/AsyncStorage';
 import {APP_LANGUAGE} from './app/constants/AppConstant';
+import ShowNetworkError from './app/component/NetworkError';
 
 const App = () => {
+  const netInfo = useNetInfo();
+
   const MyTheme = {
     ...DefaultTheme,
     dark: false,
@@ -28,6 +33,17 @@ const App = () => {
       notification: 'rgb(255, 69, 58)',
     },
   };
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      console.log('Connection type', state.type);
+      console.log('Is connected?', state.isConnected);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [third]);
+  // Unsubscribe
 
   useEffect(() => {
     function changeLanguage() {
@@ -63,7 +79,7 @@ const App = () => {
               backgroundColor={BACKGROUND_COLOR}
               barStyle={'light-content'}
             />
-            <AppIndex />
+            {netInfo.isConnected ? <AppIndex /> : <ShowNetworkError />}
           </SafeAreaProvider>
         </Provider>
       </NavigationContainer>
