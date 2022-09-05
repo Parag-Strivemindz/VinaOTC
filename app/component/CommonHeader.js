@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     color: WHITE,
     fontFamily: POPPINS_MEDIUM,
     fontSize: WP(20),
+    textTransform: 'capitalize',
   },
   iconContainer: {
     backgroundColor: 'white',

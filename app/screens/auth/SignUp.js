@@ -1,21 +1,16 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {
-  Text,
-  View,
-  Pressable,
-  ScrollView,
-  LayoutAnimation,
-  UIManager,
-  Platform,
-} from 'react-native';
+import {Text, View, Pressable, ScrollView} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {SvgXml} from 'react-native-svg';
+
+import {Selector as languageSelector} from '../../store/redux/localization';
 
 import Error from '../../component/Error';
 import Loader from '../../component/Loader';
 import {Register} from '../../services/auth';
-import strings from '../../utils/Localization';
 import ActionButton from '../../component/ActionButton';
+import SnackBar from '../../component/SnackBar';
+import Container from './common/Container';
 
 import {
   emailVerification,
@@ -30,18 +25,14 @@ import {
   EMAIL_SVG,
   CIRCLE_SVG,
 } from '../../constants/ImageConstant';
-import Container from './common/Container';
+
 import {SECONDARY_COLOR} from '../../styles/Fonts&Colors';
 import {HP} from '../../styles/Dimesions';
-import SnackBar from '../../component/SnackBar';
-
-if (Platform.OS === 'android') {
-  if (UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-}
+import WantToExit from '../../component/WantToExit';
+import {i18n} from '../../i18n/lang';
 
 const SignUp = ({navigation}) => {
+  const Language = useSelector(languageSelector.Localization);
   const [getter, setter] = useState({
     fullName: '',
     Email: '',
@@ -102,7 +93,7 @@ const SignUp = ({navigation}) => {
         passwordError: password,
         fullNameErro: fullName,
       }));
-      SnackBar('Please Accept TermA&Condition');
+      SnackBar(i18n[Language.code].termAndCondi);
     }
     //check if any field is empty or invalid
   }, [getter, setter, Error, setError]);
@@ -115,7 +106,7 @@ const SignUp = ({navigation}) => {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled">
           <CommonAuthComponent
-            text={strings.Register}
+            text={i18n[Language.code].Register}
             source={LOGIN_CENTER_IMAGE}
             imageContainer={{height: HP(120)}}
             containerStyle={{marginTop: HP(40)}}
@@ -132,7 +123,7 @@ const SignUp = ({navigation}) => {
                 }));
               }}
               errorMessage={error.fullNameErro}
-              placeholder={strings.Fullname}></FieldInput>
+              placeholder={i18n[Language.code].Fullname}></FieldInput>
 
             <FieldInput
               iconLeft={EMAIL_SVG}
@@ -146,7 +137,7 @@ const SignUp = ({navigation}) => {
                 }));
               }}
               errorMessage={error.emailError}
-              placeholder={strings.Email}></FieldInput>
+              placeholder={i18n[Language.code].Email}></FieldInput>
 
             {/*Password block*/}
             <FieldInput
@@ -161,7 +152,7 @@ const SignUp = ({navigation}) => {
                   password: text,
                 }));
               }}
-              placeholder={strings.Password}></FieldInput>
+              placeholder={i18n[Language.code].Password}></FieldInput>
             <FieldInput
               iconLeft={EMAIL_SVG}
               containerStyle={{marginTop: HP(15)}}
@@ -174,7 +165,7 @@ const SignUp = ({navigation}) => {
                   confirmPassword: text,
                 }));
               }}
-              placeholder={strings.confirmPassword}></FieldInput>
+              placeholder={i18n[Language.code].confirmPassword}></FieldInput>
 
             <View style={{marginTop: HP(25)}}>
               {getter.termAndCondition ? (
@@ -187,7 +178,7 @@ const SignUp = ({navigation}) => {
                     style={[styles.termAndConditionImg]}
                   />
                   <Text numberOfLines={2} style={styles.termAndConditionTxt}>
-                    {strings.termAndCondi}
+                    {i18n[Language.code].termAndCondi}
                   </Text>
                 </Pressable>
               ) : (
@@ -200,7 +191,7 @@ const SignUp = ({navigation}) => {
                     style={[styles.termAndConditionImg]}
                   />
                   <Text numberOfLines={2} style={styles.termAndConditionTxt}>
-                    {strings.termAndCondi}
+                    {i18n[Language.code].termAndCondi}
                   </Text>
                 </Pressable>
               )}
@@ -220,7 +211,9 @@ const SignUp = ({navigation}) => {
               {getter.isLoading ? (
                 <Loader size={'small'} color={'#fff'} />
               ) : (
-                <Text style={styles.loginTxt}>{strings.signup}</Text>
+                <Text style={styles.loginTxt}>
+                  {i18n[Language.code].signup}
+                </Text>
               )}
             </ActionButton>
             <Pressable
@@ -229,13 +222,16 @@ const SignUp = ({navigation}) => {
               }}
               style={styles.haveAnAccountContainer}>
               <Text style={styles.notHaveAccontTxt}>
-                {strings.alreadyhaveAccount} ?{' '}
+                {i18n[Language.code].alreadyhaveAccount} ?{' '}
               </Text>
-              <Text style={styles.haveAnAccount}>{strings.backto}</Text>
+              <Text style={styles.haveAnAccount}>
+                {i18n[Language.code].backto}
+              </Text>
             </Pressable>
           </View>
         </ScrollView>
       </Container>
+      {WantToExit()}
     </View>
   );
 };

@@ -1,13 +1,19 @@
+import {launchCamera} from '@yunfeic/react-native-imagepicker';
 import React from 'react';
 import {View, Text} from 'react-native';
 import Animated, {SlideInLeft, Layout} from 'react-native-reanimated';
+import {useSelector} from 'react-redux';
 
 import RowContainer from '../../../component/RowContainer';
+import {i18n} from '../../../i18n/lang';
+import {Selector} from '../../../store/redux/localization';
 import {SECONDARY_COLOR} from '../../../styles/Fonts&Colors';
 import {DDMMYY} from '../../../utils/Date';
 import styles from './styles';
 
 const FilterItem = ({requestData}) => {
+  const language = useSelector(Selector.Localization);
+
   return (
     <>
       {requestData.map((item, index) => {
@@ -39,7 +45,9 @@ const FilterItem = ({requestData}) => {
                       ? SECONDARY_COLOR
                       : 'rgba(233,78,27,1)',
                 }}>
-                {item.status}
+                {item.status == 'approve'
+                  ? i18n[language.code].approved
+                  : i18n[language.code].pending}
               </Text>
             </RowContainer>
           </Animated.View>

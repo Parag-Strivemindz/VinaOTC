@@ -1,6 +1,8 @@
 import {View, Text, Image} from 'react-native';
 import React, {useCallback, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+
+import {Selector as languageSelector} from '../../store/redux/localization';
 
 import CommonHeader from '../../component/CommonHeader';
 import Container from '../../component/Container';
@@ -28,6 +30,7 @@ import {ARROWSHARES_SVG, CLOCK} from '../../constants/IconConstant';
 import {isFeildValid} from '../../utils/Validation';
 import sellStock from '../../services/stock/SellStocks';
 import Loader from '../../component/Loader';
+import {i18n} from '../../i18n/lang';
 
 const data = [
   {
@@ -81,6 +84,8 @@ const SellShares = ({route, navigation}) => {
   const {title, created_at, CodeID, stockAmout, stock_id, totalShare, isSell} =
     route.params;
 
+  const language = useSelector(languageSelector.Localization);
+
   const [getter, setter] = useState({
     ammount: '',
     isLoading: false,
@@ -120,7 +125,7 @@ const SellShares = ({route, navigation}) => {
 
   return (
     <View style={{flex: 1}}>
-      <CommonHeader title="Sell Shares" />
+      <CommonHeader title={i18n[language.code].sellShares} />
       <Container
         scrollViewContainerStyle={{
           paddingTop: CONTAINER_PADDINGTOP,
@@ -199,7 +204,7 @@ const SellShares = ({route, navigation}) => {
                 color: WHITE,
                 fontSize: WP(15),
               }}>
-              Total Shares Available
+              {i18n[language.code].sharesAvilable}
             </Text>
           </View>
           <View>
@@ -256,7 +261,7 @@ const SellShares = ({route, navigation}) => {
           titleStyle={{
             fontSize: WP(12),
           }}
-          title={'Enter Quantity Of Shares which you want’s to sell'}
+          title={i18n[language.code].enterShares}
         />
         <CardViewDivider
           style={{
@@ -301,7 +306,12 @@ const SellShares = ({route, navigation}) => {
           {getter.isLoading ? (
             <Loader />
           ) : (
-            <Text style={styles.bigActionBtnTxt}>Sell Now</Text>
+            <Text
+              style={styles.bigActionBtnTxt}
+              adjustsFontSizeToFit
+              numberOfLines={1}>
+              {i18n[language.code].sellNow}
+            </Text>
           )}
         </ActionButton>
       </Container>

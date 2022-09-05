@@ -12,7 +12,7 @@ const SettingStack = () => (
   <Stack.Navigator
     screenOptions={{
       headerShown: false,
-      animation: 'none',
+      animation: 'default',
     }}>
     <Stack.Screen name="Setting" component={Setting} />
     <Stack.Screen name="Chat" component={Chat} />

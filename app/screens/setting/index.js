@@ -32,13 +32,15 @@ import {
   PADDING_VERTICAL,
 } from '../../styles/GlobalStyles';
 import {Selector as UserSelector} from '../../store/redux/user';
+import {Selector as languageSelector} from '../../store/redux/localization';
+
+import {i18n} from '../../i18n/lang';
 import Loader from '../../component/Loader';
 import WantToExit from '../../component/WantToExit';
-import {useFocusEffect} from '@react-navigation/native';
-import {useCallback} from 'react';
 
 const Setting = ({navigation}) => {
   const userInfo = useSelector(UserSelector.User_Info);
+  const language = useSelector(languageSelector.Localization);
 
   const [isLoader, setLoader] = useState(false);
 
@@ -47,41 +49,6 @@ const Setting = ({navigation}) => {
   };
 
   const dispatch = useDispatch();
-
-  const [getter, setter] = useState({
-    isVisible: false,
-  });
-  const onClose = () => setter(prev => ({...prev, isVisible: !prev.isVisible}));
-
-  const onQuite = () => {
-    BackHandler.exitApp();
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      console.log('called');
-      const unsubscribe = BackHandler.addEventListener(
-        'hardwareBackPress',
-        () => {
-          onClose();
-          return true;
-        },
-      );
-      return () => unsubscribe.remove();
-    }),
-  );
-  // useEffect(() => {
-  //   const unsubscribe = BackHandler.addEventListener(
-  //     'hardwareBackPress',
-  //     () => {
-  //       onClose();
-  //       return true;
-  //     },
-  //   );
-  //   return () => {
-  //     unsubscribe.remove();
-  //   };
-  // }, []);
 
   const ItemContainer = ({icon, title, callback}) => {
     return (
@@ -107,10 +74,12 @@ const Setting = ({navigation}) => {
           }}>
           <SvgXml xml={icon} style={{marginRight: 15}} />
           <Text
+            adjustsFontSizeToFit
+            numberOfLines={1}
             style={{
               color: WHITE,
               fontFamily: MONTSERRAT_MEDIUM,
-              fontSize: WP(16),
+              // fontSize: WP(15),
             }}>
             {title}
           </Text>
@@ -130,30 +99,30 @@ const Setting = ({navigation}) => {
         }}>
         <ItemContainer
           icon={CHAT}
-          title={'Chat With Us'}
+          title={i18n[language.code].chatWithUs}
           callback={() => navigateTo('Chat')}
         />
         <ItemContainer
           icon={SERVICES}
-          title={'Help & Support'}
+          title={i18n[language.code].helpAndSupport}
           callback={() => navigateTo('HelpAndSupport')}
         />
         <ItemContainer
           callback={() => navigateTo('PrivacyPolicy')}
           icon={THUMB}
-          title={'Privacy Policy'}
+          title={i18n[language.code].privacyPolicy}
         />
         <ItemContainer
           callback={() => navigateTo('ChangePassword')}
           icon={UNLOCK}
-          title={'Change Password'}
+          title={i18n[language.code].changepassword}
         />
         {isLoader ? (
           <Loader size={'large'} color={SECONDARY_COLOR} />
         ) : (
           <ItemContainer
             icon={LOGOUT}
-            title={'Log Me Out'}
+            title={i18n[language.code].logMeOut}
             callback={() => dispatch(SignOut(setLoader))}
           />
         )}
@@ -175,11 +144,7 @@ const Setting = ({navigation}) => {
           </Text>
         </View>
       </Container>
-      <WantToExit
-        isVisible={getter.isVisible}
-        onClose={onClose}
-        onQuit={onQuite}
-      />
+      {WantToExit()}
     </View>
   );
 };

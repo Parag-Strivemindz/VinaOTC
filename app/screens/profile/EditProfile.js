@@ -1,17 +1,8 @@
 import React, {useCallback, useState} from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  LayoutAnimation,
-  Platform,
-  UIManager,
-} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {SvgXml} from 'react-native-svg';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   launchImageLibrary,
   launchCamera,
@@ -19,7 +10,7 @@ import {
 
 import updateUserProfile from '../../services/user/UpdateProfile';
 
-import {CAMERA, FILE} from '../../constants/AppConstant';
+import {Selector as languageSelector} from '../../store/redux/localization';
 import CommonHeader from '../../component/CommonHeader';
 import Container from '../../component/Container';
 import FiledInput from '../../screens/auth/common/FieldInput';
@@ -30,7 +21,15 @@ import ActionButton from '../../component/ActionButton';
 import styles from './styles';
 import GlobalStyles, {PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
 import {EMAIL_SVG} from '../../constants/ImageConstant';
-import {CIRCLE, ERROR, SORT, USER_SVG} from '../../constants/IconConstant';
+import {CAMERA, FILE} from '../../constants/AppConstant';
+import {
+  CAMERA_SVG,
+  CIRCLE,
+  ERROR,
+  FILE_SVG,
+  SORT,
+  USER_SVG,
+} from '../../constants/IconConstant';
 import {HP, WP} from '../../styles/Dimesions';
 import {
   BACKGROUND_COLOR,
@@ -43,19 +42,27 @@ import {
 } from '../../styles/Fonts&Colors';
 import RowContainer from '../../component/RowContainer';
 import Loader from '../../component/Loader';
-
-const filerItems = [
-  {
-    id: '1',
-    name: FILE,
-  },
-  {
-    id: '2',
-    name: CAMERA,
-  },
-];
+import {Selector} from '../../store/redux/localization';
+import {i18n} from '../../i18n/lang';
 
 const FindAttachment = ({close, callback}) => {
+  const languague = useSelector(languageSelector.Localization);
+
+  const filerItems = [
+    {
+      id: '1',
+      name: i18n[languague.code].file,
+      value: FILE,
+      icon: FILE_SVG,
+    },
+    {
+      id: '2',
+      name: i18n[languague.code].camera,
+      value: CAMERA,
+      icon: CAMERA_SVG,
+    },
+  ];
+
   return (
     <View style={[GlobalStyles.modalContainer]}>
       <RowContainer
@@ -69,7 +76,8 @@ const FindAttachment = ({close, callback}) => {
             color: BLACK_70,
             fontFamily: ROBOTO_MEDIUM,
           }}>
-          Choose Photo From
+          {i18n[languague.code].choose} {i18n[languague.code].photo}{' '}
+          {i18n[languague.code].from}
         </Text>
         <SvgXml
           xml={ERROR}
@@ -84,7 +92,7 @@ const FindAttachment = ({close, callback}) => {
       </RowContainer>
       {filerItems.map((item, index) => (
         <RowContainer
-          callback={() => callback(item.name)}
+          callback={() => callback(item.value)}
           key={index.toString()}
           style={{
             ...styles.rowFilteItemContainer,
@@ -92,7 +100,7 @@ const FindAttachment = ({close, callback}) => {
             // marginTop: HP(15),
           }}>
           <RowContainer style={{alignItems: 'center'}}>
-            <SvgXml xml={CIRCLE} />
+            <SvgXml xml={item.icon} />
             <Text
               style={{
                 marginLeft: WP(15),
@@ -109,7 +117,10 @@ const FindAttachment = ({close, callback}) => {
 };
 
 export default function EditProfile({route, navigation}) {
+  const languague = useSelector(languageSelector.Localization);
+
   const {profileImg, userName, email} = route.params;
+
   const [getter, setter] = useState({
     fullName: userName,
     Email: email,
@@ -209,7 +220,7 @@ export default function EditProfile({route, navigation}) {
 
   return (
     <View style={{flex: 1}}>
-      <CommonHeader title={'Edit Profile'} />
+      <CommonHeader title={i18n[languague.code].editProfile} />
       <Container
         scrollViewContainerStyle={{
           ...GlobalStyles.containerStyle,
@@ -295,7 +306,9 @@ export default function EditProfile({route, navigation}) {
           {getter.isLoading ? (
             <Loader color={'white'} size="small" />
           ) : (
-            <Text style={styles.updateProfileTxt}>Update Profile</Text>
+            <Text style={styles.updateProfileTxt}>
+              {i18n[languague.code].updateProfile}
+            </Text>
           )}
         </ActionButton>
       </Container>

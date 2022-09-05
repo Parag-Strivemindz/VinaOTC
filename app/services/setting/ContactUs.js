@@ -3,7 +3,7 @@ import {getRequest} from '../../utils/AxiosRequest';
 import env from '../../config/env';
 import {errorhandler, responseHandler} from './ReqReshandler';
 
-const ContactUs = () => {
+const ContactUs = language => {
   return async dispatch => {
     try {
       dispatch({

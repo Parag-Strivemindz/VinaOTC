@@ -9,6 +9,8 @@ import Notification from '../../screens/profile/Notification';
 import AddMoney from '../../screens/home/AddMoney';
 import Portfolio from '../../screens/home/Portfolio';
 import AllPortfolio from '../../screens/home/AllPortfolio';
+import BuyShares from '../../screens/home/BuyShares';
+import SellShares from '../../screens/home/SellShares';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +18,7 @@ const ProfileStack = () => (
   <Stack.Navigator
     screenOptions={{
       headerShown: false,
-      animation: 'none',
+      animation: 'default',
     }}>
     <Stack.Screen name="Profile" component={Profile} />
     <Stack.Screen name="MyProfile" component={MyProfile} />
@@ -27,6 +29,8 @@ const ProfileStack = () => (
     <Stack.Screen name="AddMoney" component={AddMoney} />
     <Stack.Screen name="Portfolio" component={Portfolio} />
     <Stack.Screen name="AllPortfolio" component={AllPortfolio} />
+    <Stack.Screen name="BuyShares" component={BuyShares} />
+    <Stack.Screen name="SellShares" component={SellShares} />
   </Stack.Navigator>
 );
 

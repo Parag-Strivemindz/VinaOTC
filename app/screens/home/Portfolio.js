@@ -2,6 +2,9 @@ import {Image, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {Selector as dashBoardSelector} from '../../store/redux/dashboard';
+import {Selector as languageSelector} from '../../store/redux/localization';
+
 import getStockView from '../../services/dashboard/GetStockView';
 
 import useNavigation from '../../component/UseNavigation';
@@ -11,8 +14,6 @@ import StockWebView from '../../component/StockWebView';
 import Loader from '../../component/Loader';
 import RowContainer from '../../component/RowContainer';
 import ActionButton from '../../component/ActionButton';
-
-import {Selector as dashBoardSelector} from '../../store/redux/dashboard';
 
 import {HP, WINDOW_HEIGHT, WP} from '../../styles/Dimesions';
 import {
@@ -29,6 +30,7 @@ import {
   WHITE,
 } from '../../styles/Fonts&Colors';
 import {CLOCK, RIGHT_ARROW_PNG} from '../../constants/IconConstant';
+import {i18n} from '../../i18n/lang';
 
 function Shares({title, color, screenName = '', data = {}, navigation}) {
   const navigate = useNavigation(screenName, navigation);
@@ -64,11 +66,9 @@ function Shares({title, color, screenName = '', data = {}, navigation}) {
           }}
           resizeMode="contain"
           source={RIGHT_ARROW_PNG}
-          rotation={title == 'Sell' ? -90 : 90}
+          rotation={screenName == 'SellShares' ? -90 : 90}
         />
-        <Text style={{color: WHITE, fontFamily: ROBOTO_BOLD}}>
-          {title} Shares
-        </Text>
+        <Text style={{color: WHITE, fontFamily: ROBOTO_BOLD}}>{title}</Text>
       </ActionButton>
     </View>
   );
@@ -77,7 +77,7 @@ function Shares({title, color, screenName = '', data = {}, navigation}) {
 const Portfolio = ({route, navigation}) => {
   const {CodeID} = route.params;
   const stockView = useSelector(dashBoardSelector.STOCK_VIEW);
-  console.log(CodeID + ' CodeID');
+  const language = useSelector(languageSelector.Localization);
 
   const dispatch = useDispatch();
 
@@ -155,7 +155,7 @@ const Portfolio = ({route, navigation}) => {
               navigation={navigation}
               screenName={'SellShares'}
               color={'black'}
-              title={'Sell'}
+              title={i18n[language.code].sellShares}
               data={{
                 title: stockView.data.data.name,
                 created_at: stockView.data.data.created_at,
@@ -169,7 +169,7 @@ const Portfolio = ({route, navigation}) => {
               navigation={navigation}
               screenName={'BuyShares'}
               color={'#0096FF'}
-              title={'Buy'}
+              title={i18n[language.code].buyShares}
               data={{
                 title: stockView.data.data.name,
                 created_at: stockView.data.data.created_at,

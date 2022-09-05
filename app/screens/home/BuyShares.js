@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 
 import {useDispatch} from 'react-redux';
 import {Selector} from '../../store/redux/dashboard';
+import {Selector as languageSelector} from '../../store/redux/localization/index';
 
 import CommonHeader from '../../component/CommonHeader';
 import Container from '../../component/Container';
@@ -30,6 +31,7 @@ import {ARROWSHARES_SVG, CLOCK} from '../../constants/IconConstant';
 import buyStocks from '../../services/stock/BuyStocks';
 import {isFeildValid} from '../../utils/Validation';
 import Loader from '../../component/Loader';
+import {i18n} from '../../i18n/lang';
 
 const data = [
   {
@@ -81,6 +83,7 @@ function NumberShares({title, data}) {
 const BuyShares = ({navigation, route}) => {
   const walletDetails = useSelector(Selector.WALLET_DETAILS);
   const stockView = useSelector(Selector.STOCK_VIEW);
+  const language = useSelector(languageSelector.Localization);
 
   const {title, created_at, CodeID, stockAmout, stock_id} = route.params;
 
@@ -129,7 +132,7 @@ const BuyShares = ({navigation, route}) => {
 
   return (
     <View style={{flex: 1}}>
-      <CommonHeader title="Buy Shares" />
+      <CommonHeader title={i18n[language.code].buyShares} />
       <Container
         scrollViewContainerStyle={{
           paddingTop: CONTAINER_PADDINGTOP,
@@ -149,7 +152,7 @@ const BuyShares = ({navigation, route}) => {
                 alignItems: 'center',
                 justifyContent: 'flex-start',
               }}>
-              <Image
+              {/* <Image
                 resizeMode="center"
                 source={CLOCK}
                 style={{
@@ -158,9 +161,9 @@ const BuyShares = ({navigation, route}) => {
                   tintColor: WHITE,
                   marginRight: HP(5),
                 }}
-              />
+              /> */}
               <Text style={styles.itemContainerLeftSubTitTxt}>
-                {created_at.slice(-9)} |<Text> {CodeID}</Text>
+                <Text>{CodeID}</Text>
               </Text>
             </RowContainer>
           </View>
@@ -190,7 +193,7 @@ const BuyShares = ({navigation, route}) => {
             marginTop: HP(20),
             marginHorizontal: PADDING_HORIZONTAL,
           }}
-          placeholder={'Enter Quantity of Shapes'}
+          placeholder={i18n[language.code].enterShares}
           errorMessage={error.ammounError}
           placeholdercolor={WHITE}
           style={styles.filedInputTxt}
@@ -251,7 +254,7 @@ const BuyShares = ({navigation, route}) => {
                 color: WHITE,
                 fontSize: WP(14),
               }}>
-              Total Balance
+              {i18n[language.code].totalBalance}
             </Text>
             <Text
               style={{
@@ -260,7 +263,7 @@ const BuyShares = ({navigation, route}) => {
                 color: WHITE,
                 fontSize: WP(25),
               }}>
-              ${walletDetails.data.data}
+              {walletDetails.data.data} ₫
             </Text>
           </View>
           <View
@@ -280,7 +283,9 @@ const BuyShares = ({navigation, route}) => {
                 height: HP(35),
                 borderRadius: 4,
               }}>
-              <Text style={styles.addFundsTxt}>Add Funds in wallet</Text>
+              <Text style={styles.addFundsTxt}>
+                {i18n[language.code].addInWallet}
+              </Text>
             </ActionButton>
           </View>
         </RowContainer>
@@ -299,8 +304,12 @@ const BuyShares = ({navigation, route}) => {
           {getter.isLoading ? (
             <Loader />
           ) : (
-            <Text style={styles.bigActionBtnTxt}>
-              Proceed With Wallet Funds
+            <Text
+              style={styles.bigActionBtnTxt}
+              allowFontScaling={false}
+              adjustsFontSizeToFit
+              numberOfLines={1}>
+              {i18n[language.code].proceedWithWallet}
             </Text>
           )}
         </ActionButton>

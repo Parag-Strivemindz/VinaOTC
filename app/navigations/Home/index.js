@@ -13,7 +13,7 @@ const HomeStack = () => (
   <Stack.Navigator
     screenOptions={{
       headerShown: false,
-      animation: 'none',
+      animation: 'default',
     }}>
     <Stack.Screen name="home" component={Home} />
     <Stack.Screen name="AllPortfolio" component={AllPortfolio} />

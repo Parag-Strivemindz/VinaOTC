@@ -16,6 +16,9 @@ import {
   WHITE,
 } from '../styles/Fonts&Colors';
 import {WP} from '../styles/Dimesions';
+import {i18n} from '../i18n/lang';
+import {useSelector} from 'react-redux';
+import {Selector} from '../store/redux/localization';
 
 const GrowthAndEquity = (
   <Text
@@ -30,6 +33,8 @@ const GrowthAndEquity = (
 );
 
 const CardView = ({callback, url, data}) => {
+  const language = useSelector(Selector.Localization);
+
   const {
     total_price,
     stock_amount,
@@ -129,11 +134,11 @@ const CardView = ({callback, url, data}) => {
       <CardViewDivider />
       <RowContainer callback={() => callback != undefined && callback()}>
         <View>
-          <Text style={styles.invest}>Invested</Text>
+          <Text style={styles.invest}>{i18n[language.code].invested}</Text>
           <Text style={styles.value}>{total_price}</Text>
         </View>
         <View>
-          <Text style={styles.invest}>Current</Text>
+          <Text style={styles.invest}>{i18n[language.code].current}</Text>
           <Text style={styles.value}>{stock_amount}</Text>
         </View>
         <View>
@@ -142,20 +147,24 @@ const CardView = ({callback, url, data}) => {
               styles.invest,
               {color: status ? WHITE : '#E94E1B', textTransform: 'capitalize'},
             ]}>
-            {status ? 'status' : 'Returns'}
+            {status ? i18n[language.code].status : i18n[language.code].return}
           </Text>
           <Text
             style={[
               styles.value,
               {
                 alignSelf: 'flex-end',
-                color: '#E94E1B',
+                color: status == 'pending' ? '#E94E1B' : SECONDARY_COLOR,
                 textTransform: 'capitalize',
                 fontFamily: POPPINS_MEDIUM,
-                fontSize: WP(15),
+                fontSize: WP(14),
               },
             ]}>
-            {status ? status : '-400'}
+            {status
+              ? status == 'pending'
+                ? i18n[language.code].pending
+                : i18n[language.code].approved
+              : '-400'}
           </Text>
         </View>
       </RowContainer>

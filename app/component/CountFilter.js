@@ -16,6 +16,8 @@ import {
   WHITE,
   WHITE_30,
 } from '../styles/Fonts&Colors';
+import {Selector} from '../store/redux/localization';
+import {i18n} from '../i18n/lang';
 
 const CountFilter = ({
   style,
@@ -24,6 +26,8 @@ const CountFilter = ({
   disableLeftButton,
   disableRightButton,
 }) => {
+  const language = useSelector(Selector.Localization);
+
   const [getter, setter] = useState({
     isVisible: false,
   });
@@ -150,7 +154,9 @@ const CountFilter = ({
               pageNumber: prev.pageNumber - 1,
             }))
           }>
-          <Text style={styles.actionBtnTxt}>Previous</Text>
+          <Text style={styles.actionBtnTxt}>
+            {i18n[language.code].previous}
+          </Text>
         </ActionButton>
         <ActionButton callBack={showMenu} style={styles.actionBtn}>
           <Text style={{color: 'white'}}>{numberOfItems}</Text>
@@ -165,7 +171,7 @@ const CountFilter = ({
             }))
           }
           style={{width: WP(90), height: HP(36), padding: 5}}>
-          <Text style={styles.actionBtnTxt}>Next</Text>
+          <Text style={styles.actionBtnTxt}> {i18n[language.code].next}</Text>
         </ActionButton>
       </RowContainer>
       <Picker />

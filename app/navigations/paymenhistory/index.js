@@ -10,6 +10,9 @@ import {
   WHITE,
 } from '../../styles/Fonts&Colors';
 import {HP, WP} from '../../styles/Dimesions';
+import {Selector} from '../../store/redux/localization';
+import {useSelector} from 'react-redux';
+import {i18n} from '../../i18n/lang';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -36,6 +39,7 @@ const Tabbar = ({name, focused, color}) => (
 );
 
 function HistoryTabs() {
+  const language = useSelector(Selector.Localization);
   return (
     <Tab.Navigator
       showPageIndicator={false}
@@ -64,7 +68,7 @@ function HistoryTabs() {
           tabBarLabel: ({focused}) => (
             <Tabbar
               focused={focused}
-              name={'Deposite Request'}
+              name={i18n[language.code].depostiRequest}
               color={SECONDARY_COLOR}
             />
           ),
@@ -78,7 +82,7 @@ function HistoryTabs() {
           tabBarLabel: ({focused}) => (
             <Tabbar
               focused={focused}
-              name={'Withdrawal Request'}
+              name={i18n[language.code].withdrawalRequest}
               color={'red'}
             />
           ),

@@ -20,6 +20,7 @@ export default StyleSheet.create({
     color: WHITE,
     fontSize: WP(15),
     fontFamily: MONTSERRAT_MEDIUM,
+    textTransform: 'capitalize',
   },
   walletContainer: {
     height: HP(50),
@@ -48,7 +49,8 @@ export default StyleSheet.create({
   blockHeaderTxt: {
     color: WHITE,
     fontFamily: MONTSERRAT_MEDIUM,
-    fontSize: 15,
+    // fontSize: WP(15),
+    textTransform: 'uppercase',
   },
   hiffenDividerRow: {
     marginLeft: 16,
@@ -78,6 +80,7 @@ export default StyleSheet.create({
     width: WP(125),
     height: HP(32),
     borderRadius: 3,
+    alignSelf: 'flex-start',
   },
   balanceContainer: {
     justifyContent: 'center',
@@ -142,6 +145,7 @@ export default StyleSheet.create({
     width: WP(204),
     borderRadius: 6,
     marginTop: HP(50),
+    // alignSelf: 'flex-start',
   },
   updateProfileTxt: {
     fontFamily: ROBOTO_REGULAR,

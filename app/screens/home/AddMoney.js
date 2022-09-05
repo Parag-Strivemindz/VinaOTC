@@ -18,6 +18,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import getBankInfoList from '../../services/bank/BankInfoList';
 import {Selector} from '../../store/redux/bank/index';
 import {Selector as supportAndHelp} from '../../store/redux/setting/index';
+import {Selector as languageSelector} from '../../store/redux/localization/index';
 
 import {isFeildValid} from '../../utils/Validation';
 import styles from './styles';
@@ -58,19 +59,7 @@ import {
 import Loader from '../../component/Loader';
 import DepositeFunds from '../../services/bank/DepositeFunds';
 import ContactUs from '../../services/setting/ContactUs';
-
-const filerItems = [
-  {
-    id: '1',
-    name: FILE,
-    image: FILE_SVG,
-  },
-  {
-    id: '2',
-    name: CAMERA,
-    image: CAMERA_SVG,
-  },
-];
+import {i18n} from '../../i18n/lang';
 
 function BankDetails({title, value}) {
   return (
@@ -96,7 +85,7 @@ function BankDetails({title, value}) {
             fontFamily: ROBOTO_REGULAR,
             color: SECONDARY_COLOR,
           }}>
-          {value || 'No Available'}
+          {value || '????'}
         </Text>
       </RowContainer>
     </>
@@ -104,6 +93,8 @@ function BankDetails({title, value}) {
 }
 
 function OnAttachFile(props) {
+  const language = useSelector(languageSelector.Localization);
+
   return (
     <RowContainer
       callback={() => props.close()}
@@ -130,7 +121,7 @@ function OnAttachFile(props) {
             fontFamily: MONTSERRAT_REGULAR,
             color: 'rgba(34,34,34,0.7)',
           }}>
-          Please Attach file
+          {i18n[language.code].please} {i18n[language.code].attachFile}{' '}
         </Text>
       </RowContainer>
     </RowContainer>
@@ -138,6 +129,23 @@ function OnAttachFile(props) {
 }
 
 const FindAttachment = ({close, callback}) => {
+  const language = useSelector(languageSelector.Localization);
+
+  const filerItems = [
+    {
+      id: '1',
+      name: i18n[language.code].file,
+      image: FILE_SVG,
+      value: 'file',
+    },
+    {
+      id: '2',
+      name: i18n[language.code].camera,
+      image: CAMERA_SVG,
+      value: 'camera',
+    },
+  ];
+
   return (
     <View style={[GlobalStyles.modalContainer]}>
       <RowContainer
@@ -151,7 +159,8 @@ const FindAttachment = ({close, callback}) => {
             color: BLACK_70,
             fontFamily: ROBOTO_MEDIUM,
           }}>
-          Choose Photo From
+          {i18n[language.code].choose} {i18n[language.code].photo}{' '}
+          {i18n[language.code].from}
         </Text>
         <SvgXml
           xml={ERROR}
@@ -166,14 +175,16 @@ const FindAttachment = ({close, callback}) => {
       </RowContainer>
       {filerItems.map((item, index) => (
         <RowContainer
-          callback={() => callback(item.name)}
+          callback={() => callback(item.value)}
           key={index.toString()}
           style={{
             ...styles.rowFilteItemContainer,
             backgroundColor: WHITE,
             // marginTop: HP(15),
           }}>
-          <RowContainer style={{alignItems: 'center'}}>
+          <RowContainer
+            style={{alignItems: 'center'}}
+            callback={() => callback(item.value)}>
             <SvgXml xml={item.image} />
             <Text
               style={{
@@ -194,6 +205,7 @@ const FindAttachment = ({close, callback}) => {
 function AddMoney({navigation, route}) {
   // const bankInfo = useSelector(Selector.BankInfoList);
   const helpandSupport = useSelector(supportAndHelp.CONTACT_US);
+  const language = useSelector(languageSelector.Localization);
 
   const [getter, setter] = useState({
     ammount: '',
@@ -317,8 +329,7 @@ function AddMoney({navigation, route}) {
   return (
     <View style={{flex: 1}}>
       <CommonHeader
-        navigateBack={'Add Money'}
-        title={'Add Money'}
+        title={i18n[language.code].addMoney}
         rightItem={
           route.params &&
           (() => <WalletBalance params={route.params.walletBalance} />)
@@ -338,7 +349,10 @@ function AddMoney({navigation, route}) {
               color: WHITE,
               fontSize: WP(13),
             }}>
-            Please Enter ammout that you wants to Deposit
+            {i18n[language.code].please} {i18n[language.code].enter}{' '}
+            {i18n[language.code].ammount} {i18n[language.code].that}{' '}
+            {i18n[language.code].you} {i18n[language.code].wants}{' '}
+            {i18n[language.code].to} {i18n[language.code].deposite}
           </Text>
           <FieldInput
             keyboardType={'number-pad'}
@@ -361,6 +375,7 @@ function AddMoney({navigation, route}) {
           />
         </View>
         <WarningBanner
+          title={i18n[language.code].recheckAccount}
           style={{
             marginTop: HP(30),
           }}
@@ -391,18 +406,27 @@ function AddMoney({navigation, route}) {
                     },
                   ]}>
                   <BankDetails
-                    title={'Accont Number'}
+                    title={i18n[language.code].accounNumber}
                     value={item.bank_account_no}
                   />
-                  <BankDetails title={'ifsc Code'} value={item.ifsc_code} />
                   <BankDetails
-                    title={'Name of A/c holder'}
+                    title={i18n[language.code].ifsccode}
+                    value={item.ifsc_code}
+                  />
+                  <BankDetails
+                    title={i18n[language.code].accountHolder}
                     value={item.account_holder_name}
                   />
-                  <BankDetails title={'Bank Name'} value={item.bank_name} />
-                  <BankDetails title={'Branch Code'} value={item.branch_code} />
                   <BankDetails
-                    title={'Branch Address'}
+                    title={i18n[language.code].bankName}
+                    value={item.bank_name}
+                  />
+                  <BankDetails
+                    title={i18n[language.code].branchCode}
+                    value={item.branch_code}
+                  />
+                  <BankDetails
+                    title={i18n[language.code].branchAddress}
                     value={item.bank_address}
                   />
                 </View>
@@ -472,7 +496,7 @@ function AddMoney({navigation, route}) {
                 color: WHITE,
                 fontSize: WP(16),
               }}>
-              Deposite Funds
+              {i18n[language.code].deposite} {i18n[language.code].funds}
             </Text>
           )}
         </ActionButton>

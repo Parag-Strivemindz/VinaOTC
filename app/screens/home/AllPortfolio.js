@@ -12,16 +12,21 @@ import styles from './styles';
 import {HP} from '../../styles/Dimesions';
 import {ARROW_DIGONAL} from '../../constants/IconConstant';
 import {PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
+import {useSelector} from 'react-redux';
+import {Selector} from '../../store/redux/localization';
+import {i18n} from '../../i18n/lang';
 
 const AllPortfolio = ({navigation, route}) => {
+  const language = useSelector(Selector.Localization);
   const {walletDetails, allPortfolio, navigateTo} = route.params;
 
   console.log(JSON.stringify(allPortfolio.data[0].code) + ' fromAllPorfolio');
-  const rightItem = () => <SvgXml xml={ARROW_DIGONAL} onPress={() => {}} />;
+
+  // const rightItem = () => <SvgXml xml={ARROW_DIGONAL} onPress={() => {}} />;
 
   return (
     <View style={styles.container}>
-      <CommonHeader title={'My Portfolio'} rightItem={rightItem} />
+      <CommonHeader title={i18n[language.code].my + ' Portfolio'} />
       <Container>
         {/**
          * Total InvesetMent
@@ -32,7 +37,7 @@ const AllPortfolio = ({navigation, route}) => {
               {walletDetails.data ? walletDetails.data : '0'}
             </Text>
             <Text style={[styles.subtitleTxt, {marginTop: HP(10)}]}>
-              Total Portfolio
+              {i18n[language.code].TotalPortfolio}
             </Text>
             <HifenDivider style={styles.hiffenDivider} />
           </View>

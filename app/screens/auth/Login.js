@@ -1,18 +1,10 @@
-import React, {useState, useCallback, useEffect} from 'react';
-import {
-  Text,
-  View,
-  Pressable,
-  ScrollView,
-  LayoutAnimation,
-  Platform,
-  UIManager,
-  StatusBar,
-} from 'react-native';
+import React, {useState, useCallback} from 'react';
+import {Text, View, Pressable, ScrollView, StatusBar} from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 
-import strings from '../../utils/Localization';
+import {Selector as languageSelector} from '../../store/redux/localization';
+
 import {loginUser} from '../../services/auth';
 import {emailVerification, passwordVerification} from '../../utils/Validation';
 import FieldInput from './common/FieldInput';
@@ -21,8 +13,6 @@ import ActionButton from '../../component/ActionButton';
 import Container from './common/Container';
 import Picker from '../../component/MenuItem';
 import {Selector} from '../../store/redux/user/index';
-import {setItem} from '../../utils/AsyncStorage';
-import {APP_LANGUAGE} from '../../constants/AppConstant';
 
 import {WP, HP} from '../../styles/Dimesions';
 import styles from './Styles';
@@ -33,15 +23,12 @@ import {
   EMAIL_SVG,
 } from '../../constants/ImageConstant';
 import Loader from '../../component/Loader';
-
-if (Platform.OS === 'android') {
-  if (UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-}
+import WantToExit from '../../component/WantToExit';
+import LocalizationAction from '../../services/Localization';
+import {i18n} from '../../i18n/lang';
 
 const Login = ({navigation}) => {
-  //get the context value
+  const Language = useSelector(languageSelector.Localization);
   const [getter, setter] = useState({
     email: '',
     password: '',
@@ -50,34 +37,24 @@ const Login = ({navigation}) => {
   });
 
   const [language, setLanguage] = useState({
-    language: {value: 'English', shortForm: 'en'},
     isVisible: false,
   });
 
   const userState = useSelector(Selector.User_Info);
+  const dispatch = useDispatch();
 
-  const languageChange = item => {
+  const languageChange = useCallback(item => {
     try {
       setLanguage(prev => ({
         ...prev,
         isVisible: false,
-        language: {
-          value: item.language.value,
-          shortForm: item.language.shortForm,
-        },
       }));
-      const preferdLanguage = {
-        value: item.language.value,
-        code: item.language.shortForm,
-      };
-      setItem(APP_LANGUAGE, JSON.stringify(preferdLanguage));
-      strings.setLanguage(item.language.shortForm);
+      // setItem(APP_LANGUAGE, JSON.stringify(preferdLanguage));
+      dispatch(LocalizationAction(item));
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const dispatch = useDispatch();
+  }, []);
 
   const emptyState = useCallback(() => {
     setter(prev => ({
@@ -138,7 +115,7 @@ const Login = ({navigation}) => {
           <CommonAuthComponent
             containerStyle={{marginTop: HP(50)}}
             source={LOGIN_CENTER_IMAGE}
-            text={strings.signYou}
+            text={i18n[Language.code].signYou}
           />
           <View style={{marginTop: HP(30)}}>
             <FieldInput
@@ -153,12 +130,12 @@ const Login = ({navigation}) => {
                 }));
               }}
               errorMessage={getter.emailError}
-              placeholder={strings.Email}
+              placeholder={i18n[Language.code].Email}
               placeholderTextColor={'gray'}></FieldInput>
 
             <FieldInput
               containerStyle={{marginTop: HP(20)}}
-              placeholder={strings.Password}
+              placeholder={i18n[Language.code].Password}
               iconLeft={LOCK_SVG}
               errorMessage={getter.passwordError}
               value={getter.password}
@@ -172,7 +149,7 @@ const Login = ({navigation}) => {
             <Text
               style={[styles.forgetPasswordTxt]}
               onPress={() => navigation.navigate('forgetpassword')}>
-              {strings.Forgetpassword}
+              {i18n[Language.code].Forgetpassword}
             </Text>
             <ActionButton
               disabled={userState.isLoading ? true : false}
@@ -185,7 +162,7 @@ const Login = ({navigation}) => {
               {userState.isLoading ? (
                 <Loader size={'small'} color={'#fff'} />
               ) : (
-                <Text style={styles.loginTxt}>{strings.login}</Text>
+                <Text style={styles.loginTxt}>{i18n[Language.code].login}</Text>
               )}
             </ActionButton>
           </View>
@@ -201,12 +178,15 @@ const Login = ({navigation}) => {
               // {borderWidth: 1, borderColor: 'red'},
             ]}>
             <Text style={styles.notHaveAccontTxt}>
-              {strings.donthaveanaccount} ?{' '}
+              {i18n[Language.code].donthaveanaccount} ?{' '}
             </Text>
-            <Text style={styles.haveAnAccount}>{strings.RegisterNow}</Text>
+            <Text style={styles.haveAnAccount}>
+              {i18n[Language.code].RegisterNow}
+            </Text>
           </Pressable>
         </ScrollView>
       </Container>
+      <WantToExit />
     </View>
   );
 };

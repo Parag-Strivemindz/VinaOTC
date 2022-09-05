@@ -3,14 +3,17 @@ import React from 'react';
 import WebView from 'react-native-webview';
 
 import CommonHeader from '../../component/CommonHeader';
-import Container from '../../component/Container';
 
 import {BALCK, ROBOTO_MEDIUM, SECONDARY_COLOR} from '../../styles/Fonts&Colors';
 import {CONTAINER_PADDINGTOP} from '../../styles/GlobalStyles';
+import {useSelector} from 'react-redux';
+import {Selector} from '../../store/redux/localization';
+import {i18n} from '../../i18n/lang';
 
 const PrivacyPolicy = () => {
+  const language = useSelector(Selector.Localization);
+  console.log(JSON.stringify(language) + ' langguageCode');
   function OnErrorShow({errorDomain, errorCode, errorDesc}) {
-    console.log(errorDomain);
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Text
@@ -35,7 +38,7 @@ const PrivacyPolicy = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <CommonHeader title="Privacy Policy" />
+      <CommonHeader title={i18n[language.code].privacyPolicy} />
       <WebView
         // style={{backgroundColor: 'white'}}
         containerStyle={{
@@ -51,7 +54,7 @@ const PrivacyPolicy = () => {
         renderError={OnErrorShow}
         bounces={false}
         source={{
-          uri: 'https://vinaotc.com/backend/api/privacy_policy?lang=en',
+          uri: `https://vinaotc.strivemindz.com/public/api/privacy_policy?lang=${language.code}`,
         }}
       />
     </View>

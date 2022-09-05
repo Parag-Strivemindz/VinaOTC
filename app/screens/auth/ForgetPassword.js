@@ -1,31 +1,27 @@
 import React, {useCallback, useContext, useState} from 'react';
-import {
-  Pressable,
-  Text,
-  View,
-  Image,
-  LayoutAnimation,
-  UIManager,
-  Platform,
-  ScrollView,
-  I18nManager,
-} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
-
-import FieldInput from './common/FieldInput';
+import {Pressable, Text, View, ScrollView} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import styles from './Styles';
-import {emailVerification} from '../../utils/Validation';
-import Loader from '../../component/Loader';
-import strings from '../../utils/Localization';
+
 import {ForgetPassword as ForgetPasswordAction} from '../../services/auth';
-import CommonAuthComponent from './common/ImageHeader';
-import {EMAIL_SVG, FP_CENTER_IMAGE} from '../../constants/ImageConstant';
-import ActionButton from '../../component/ActionButton';
-import {MONTSERRAT_MEDIUM, WHITE} from '../../styles/Fonts&Colors';
+import {Selector as languageSelector} from '../../store/redux/localization';
+
+import {emailVerification} from '../../utils/Validation';
+import FieldInput from './common/FieldInput';
+import Loader from '../../component/Loader';
 import Container from './common/Container';
+import WantToExit from '../../component/WantToExit';
+import CommonAuthComponent from './common/ImageHeader';
+import ActionButton from '../../component/ActionButton';
+
+import {MONTSERRAT_MEDIUM, WHITE} from '../../styles/Fonts&Colors';
+import {EMAIL_SVG, FP_CENTER_IMAGE} from '../../constants/ImageConstant';
 import {HP} from '../../styles/Dimesions';
+import {i18n} from '../../i18n/lang';
 
 const ForgetPassword = ({navigation}) => {
+  const Language = useSelector(languageSelector.Localization);
+
   const [getter, setter] = useState({
     email: '',
     emailError: '',
@@ -65,7 +61,7 @@ const ForgetPassword = ({navigation}) => {
           keyboardShouldPersistTaps="handled">
           <View style={[styles.blockContainer, {marginTop: HP(50)}]}>
             <CommonAuthComponent
-              text={strings.Forgetpassword}
+              text={i18n[Language.code].Forgetpassword}
               source={FP_CENTER_IMAGE}
             />
           </View>
@@ -77,7 +73,9 @@ const ForgetPassword = ({navigation}) => {
               color: WHITE,
               fontFamily: MONTSERRAT_MEDIUM,
             }}>
-            {`${strings.please} ${strings.enter} ${strings.Register} ${strings.Email} ${strings.id}`}
+            {`${i18n[Language.code].please} ${i18n[Language.code].enter} ${
+              i18n[Language.code].Register
+            } ${i18n[Language.code].Email} ${i18n[Language.code].id}`}
           </Text>
           <FieldInput
             iconLeft={EMAIL_SVG}
@@ -100,18 +98,23 @@ const ForgetPassword = ({navigation}) => {
               <Loader size={'small'} color={'#fff'} />
             ) : (
               <Text style={styles.loginTxt}>
-                {`${strings.verificationLink}`}
+                {`${i18n[Language.code].verificationLink}`}
               </Text>
             )}
           </ActionButton>
           <Pressable
             onPress={() => navigation.goBack()}
             style={[styles.haveAnAccountContainer, {marginTop: HP(40)}]}>
-            <Text style={styles.notHaveAccontTxt}>{`${strings.backto}`} </Text>
-            <Text style={styles.haveAnAccount}>{`${strings.login}`}</Text>
+            <Text style={styles.notHaveAccontTxt}>
+              {`${i18n[Language.code].backto}`}{' '}
+            </Text>
+            <Text style={styles.haveAnAccount}>{`${
+              i18n[Language.code].login
+            }`}</Text>
           </Pressable>
         </ScrollView>
       </Container>
+      {WantToExit()}
     </View>
   );
 };

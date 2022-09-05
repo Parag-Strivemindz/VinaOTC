@@ -1,6 +1,6 @@
 import {View, Text} from 'react-native';
 import React, {useCallback, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {isFeildValid, NumberVerification} from '../../utils/Validation';
 import Container from '../../component/Container';
@@ -24,8 +24,12 @@ import GlobalStyles, {
 import {HP, WP} from '../../styles/Dimesions';
 import WithDrawFundAction from '../../services/stock/Withdraw';
 import Loader from '../../component/Loader';
+import {Selector} from '../../store/redux/localization';
+import {i18n} from '../../i18n/lang';
 
 const WithdrawPayment = () => {
+  const language = useSelector(Selector.Localization);
+
   const [getter, setter] = useState({
     ammount: '',
     accountNumber: '',
@@ -111,7 +115,9 @@ const WithdrawPayment = () => {
 
   return (
     <View style={{flex: 1}}>
-      <CommonHeader title={'Withdraw Form'} />
+      <CommonHeader
+        title={`${i18n[language.code].withDraw} ${i18n[language.code].form}`}
+      />
       <Container>
         <View
           style={{
@@ -126,7 +132,10 @@ const WithdrawPayment = () => {
               color: WHITE,
               fontSize: WP(13),
             }}>
-            Please Enter ammout that you wants to Deposit
+            {i18n[language.code].please} {i18n[language.code].enter}{' '}
+            {i18n[language.code].ammount} {i18n[language.code].that}{' '}
+            {i18n[language.code].you} {i18n[language.code].wants}{' '}
+            {i18n[language.code].to} {i18n[language.code].withDraw}
           </Text>
           <FieldInput
             keyboardType={'number-pad'}
@@ -154,7 +163,9 @@ const WithdrawPayment = () => {
             style={{
               marginBottom: HP(20),
             }}>
-            <Text style={styles.fieldPlaceholder}>Account Number</Text>
+            <Text style={styles.fieldPlaceholder}>
+              {i18n[language.code].accounNumber}
+            </Text>
             <FieldInput
               keyboardType={'number-pad'}
               containerStyle={{marginTop: HP(10)}}
@@ -170,7 +181,9 @@ const WithdrawPayment = () => {
             style={{
               marginBottom: HP(20),
             }}>
-            <Text style={styles.fieldPlaceholder}>IFSC code</Text>
+            <Text style={styles.fieldPlaceholder}>
+              {i18n[language.code].ifsccode}
+            </Text>
             <FieldInput
               containerStyle={{marginTop: HP(10)}}
               placeholder={'hdfc15426'}
@@ -185,7 +198,9 @@ const WithdrawPayment = () => {
             style={{
               marginBottom: HP(20),
             }}>
-            <Text style={styles.fieldPlaceholder}>Name of account Holder</Text>
+            <Text style={styles.fieldPlaceholder}>
+              {i18n[language.code].accountHolder}
+            </Text>
             <FieldInput
               containerStyle={{marginTop: HP(10)}}
               placeholder={'lisa harper'}
@@ -200,7 +215,9 @@ const WithdrawPayment = () => {
             style={{
               marginBottom: HP(20),
             }}>
-            <Text style={styles.fieldPlaceholder}>Bank Name</Text>
+            <Text style={styles.fieldPlaceholder}>
+              {i18n[language.code].bankName}
+            </Text>
             <FieldInput
               containerStyle={{marginTop: HP(10)}}
               placeholder={'HDFC Bank PVT LTD'}
@@ -215,7 +232,9 @@ const WithdrawPayment = () => {
             style={{
               marginBottom: HP(20),
             }}>
-            <Text style={styles.fieldPlaceholder}>Branch Code</Text>
+            <Text style={styles.fieldPlaceholder}>
+              {i18n[language.code].branchCode}
+            </Text>
             <FieldInput
               containerStyle={{marginTop: HP(10)}}
               placeholder={'1254'}
@@ -230,7 +249,9 @@ const WithdrawPayment = () => {
             style={{
               marginBottom: HP(20),
             }}>
-            <Text style={styles.fieldPlaceholder}>Branch Address</Text>
+            <Text style={styles.fieldPlaceholder}>
+              {i18n[language.code].branchAddress}
+            </Text>
             <FieldInput
               containerStyle={{marginTop: HP(10)}}
               placeholder={'7845'}
@@ -257,7 +278,8 @@ const WithdrawPayment = () => {
                 fontFamily: ROBOTO_REGULAR,
                 color: WHITE,
               }}>
-              Withdraw Funds
+              {i18n[language.code].withDraw}
+              {i18n[language.code].funds}
             </Text>
           )}
         </ActionButton>

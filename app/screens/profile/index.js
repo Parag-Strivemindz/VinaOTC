@@ -1,4 +1,4 @@
-import {BackHandler, Image, Text, View} from 'react-native';
+import {BackHandler, Image, Text, View, Alert} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {SvgXml} from 'react-native-svg';
@@ -6,6 +6,8 @@ import {useFocusEffect} from '@react-navigation/native';
 
 import {Selector as dashboardSelector} from '../../store/redux/dashboard/index';
 import {Selector as userSelector} from '../../store/redux/user/index';
+import {Selector as languageSelector} from '../../store/redux/localization/index';
+
 import getMySellStock from '../../services/user/MySellStock';
 
 import Container from '../../component/Container';
@@ -29,52 +31,21 @@ import {
 } from '../../styles/Fonts&Colors';
 import Loader from '../../component/Loader';
 import WantToExit from '../../component/WantToExit';
+import {i18n} from '../../i18n/lang';
 
 const Profile = ({navigation}) => {
   const myPortfolio = useSelector(dashboardSelector.My_Stock_Portfolio);
   const walletDetails = useSelector(dashboardSelector.WALLET_DETAILS);
   const mySellStock = useSelector(userSelector.My_Sell_Stocks);
   const myProfileDetails = useSelector(userSelector.User_Info);
+  const language = useSelector(languageSelector.Localization);
 
+  console.log(i18n[language.code].wallet);
   const navigateTo = useCallback(screenName => {
     return (params = {}) => {
       navigation.navigate(screenName, {
         ...params,
       });
-    };
-  }, []);
-
-  const [getter, setter] = useState({
-    isVisible: false,
-  });
-
-  const onClose = () => {
-    setter(prev => ({...prev, isVisible: !prev.isVisible}));
-  };
-
-  const onQuite = () => {
-    setter(prev => ({...prev, isVisible: !prev.isVisible}));
-    return true;
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      console.log('called');
-      BackHandler.addEventListener('hardwareBackPress', onQuite);
-      return () =>
-        BackHandler.removeEventListener('hardwareBackPress', onQuite);
-    }, [onQuite]),
-  );
-
-  useEffect(() => {
-    const unsubscribe = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        return true;
-      },
-    );
-    return () => {
-      unsubscribe.remove();
     };
   }, []);
 
@@ -113,7 +84,7 @@ const Profile = ({navigation}) => {
                 fontSize: WP(16),
                 color: WHITE,
               }}>
-              Wallet & My Profile
+              {i18n[language.code].wallet} & {i18n[language.code].myProfile}
             </Text>
           </RowContainer>
           <SvgXml xml={ARROW_DOWN} rotation={-90} />
@@ -124,12 +95,14 @@ const Profile = ({navigation}) => {
          */}
         <RowContainer
           style={{alignItems: 'center', paddingHorizontal: PADDING_HORIZONTAL}}>
-          <RowContainer>
-            <Text style={[styles.blockHeaderTxt]}>PORTFOLIO OVERVIEW</Text>
+          <RowContainer style={{maxWidth: '75%'}}>
+            <Text style={[styles.blockHeaderTxt]}>
+              Portfolio {i18n[language.code].PortfolioOverview}
+            </Text>
             <HifenDivider style={styles.hiffenDividerRow} />
           </RowContainer>
           <Text
-            style={styles.seeAllTxt}
+            style={[styles.seeAllTxt, {width: '20%', textAlign: 'right'}]}
             onPress={() =>
               navigation.navigate('AllPortfolio', {
                 walletDetails: walletDetails.data,
@@ -137,7 +110,7 @@ const Profile = ({navigation}) => {
                 navigateTo,
               })
             }>
-            See All
+            {i18n[language.code].seeAll}
           </Text>
         </RowContainer>
         <View
@@ -173,7 +146,9 @@ const Profile = ({navigation}) => {
         <RowContainer
           style={{alignItems: 'center', paddingHorizontal: PADDING_HORIZONTAL}}>
           <RowContainer>
-            <Text style={[styles.blockHeaderTxt]}>SELL HISTORY</Text>
+            <Text style={[styles.blockHeaderTxt]}>
+              {i18n[language.code].sellHistory}
+            </Text>
             <HifenDivider style={styles.hiffenDividerRow} />
           </RowContainer>
           {/* <Text style={styles.seeAllTxt}>See All</Text> */}
@@ -195,11 +170,7 @@ const Profile = ({navigation}) => {
           </View>
         </View>
       </Container>
-      <WantToExit
-        isVisible={getter.isVisible}
-        onClose={onClose}
-        onQuit={onQuite}
-      />
+      {WantToExit()}
     </View>
   );
 };

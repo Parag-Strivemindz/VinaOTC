@@ -5,12 +5,15 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {paymentRequestSelector} from '../../../store/redux/paymentRequest/index';
 import getMyWithDrawRequest from '../../../services/paymentRequest/WithDrawalRequest';
+import {Selector as languageSelector} from '../../../store/redux/localization';
 
 import styles from './styles';
+import FilterModal from './FilterModal';
+import FilterItem from './RenderFilterItemList';
+import Loader from '../../../component/Loader';
 import CountFilter from '../../../component/CountFilter';
 import RowContainer from '../../../component/RowContainer';
 import CardViewDivider from '../../../component/CardViewDivider';
-import {stocks} from '..';
 import Container from '../../../component/Container';
 import {
   PADDING_HORIZONTAL,
@@ -24,19 +27,17 @@ import {
   ROBOTO_MEDIUM,
 } from '../../../styles/Fonts&Colors';
 import {HP, WP, WINDOW_HEIGHT} from '../../../styles/Dimesions';
-import FilterModal from './FilterModal';
-import FilterItem from './RenderFilterItemList';
-import Loader from '../../../component/Loader';
 
 const WithDrawal = () => {
   const withdraw_request = useSelector(paymentRequestSelector.WITHDRAW_REQUEST);
+  const language = useSelector(languageSelector.Localization);
 
   const [getter, setter] = useState({
     isVisible: false,
   });
 
   const [pageFilter, setPageFilter] = useState({
-    pageNumber: 0,
+    pageNumber: 1,
     numberOfItemOnPage: 10,
   });
 
@@ -126,7 +127,7 @@ const WithDrawal = () => {
         )}
       </Container>
       <CountFilter
-        disableLeftButton={pageFilter.pageNumber == 1 ? true : false}
+        disableLeftButton={pageFilter.pageNumber <= 1 ? true : false}
         disableRightButton={withdraw_request.noRecordFound}
         style={{paddingBottom: 10}}
         numberOfItems={pageFilter.numberOfItemOnPage}

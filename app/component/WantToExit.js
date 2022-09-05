@@ -1,5 +1,7 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {BackHandler, StyleSheet, Text, View} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
+
 import CommonFilterModal from './CommonFilterModal';
 import RowContainer from './RowContainer';
 import ActionButton from './ActionButton';
@@ -9,15 +11,44 @@ import {
   SECONDARY_COLOR,
   WHITE,
 } from '../styles/Fonts&Colors';
-
 import {HP, WINDOW_WIDTH, WP} from '../styles/Dimesions';
 import {PADDING_HORIZONTAL} from '../styles/GlobalStyles';
 
-const WantToExit = ({isVisible, onClose, onQuit}) => {
+const WantToExit = () => {
+  const [getter, setter] = useState({
+    isVisible: false,
+  });
+
+  const onClose = value => {
+    setter(prev => ({...prev, isVisible: !prev.isVisible}));
+    if (value) {
+      onQuit();
+    }
+  };
+
+  const onQuit = () => {
+    const clear = setTimeout(() => {
+      BackHandler.exitApp();
+    }, 250);
+    return () => clearTimeout(clear);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        onClose(false);
+        return true;
+      };
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, []),
+  );
+
   return (
     <CommonFilterModal
       close={onClose}
-      isVisible={isVisible}
+      isVisible={getter.isVisible}
       containerStyle={{
         backgroundColor: 'rgba(0,0,0,0.5)',
       }}>
@@ -44,13 +75,7 @@ const WantToExit = ({isVisible, onClose, onQuit}) => {
             justifyContent: 'center',
           }}>
           <ActionButton
-            callBack={() =>
-              onQuit(prev => ({
-                ...prev,
-                isVisible: false,
-                isQuit: true,
-              }))
-            }
+            callBack={() => onClose(true)}
             style={{
               ...styles.resetBtn,
               backgroundColor: 'red',
@@ -59,12 +84,7 @@ const WantToExit = ({isVisible, onClose, onQuit}) => {
             <Text style={[styles.titletxt, {color: WHITE}]}>Yes</Text>
           </ActionButton>
           <ActionButton
-            callBack={() =>
-              onClose(prev => ({
-                ...prev,
-                isVisible: false,
-              }))
-            }
+            callBack={() => onClose(false)}
             style={{
               ...styles.resetBtn,
               backgroundColor: SECONDARY_COLOR,

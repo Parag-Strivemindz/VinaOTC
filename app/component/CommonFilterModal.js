@@ -1,12 +1,4 @@
-import {
-  StyleSheet,
-  Modal,
-  TouchableWithoutFeedback,
-  Pressable,
-  TouchableHighlight,
-  Touchable,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, Modal, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 
 const CommonFilterModal = ({
@@ -21,7 +13,7 @@ const CommonFilterModal = ({
       transparent
       animationType="fade"
       visible={isVisible}
-      onRequestClose={close}
+      onRequestClose={() => close(false)}
       {...style}>
       <TouchableOpacity
         activeOpacity={1}

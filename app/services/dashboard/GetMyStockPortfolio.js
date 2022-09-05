@@ -6,8 +6,10 @@ import {getItem} from '../../utils/AsyncStorage';
 import {responseHandler, errorhandler} from './index';
 
 import env from '../../config/env';
+import {lang} from '../../constants/ApiConstants';
 
 const GetMyStockPortfolio = () => {
+  console.log(lang + ' lang');
   return async dispatch => {
     try {
       dispatch({
@@ -19,7 +21,9 @@ const GetMyStockPortfolio = () => {
         },
       });
       const userId = await getItem(USER_ID);
-      postRequestWithHeader(env.MY_STOCKS_PORTFOLIO, {UserID: userId})
+      postRequestWithHeader(env.MY_STOCKS_PORTFOLIO, {
+        UserID: userId,
+      })
         .then(res => {
           responseHandler(res.data, MY_STOCK_PORTFOLIO, dispatch);
         })

@@ -1,8 +1,12 @@
 import {StyleSheet, Text, View, Button} from 'react-native';
 import React, {useState} from 'react';
 import DatePicker from 'react-native-date-picker';
+import {useSelector} from 'react-redux';
+import {Selector} from '../store/redux/localization';
 
 const Calander = ({setDate, setOpen, date, open}) => {
+  const language = useSelector(Selector.Localization);
+
   const SelecteData = date => {
     setOpen();
     if (open.from == 'from') {
@@ -27,7 +31,7 @@ const Calander = ({setDate, setOpen, date, open}) => {
   return (
     <>
       <DatePicker
-        locale="en"
+        locale={language.code}
         mode="date"
         modal
         open={open.open}

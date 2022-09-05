@@ -1,53 +1,59 @@
+import {useSelector} from 'react-redux';
+import {i18n} from '../i18n/lang';
+import {Selector} from '../store/redux/localization';
+
 export const DDMMYY = (input, seperator = '-') => {
+  const language = useSelector(Selector.Localization);
+
   console.log(input + ' date');
   const monthObj = [
     {
       id: '01',
-      value: 'Jan',
+      value: i18n[language.code].jan,
     },
     {
       id: '02',
-      value: 'Feb',
+      value: i18n[language.code].feb,
     },
     {
       id: '03',
-      value: 'Mar',
+      value: i18n[language.code].mar,
     },
     {
       id: '04',
-      value: 'April',
+      value: i18n[language.code].april,
     },
     {
       id: '05',
-      value: 'May',
+      value: i18n[language.code].may,
     },
     {
       id: '06',
-      value: 'June',
+      value: i18n[language.code].june,
     },
     {
       id: '07',
-      value: 'july',
+      value: i18n[language.code].july,
     },
     {
       id: '08',
-      value: 'Aug',
+      value: i18n[language.code].aug,
     },
     {
       id: '09',
-      value: 'Sept',
+      value: i18n[language.code].sept,
     },
     {
       id: '10',
-      value: 'Oct',
+      value: i18n[language.code].oct,
     },
     {
       id: '11',
-      value: 'Nov',
+      value: i18n[language.code].nov,
     },
     {
       id: '12',
-      value: 'Dec',
+      value: i18n[language.code].dec,
     },
   ];
   const currentDate = new Date();

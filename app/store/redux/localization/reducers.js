@@ -2,7 +2,8 @@ import {LOCAL_LANGUAGE} from './actionTypes';
 
 const initialState = {
   language: {
-    code: 'en_US',
+    code: 'en',
+    value: 'English',
   },
 };
 

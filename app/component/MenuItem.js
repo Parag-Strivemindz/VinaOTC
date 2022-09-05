@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
-import {View, Text, Image} from 'react-native';
+import {View, Text, Image, Pressable} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {Selector} from '../store/redux/localization';
 
 import {Menu, MenuItem} from 'react-native-material-menu';
 import {SvgXml} from 'react-native-svg';
@@ -20,26 +22,27 @@ const menuItem = [
     id: '1',
     language: {
       value: 'English',
-      shortForm: 'en',
+      code: 'en',
     },
   },
   {
     id: '2',
     language: {
       value: 'Vieatnam',
-      shortForm: 'vi',
+      code: 'vi',
     },
   },
   {
     id: '3',
     language: {
       value: 'Chinese',
-      shortForm: 'zh',
+      code: 'zh',
     },
   },
 ];
 function Picker({callback, setter, getter}) {
-  console.log(getter.language.value);
+  const language = useSelector(Selector.Localization);
+
   const hideMenu = () => setter(prev => ({...prev, isVisible: false}));
 
   const showMenu = () => setter(prev => ({...prev, isVisible: true}));
@@ -59,7 +62,12 @@ function Picker({callback, setter, getter}) {
     />
   );
   return (
-    <View
+    <Pressable
+      android_ripple={{
+        borderless: true,
+        radius: 50,
+      }}
+      onPress={showMenu}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
@@ -74,9 +82,8 @@ function Picker({callback, setter, getter}) {
         visible={getter.isVisible}
         anchor={
           <Text
-            onPress={showMenu}
             style={{color: WHITE, fontSize: 14, fontFamily: ROBOTO_REGULAR}}>
-            {getter.language.value}
+            {language.value}
           </Text>
         }
         onRequestClose={hideMenu}>
@@ -89,7 +96,7 @@ function Picker({callback, setter, getter}) {
                   fontFamily: ROBOTO_MEDIUM,
                   fontSize: 14,
                 }}
-                onPress={() => callback(item)}>
+                onPress={() => callback(item.language)}>
                 {item.language.value}
               </MenuItem>
               {index == 0 && (
@@ -111,8 +118,8 @@ function Picker({callback, setter, getter}) {
         })}
       </Menu>
       <ArrowDown />
-    </View>
+    </Pressable>
   );
 }
 
-export default React.memo(Picker);
+export default Picker;

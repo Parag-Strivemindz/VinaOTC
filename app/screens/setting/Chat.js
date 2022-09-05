@@ -12,8 +12,13 @@ import {
   WHITE,
 } from '../../styles/Fonts&Colors';
 import {HP, WP} from '../../styles/Dimesions';
+import {i18n} from '../../i18n/lang';
+import {APP_LANGUAGE} from '../../constants/AppConstant';
+import {useSelector} from 'react-redux';
+import {Selector} from '../../store/redux/localization';
 
 export default function Chat() {
+  const language = useSelector(Selector.Localization);
   const [messages, setMessages] = useState([]);
   const ADMIN_ID = 'ebe55bad-b8b1-4671-8414-1100d787707a';
   const CLIENT_ID = '13445abc';
@@ -154,7 +159,7 @@ export default function Chat() {
 
   return (
     <View style={{flex: 1, backgroundColor: BACKGROUND_COLOR}}>
-      <CommonHeader title="Chat" />
+      <CommonHeader title={i18n[language.code].chat} />
       <GiftedChat
         showAvatarForEveryMessage
         wrapInSafeArea

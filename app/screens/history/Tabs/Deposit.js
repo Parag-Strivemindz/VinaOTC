@@ -27,9 +27,12 @@ import {
   SECONDARY_COLOR,
 } from '../../../styles/Fonts&Colors';
 import Loader from '../../../component/Loader';
+import {i18n} from '../../../i18n/lang';
+import {Selector} from '../../../store/redux/localization';
 
 const Deposit = () => {
   const DepositeRequest = useSelector(paymentRequestSelector.DEPOSITE_REQUEST);
+  const language = useSelector(Selector.Localization);
 
   const [getter, setter] = useState({
     isVisible: false,
@@ -76,7 +79,7 @@ const Deposit = () => {
     <View style={{flex: 1, backgroundColor: BACKGROUND_COLOR}}>
       <CardViewDivider style={{marginVertical: PADDING_VERTICAL}} />
       <RowContainer style={{paddingHorizontal: PADDING_HORIZONTAL}}>
-        <Text style={styles.filter}>Filter</Text>
+        <Text style={styles.filter}>{i18n[language.code].Filter}</Text>
         <Pressable
           android_ripple={{
             borderless: true,
@@ -120,7 +123,7 @@ const Deposit = () => {
         )}
       </Container>
       <CountFilter
-        disableLeftButton={pageFilter.pageNumber == 1 ? true : false}
+        disableLeftButton={pageFilter.pageNumber <= 1 ? true : false}
         disableRightButton={DepositeRequest.noRecordFound}
         style={{paddingBottom: 10}}
         numberOfItems={pageFilter.numberOfItemOnPage}

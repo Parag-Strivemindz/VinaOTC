@@ -1,24 +1,28 @@
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
-import React, {useEffect, useState, useMemo} from 'react';
+import React, {useEffect, useState, useMemo, useRef} from 'react';
 import {useNetInfo} from '@react-native-community/netinfo';
-
 import {BackHandler, StatusBar, View} from 'react-native';
 import {Provider} from 'react-redux';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import * as RNLocalize from 'react-native-localize';
+import SplashScreen from 'react-native-splash-screen';
+
 import AppIndex from './app/AppIndex';
 import store from './app/store/redux/store';
-import {BACKGROUND_COLOR} from './app/styles/Fonts&Colors';
 import strings from './app/utils/Localization';
-import * as RNLocalize from 'react-native-localize';
 import {getItem} from './app/utils/AsyncStorage';
-import {APP_LANGUAGE} from './app/constants/AppConstant';
 import ShowNetworkError from './app/component/NetworkError';
-import SplashScreen from 'react-native-splash-screen';
-import WantToExit from './app/component/WantToExit';
-import {useCallback} from 'react';
+// import navigationRef from './app/component/NavigationRef';
+
+import {APP_LANGUAGE} from './app/constants/AppConstant';
+import {BACKGROUND_COLOR} from './app/styles/Fonts&Colors';
+import useNavigationRef from './app/component/NavigationRef';
 
 const App = () => {
   const netInfo = useNetInfo();
+
+  // const navRef = useRef();
+  const [navRef, resetNavigationState] = useNavigationRef();
 
   const MyTheme = {
     ...DefaultTheme,
@@ -33,19 +37,19 @@ const App = () => {
     },
   };
 
+  function changeLanguage() {
+    const locals = RNLocalize.getLocales();
+    console.log(locals + ' locals');
+    strings.setLanguage(locals[0].languageCode);
+  }
+
   useEffect(() => {
     SplashScreen.hide();
-    function changeLanguage() {
-      const locals = RNLocalize.getLocales();
-      console.log(locals + ' locals');
-      strings.setLanguage(locals[0].languageCode);
-    }
     (async () => {
       try {
-        console.log(strings.getInterfaceLanguage());
-        console.log(strings.getAvailableLanguages());
         await getItem(APP_LANGUAGE).then(res => {
           if (res) {
+            console.log(res);
             const {code, value} = JSON.parse(res);
             strings.setLanguage(code);
           } else {
@@ -54,13 +58,12 @@ const App = () => {
         });
       } catch (Err) {}
     })();
-
     return () => RNLocalize.removeEventListener('change', changeLanguage);
   }, []);
 
   return (
     <View style={{flex: 1, backgroundColor: BACKGROUND_COLOR}}>
-      <NavigationContainer>
+      <NavigationContainer ref={navRef}>
         <Provider store={store}>
           <SafeAreaProvider>
             <StatusBar

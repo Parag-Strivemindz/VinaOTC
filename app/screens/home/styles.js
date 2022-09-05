@@ -83,7 +83,7 @@ export default StyleSheet.create({
   seeAllTxt: {
     color: '#575C67',
     fontFamily: POPPINS_MEDIUM,
-    fontSize: 13,
+    fontSize: WP(13),
   },
   itemContainer: {
     // marginVertical: 10,

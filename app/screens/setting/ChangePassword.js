@@ -1,7 +1,8 @@
 import {View, Text} from 'react-native';
 import React, {useState, useCallback} from 'react';
-import {useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
+import {Selector as languageSelector} from '../../store/redux/localization';
 import ChangePasswordAction from '../../services/setting/ChangePassword';
 
 import Container from '../../component/Container';
@@ -19,8 +20,11 @@ import {LOCK_SVG} from '../../constants/ImageConstant';
 import {WP, HP} from '../../styles/Dimesions';
 import {ROBOTO_REGULAR, WHITE, WHITE_80} from '../../styles/Fonts&Colors';
 import Loader from '../../component/Loader';
+import {i18n} from '../../i18n/lang';
 
 const ChangePassword = () => {
+  const language = useSelector(languageSelector.Localization);
+
   const [getter, setter] = useState({
     password: '',
     newPassword: '',
@@ -73,7 +77,7 @@ const ChangePassword = () => {
 
   return (
     <View style={{flex: 1}}>
-      <CommonHeader title={'Change Password'} />
+      <CommonHeader title={i18n[language.code].changepassword} />
       <Container
         containerStyles={{
           paddingHorizontal: PADDING_HORIZONTAL,
@@ -90,13 +94,13 @@ const ChangePassword = () => {
           containerStyle={{
             marginTop: HP(15),
           }}
-          placeholder={'Password'}
+          placeholder={i18n[language.code].Password}
           iconLeft={LOCK_SVG}
           showhideIcon={true}
           errorMessage={error.passwordError}
         />
         <FieldInput
-          placeholder={'New Password'}
+          placeholder={i18n[language.code].newPassword}
           placeholdercolor={WHITE_80}
           containerStyle={{
             marginTop: HP(15),
@@ -113,7 +117,7 @@ const ChangePassword = () => {
           errorMessage={error.newPasswordError}
         />
         <FieldInput
-          placeholder={'Confirm Password'}
+          placeholder={i18n[language.code].confirmPassword}
           placeholdercolor={WHITE_80}
           containerStyle={{
             marginTop: HP(15),
@@ -136,12 +140,15 @@ const ChangePassword = () => {
             <Loader />
           ) : (
             <Text
+              adjustsFontSizeToFit
+              numberOfLines={1}
               style={{
                 fontFamily: ROBOTO_REGULAR,
                 fontSize: WP(16),
                 color: WHITE,
               }}>
-              Update Password
+              {i18n[language.code].update}
+              {i18n[language.code].Password}
             </Text>
           )}
         </ActionButton>

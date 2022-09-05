@@ -4,7 +4,10 @@ import {SvgXml} from 'react-native-svg';
 import PropTypes from 'prop-types';
 import Animated, {SlideInLeft, Layout} from 'react-native-reanimated';
 
+import {i18n} from '../../i18n/lang';
 import getMyPaymentHistory from '../../services/user/MyPaymentHistory';
+import {Selector as languageSelector} from '../../store/redux/localization/index';
+
 import {Selector} from '../../store/redux/user';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -34,23 +37,6 @@ import {
 } from '../../styles/Fonts&Colors';
 import {HP, WP} from '../../styles/Dimesions';
 
-const filerItems = [
-  {
-    id: '1',
-    name: 'All',
-    value: undefined,
-  },
-  {
-    id: '2',
-    name: 'Credit',
-    value: 'Credit',
-  },
-  {
-    id: '3',
-    name: 'Debit',
-    value: 'Debit',
-  },
-];
 const selectedItemCircle = () => (
   <Image
     source={BUTTON_SELECTED}
@@ -59,7 +45,27 @@ const selectedItemCircle = () => (
   />
 );
 
-const PaymentFilter = ({selectedItem = 'All', close, callback}) => {
+const PaymentFilter = ({selectedItem, close, callback}) => {
+  const language = useSelector(languageSelector.Localization);
+
+  const filerItems = [
+    {
+      id: '1',
+      name: i18n[language.code].all,
+      value: undefined,
+    },
+    {
+      id: '2',
+      name: i18n[language.code].credit,
+      value: 'Credit',
+    },
+    {
+      id: '3',
+      name: i18n[language.code].debit,
+      value: 'Debit',
+    },
+  ];
+
   return (
     <View style={[GlobalStyles.modalContainer]}>
       <RowContainer
@@ -73,7 +79,7 @@ const PaymentFilter = ({selectedItem = 'All', close, callback}) => {
             fontSize: WP(18),
             marginBottom: 10,
           }}>
-          Filter By
+          {i18n[language.code].filterBy}
         </Text>
 
         <SvgXml
@@ -89,17 +95,28 @@ const PaymentFilter = ({selectedItem = 'All', close, callback}) => {
       </RowContainer>
       {filerItems.map((item, index) => (
         <RowContainer
-          callback={() => callback(item.value)}
+          callback={() =>
+            callback({
+              name: item.name,
+              value: item.value,
+            })
+          }
           key={index.toString()}
           style={{
             ...styles.rowFilteItemContainer,
-            backgroundColor: selectedItem === item.name ? GREEN_LIGHT : WHITE,
+            backgroundColor:
+              selectedItem.value === item.value ? GREEN_LIGHT : WHITE,
             // marginTop: HP(15),
           }}>
           <RowContainer
             style={{alignItems: 'center'}}
-            callback={() => callback(item.value)}>
-            {selectedItem === item.name ? (
+            callback={() =>
+              callback({
+                name: item.name,
+                value: item.value,
+              })
+            }>
+            {selectedItem.value === item.value ? (
               selectedItemCircle()
             ) : (
               <SvgXml xml={CIRCLE} />
@@ -121,22 +138,33 @@ const PaymentFilter = ({selectedItem = 'All', close, callback}) => {
 
 const ProfilePaymentHistory = ({numberOfItems, pageNumber}) => {
   const myPaymentHistory = useSelector(Selector.My_Payment_History);
+  const languague = useSelector(languageSelector.Localization);
+
   const [getter, setter] = useState({
     isVisible: false,
-    filterItem: undefined,
+    filterItem: {
+      name: i18n[languague.code].all,
+      value: undefined,
+    },
   });
 
+  console.log(getter.filterItem);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getMyPaymentHistory(pageNumber, numberOfItems, getter.filterItem));
-  }, [numberOfItems, pageNumber, getter.filterItem]);
+    dispatch(
+      getMyPaymentHistory(pageNumber, numberOfItems, getter.filterItem.value),
+    );
+  }, [numberOfItems, pageNumber, getter.filterItem.value]);
 
   const onFilterSelect = value => {
     setter(prev => ({
       ...prev,
       isVisible: !prev.isVisible,
-      filterItem: value,
+      filterItem: {
+        ...prev.filterItem,
+        ...value,
+      },
     }));
   };
 
@@ -150,7 +178,9 @@ const ProfilePaymentHistory = ({numberOfItems, pageNumber}) => {
   return (
     <View style={{paddingHorizontal: PADDING_HORIZONTAL}}>
       <RowContainer style={{marginBottom: HP(30)}}>
-        <Text style={styles.paymentHistory}>PAYMENT HISTORY</Text>
+        <Text style={styles.paymentHistory}>
+          {i18n[languague.code].payment} {i18n[languague.code].history}
+        </Text>
         <Pressable
           onPress={close}
           android_ripple={{

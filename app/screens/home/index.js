@@ -7,6 +7,7 @@ import GetMyStockPortfolio from '../../services/dashboard/GetMyStockPortfolio';
 import getStockList from '../../services/dashboard/GetStockList';
 import GetWalletDetails from '../../services/dashboard/GetWalletDetails';
 import {Selector} from '../../store/redux/dashboard/index';
+import {Selector as languageSelector} from '../../store/redux/localization';
 
 import Loader from '../../component/Loader';
 import Container from '../../component/Container';
@@ -20,8 +21,10 @@ import {SECONDARY_COLOR} from '../../styles/Fonts&Colors';
 import styles from './styles';
 import {HP} from '../../styles/Dimesions';
 import WantToExit from '../../component/WantToExit';
+import {i18n} from '../../i18n/lang';
 
 const Home = ({navigation}) => {
+  const language = useSelector(languageSelector.Localization);
   const myPortfolio = useSelector(Selector.My_Stock_Portfolio);
   const walletDetails = useSelector(Selector.WALLET_DETAILS);
   const stockList = useSelector(Selector.STOCK_LIST);
@@ -34,37 +37,8 @@ const Home = ({navigation}) => {
     };
   }, []);
 
-  const [getter, setter] = useState({
-    isVisible: false,
-  });
-
-  const onClose = useCallback(() => {
-    setter(prev => ({...prev, isVisible: !prev.isVisible}));
-  }, [getter, setter]);
-
-  const onQuite = () => {
-    onClose();
-    BackHandler.exitApp();
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      console.log('called');
-      const unsubscribe = BackHandler.addEventListener(
-        'hardwareBackPress',
-        () => {
-          onClose();
-          return true;
-        },
-      );
-      return () => unsubscribe.remove();
-    }),
-  );
-
   const dispatch = useDispatch();
-
   // console.log(myPortfolio.data);
-
   useEffect(() => {
     dispatch(GetMyStockPortfolio());
     dispatch(GetWalletDetails());
@@ -84,26 +58,11 @@ const Home = ({navigation}) => {
               {walletDetails.data ? walletDetails.data.data : '0'}
             </Text>
             <Text style={[styles.subtitleTxt, {marginTop: HP(10)}]}>
-              Total Portfolio
+              {i18n[language.code].TotalPortfolio}
             </Text>
             <HifenDivider style={styles.hiffenDivider} />
-            {/* <Text style={styles.subtitleTxt}>
-              Total Investment{'  '}
-              <Text style={{color: SECONDARY_COLOR}}>$7878.00</Text>
-            </Text> */}
           </View>
-          {/* <View>
-            <Text style={styles.profit}>+15.06%</Text>
-            <Text
-              style={[
-                styles.subtitleTxt,
-                {
-                  marginTop: HP(20),
-                },
-              ]}>
-              Weekly Change
-            </Text>
-          </View> */}
+
           <View style={styles.dividerContainer}>
             <Image
               style={styles.divider}
@@ -117,11 +76,16 @@ const Home = ({navigation}) => {
         <View style={{marginTop: HP(22), paddingHorizontal: 20}}>
           <RowContainer style={{alignItems: 'center'}}>
             <RowContainer>
-              <Text style={[styles.blockHeaderTxt]}>PORTFOLIO OVERVIEW</Text>
+              <Text
+                style={[styles.blockHeaderTxt, {textTransform: 'uppercase'}]}>
+                PortFolio {i18n[language.code].PortfolioOverview}
+              </Text>
               <HifenDivider style={styles.hiffenDividerRow} />
             </RowContainer>
             <Text
-              style={styles.seeAllTxt}
+              adjustsFontSizeToFit
+              numberOfLines={1}
+              style={[styles.seeAllTxt, {alignItems: 'flex-end'}]}
               onPress={() =>
                 navigation.navigate('AllPortfolio', {
                   walletDetails: walletDetails.data,
@@ -129,7 +93,7 @@ const Home = ({navigation}) => {
                   navigateTo,
                 })
               }>
-              See All
+              {i18n[language.code].seeAll}
             </Text>
           </RowContainer>
           {/**
@@ -167,11 +131,7 @@ const Home = ({navigation}) => {
           <HomeTab />
           */}
       </Container>
-      <WantToExit
-        isVisible={getter.isVisible}
-        onClose={onClose}
-        onQuit={onQuite}
-      />
+      {WantToExit()}
     </View>
   );
 };

@@ -16,6 +16,7 @@ import getNotification from '../../services/user/Notification';
 import readNotification from '../../services/user/ReadNotification';
 
 import {Selector} from '../../store/redux/user';
+import {Selector as languageSelector} from '../../store/redux/localization/index';
 import {HP, WINDOW_HEIGHT, WINDOW_WIDTH, WP} from '../../styles/Dimesions';
 
 import {
@@ -32,6 +33,7 @@ import GlobalStyles, {
   CONTAINER_PADDINGTOP,
   PADDING_HORIZONTAL,
 } from '../../styles/GlobalStyles';
+import {i18n} from '../../i18n/lang';
 
 function Neumor({style, children, inner, darkShadow, lightShadow}) {
   return (
@@ -70,6 +72,7 @@ const data = [
 
 function Notification() {
   const notification = useSelector(Selector.GET_NOTIFICATION);
+  const language = useSelector(languageSelector.Localization);
 
   const dispatch = useDispatch();
 
@@ -79,7 +82,7 @@ function Notification() {
 
   return (
     <View style={{flex: 1}}>
-      <CommonHeader title="Notification" />
+      <CommonHeader title={i18n[language.code].Notification} />
       <Container
         scrollViewContainerStyle={{
           paddingTop: CONTAINER_PADDINGTOP,

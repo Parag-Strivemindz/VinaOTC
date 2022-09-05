@@ -20,6 +20,9 @@ import {PADDING_HORIZONTAL} from '../../../styles/GlobalStyles';
 import ActionButton from '../../../component/ActionButton';
 import {HP, WINDOW_WIDTH, WP} from '../../../styles/Dimesions';
 import Calander from '../../../component/Calander';
+import {i18n} from '../../../i18n/lang';
+import {useSelector} from 'react-redux';
+import {Selector} from '../../../store/redux/localization';
 
 // function RandomFilter({
 //   setter,
@@ -36,6 +39,8 @@ import Calander from '../../../component/Calander';
 // }
 
 const FilterModal = ({close, visible, onSearch}) => {
+  const language = useSelector(Selector.Localization);
+
   const [open, setOpen] = useState({
     open: false,
     from: '',
@@ -95,7 +100,9 @@ const FilterModal = ({close, visible, onSearch}) => {
               paddingHorizontal: PADDING_HORIZONTAL,
               marginVertical: HP(12),
             }}>
-            <Text style={styles.titletxt}>Filter by Data</Text>
+            <Text style={styles.titletxt}>
+              {i18n[language.code].filterByDate}
+            </Text>
             <SvgXml
               xml={ERROR}
               onPress={close}
@@ -113,7 +120,7 @@ const FilterModal = ({close, visible, onSearch}) => {
               paddingHorizontal: PADDING_HORIZONTAL,
             }}>
             <RowContainer style={{marginVertical: HP(10)}}>
-              <Text style={styles.titletxt}>From</Text>
+              <Text style={styles.titletxt}> {i18n[language.code].from}</Text>
               <ActionButton
                 style={{
                   height: HP(25),
@@ -137,7 +144,7 @@ const FilterModal = ({close, visible, onSearch}) => {
               </ActionButton>
             </RowContainer>
             <RowContainer style={{marginVertical: HP(10)}}>
-              <Text style={styles.titletxt}>To</Text>
+              <Text style={styles.titletxt}> {i18n[language.code].to}</Text>
               <ActionButton
                 style={{
                   height: HP(25),
@@ -186,7 +193,10 @@ const FilterModal = ({close, visible, onSearch}) => {
                 borderColor: 'rgba(1,196,0,0.3)',
                 backgroundColor: WHITE,
               }}>
-              <Text style={[styles.titletxt]}>Reset</Text>
+              <Text style={[styles.titletxt]}>
+                {' '}
+                {i18n[language.code].reset}
+              </Text>
             </ActionButton>
             <ActionButton
               callBack={() => {
@@ -199,7 +209,10 @@ const FilterModal = ({close, visible, onSearch}) => {
                 ...styles.resetBtn,
                 backgroundColor: SECONDARY_COLOR,
               }}>
-              <Text style={[styles.titletxt, {color: WHITE}]}>Search</Text>
+              <Text style={[styles.titletxt, {color: WHITE}]}>
+                {' '}
+                {i18n[language.code].search}
+              </Text>
             </ActionButton>
           </RowContainer>
         </View>

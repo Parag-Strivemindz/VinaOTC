@@ -1,16 +1,11 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  LayoutAnimation,
-  Platform,
-  UIManager,
-} from 'react-native';
+import {View, Text, StyleSheet, Platform, UIManager} from 'react-native';
 import React, {useState, useCallback, useEffect} from 'react';
 import {SvgXml} from 'react-native-svg';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {Selector as languageSelector} from '../../store/redux/localization';
 import {Selector as ContactusSelector} from '../../store/redux/setting/index';
+
 import ContactUs from '../../services/setting/ContactUs';
 import GetInTouch from '../../services/setting/GetInTouch';
 
@@ -19,11 +14,12 @@ import FieldInput from '../auth/common/FieldInput';
 import Container from '../../component/Container';
 import CommonHeader from '../../component/CommonHeader';
 import HifenDivider from '../../component/HifenDivider';
-import {EMAIL_SVG, HELPANDSUPPORT} from '../../constants/ImageConstant';
 import RowContainer from '../../component/RowContainer';
-
-import {HP, WP} from '../../styles/Dimesions';
+import Loader from '../../component/Loader';
 import {emailVerification, isFeildValid} from '../../utils/Validation';
+
+import {EMAIL_SVG, HELPANDSUPPORT} from '../../constants/ImageConstant';
+import {HP, WP} from '../../styles/Dimesions';
 import {LOCATION, PHONE} from '../../constants/IconConstant';
 import {HEADER_HEIGHT, PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
 import {
@@ -35,15 +31,11 @@ import {
   WHITE,
   WHITE_50,
 } from '../../styles/Fonts&Colors';
-import Loader from '../../component/Loader';
+import {i18n} from '../../i18n/lang';
 
-if (Platform.OS === 'android') {
-  if (UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-}
 const HelpAndSupport = () => {
   const contactUs = useSelector(ContactusSelector.CONTACT_US);
+  const language = useSelector(languageSelector.Localization);
 
   const [getter, setter] = useState({
     fullName: '',
@@ -62,9 +54,9 @@ const HelpAndSupport = () => {
 
   useEffect(() => {
     if (contactUs.data == null) {
-      dispatch(ContactUs());
+      dispatch(ContactUs(language));
     }
-  }, []);
+  }, [language]);
 
   const Submit = useCallback(() => {
     const isEmailValid = emailVerification(getter.Email);
@@ -97,7 +89,7 @@ const HelpAndSupport = () => {
 
   return (
     <View style={{flex: 1}}>
-      <CommonHeader title={'Help & Support'} />
+      <CommonHeader title={i18n[language.code].helpAndSupport} />
       <Container
         scrollViewContainerStyle={{
           paddingTop: HEADER_HEIGHT,
@@ -112,13 +104,13 @@ const HelpAndSupport = () => {
           <RowContainer style={{alignSelf: 'flex-start', marginTop: HP(22)}}>
             <SvgXml xml={PHONE} style={{marginRight: 20}} />
             <Text style={styles.phone}>
-              {contactUs.data ? contactUs.data.data.mobile_no : 'Not Avilable'}
+              {contactUs.data ? contactUs.data.data.mobile_no : '?????'}
             </Text>
           </RowContainer>
           <RowContainer style={{alignSelf: 'flex-start', marginTop: HP(22)}}>
             <SvgXml xml={EMAIL_SVG} style={{marginRight: 20}} />
             <Text style={styles.regularTxt}>
-              {contactUs.data ? contactUs.data.data.email : 'Not Avilable'}
+              {contactUs.data ? contactUs.data.data.email : '?????'}
             </Text>
           </RowContainer>
           <RowContainer style={{alignSelf: 'flex-start', marginTop: HP(22)}}>
@@ -128,7 +120,7 @@ const HelpAndSupport = () => {
                 ? contactUs.data.data.branch_address.concat(
                     contactUs.data.data.address,
                   )
-                : 'Not Avilable'}
+                : '?????'}
             </Text>
           </RowContainer>
         </View>
@@ -140,7 +132,7 @@ const HelpAndSupport = () => {
                 color: SECONDARY_COLOR,
                 fontFamily: POPPINS_SEMIBOLD,
               }}>
-              Get In Touch
+              {i18n[language.code].getInTouch}
             </Text>
             <HifenDivider style={{width: 22, marginTop: 0}} />
           </RowContainer>
@@ -149,7 +141,7 @@ const HelpAndSupport = () => {
             style={styles.inputField}
             placeholdercolor={WHITE_50}
             containerStyle={{marginTop: HP(15)}}
-            placeholder={'Your Name'}
+            placeholder={i18n[language.code].yourName}
             errorMessage={error.fullNameErro}
             value={getter.fullName}
             onChangeText={text => setter(prev => ({...prev, fullName: text}))}
@@ -159,7 +151,7 @@ const HelpAndSupport = () => {
             style={styles.inputField}
             placeholdercolor={WHITE_50}
             containerStyle={{marginTop: HP(15)}}
-            placeholder={'Email'}
+            placeholder={i18n[language.code].Email}
             errorMessage={error.emailError}
             value={getter.Email}
             onChangeText={text => setter(prev => ({...prev, Email: text}))}
@@ -169,7 +161,7 @@ const HelpAndSupport = () => {
             style={styles.inputField}
             placeholdercolor={WHITE_50}
             containerStyle={{marginTop: HP(15)}}
-            placeholder={'Your Message'}
+            placeholder={i18n[language.code].yourMessage}
             errorMessage={error.yourMessageError}
             value={getter.yourMessage}
             onChangeText={text =>
@@ -183,7 +175,7 @@ const HelpAndSupport = () => {
             {getter.isLoading ? (
               <Loader />
             ) : (
-              <Text style={styles.btnTxt}>Submit</Text>
+              <Text style={styles.btnTxt}>{i18n[language.code].submit}</Text>
             )}
           </ActionButton>
         </View>

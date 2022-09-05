@@ -32,6 +32,9 @@ import {
   WHITE_50,
 } from '../../../styles/Fonts&Colors';
 import Styles from '../Styles';
+import {useSelector} from 'react-redux';
+import {Selector} from '../../../store/redux/localization';
+import {i18n} from '../../../i18n/lang';
 
 const AnimatedError = Animated.createAnimatedComponent(Text);
 

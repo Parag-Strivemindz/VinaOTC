@@ -1,17 +1,36 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {Pressable, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
 import {SvgXml} from 'react-native-svg';
-import {FONT_MEDIUM, HEADER_HEIGHT} from '../styles/GlobalStyles';
+
+import strings from '../utils/Localization';
+import MenuItem from './MenuItem';
+import {HEADER_HEIGHT} from '../styles/GlobalStyles';
+import {BELL_ICON, LOGO_SVG} from '../constants/IconConstant';
 import {
   BACKGROUND_COLOR,
-  FONT_BOLD_ITALIC_SECONDARY,
   FONT_BOLD_REGULAR_SECONDARY,
 } from '../styles/Fonts&Colors';
-import {BELL_ICON, LOGO_SVG} from '../constants/IconConstant';
-import MenuItem from './MenuItem';
 import RECT from '../assets/icons/Rectangle 29.svg';
+import {useDispatch, useSelector} from 'react-redux';
+import LocalizationAction from '../services/Localization';
+import {Selector} from '../store/redux/localization';
 
 const Header = ({icon, callback}) => {
+  const [getter, setter] = useState({
+    isVisible: false,
+  });
+
+  const dispatch = useDispatch();
+
+  const changeLanguage = selectedLanguage => {
+    setter(prev => ({
+      ...prev,
+      isVisible: !prev.isVisible,
+    }));
+    dispatch(LocalizationAction(selectedLanguage));
+    // strings.setLanguage(selected.language.shortForm);
+  };
+
   return (
     <View style={styles.container}>
       <SvgXml
@@ -44,7 +63,7 @@ const Header = ({icon, callback}) => {
           {/**
            * get Commented just for now Menu Item need a look
            */}
-          {/* <MenuItem /> */}
+          <MenuItem callback={changeLanguage} getter={getter} setter={setter} />
           <SvgXml
             xml={RECT}
             width={'100%'}
@@ -56,7 +75,7 @@ const Header = ({icon, callback}) => {
   );
 };
 
-export default React.memo(Header);
+export default Header;
 
 const styles = StyleSheet.create({
   container: {

@@ -11,9 +11,12 @@ import {Selector} from './store/redux/user/index';
 import {getUserInfo} from './services/user/Index';
 import {LAUNCH_SCREEN} from './constants/ImageConstant';
 import WantToExit from './component/WantToExit';
+import {useNavigation} from '@react-navigation/native';
 
 const AppIndex = () => {
   const [loader, isLoader] = useState(false);
+
+  const navigation = useNavigation();
 
   const userInfo = useSelector(Selector.User_Info);
   const dispatch = useDispatch();
