@@ -59,13 +59,14 @@ const SignUp = ({navigation}) => {
   };
 
   const makeSignUpCall = useCallback(() => {
-    const isEmailValid = emailVerification(getter.Email);
+    const isEmailValid = emailVerification(getter.Email, Language);
     const [password, confirmPassword, isEqual] = passwordVerification(
       getter.password,
       getter.confirmPassword,
+      Language,
     );
 
-    const [fullName] = isFeildValid(getter.fullName);
+    const [fullName] = isFeildValid(getter.fullName, '', '', Language);
 
     if (
       isEmailValid == '' &&

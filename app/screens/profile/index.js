@@ -41,6 +41,7 @@ const Profile = ({navigation}) => {
   const language = useSelector(languageSelector.Localization);
 
   console.log(i18n[language.code].wallet);
+
   const navigateTo = useCallback(screenName => {
     return (params = {}) => {
       navigation.navigate(screenName, {

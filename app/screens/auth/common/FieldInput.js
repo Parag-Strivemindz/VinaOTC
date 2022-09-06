@@ -9,17 +9,7 @@ import {
 } from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import Proptypes from 'prop-types';
-import Animated, {
-  FadeIn,
-  FadeOut,
-  Easing,
-  SlideInDown,
-  SlideInUp,
-  SlideOutDown,
-  SlideOutUp,
-  SlideInRight,
-  Layout,
-} from 'react-native-reanimated';
+import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 
 import {HP} from '../../../styles/Dimesions';
 import {HIDE_ICON, SHOW_ICON} from '../../../constants/IconConstant';

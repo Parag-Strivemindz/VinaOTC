@@ -96,7 +96,10 @@ const Deposit = () => {
       <Container containerStyles={{paddingTop: HP(15)}}>
         {DepositeRequest.data ? (
           DepositeRequest.data.data && (
-            <FilterItem requestData={DepositeRequest.data.data} />
+            <FilterItem
+              requestData={DepositeRequest.data.data}
+              language={language.code && language}
+            />
           )
         ) : DepositeRequest.isLoading ? (
           <Loader size={'large'} color={SECONDARY_COLOR} />
@@ -125,7 +128,6 @@ const Deposit = () => {
       <CountFilter
         disableLeftButton={pageFilter.pageNumber <= 1 ? true : false}
         disableRightButton={DepositeRequest.noRecordFound}
-        style={{paddingBottom: 10}}
         numberOfItems={pageFilter.numberOfItemOnPage}
         paymentSetter={setPageFilter}
       />

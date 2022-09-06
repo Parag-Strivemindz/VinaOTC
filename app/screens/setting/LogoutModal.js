@@ -1,55 +1,23 @@
 import {BackHandler, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useState} from 'react';
-import {useFocusEffect} from '@react-navigation/native';
 
-import CommonFilterModal from './CommonFilterModal';
-import RowContainer from './RowContainer';
-import ActionButton from './ActionButton';
+import CommonFilterModal from '../../component/CommonFilterModal';
+import RowContainer from '../../component/RowContainer';
+import ActionButton from '../..//component/ActionButton';
 import {
   BLACK_70,
   ROBOTO_MEDIUM,
   SECONDARY_COLOR,
   WHITE,
-} from '../styles/Fonts&Colors';
-import {HP, WINDOW_WIDTH, WP} from '../styles/Dimesions';
-import {PADDING_HORIZONTAL} from '../styles/GlobalStyles';
+} from '../../styles/Fonts&Colors';
+import {HP, WINDOW_WIDTH, WP} from '../../styles/Dimesions';
+import {PADDING_HORIZONTAL} from '../../styles/GlobalStyles';
 import {useSelector} from 'react-redux';
-import {Selector} from '../store/redux/localization';
-import {i18n} from '../i18n/lang';
+import {Selector} from '../../store/redux/localization';
+import {i18n} from '../../i18n/lang';
 
-const WantToExit = () => {
+const LogoutModal = ({onClose, getter}) => {
   const language = useSelector(Selector.Localization);
-
-  const [getter, setter] = useState({
-    isVisible: false,
-  });
-
-  const onClose = value => {
-    setter(prev => ({...prev, isVisible: !prev.isVisible}));
-    if (value) {
-      onQuit();
-    }
-  };
-
-  const onQuit = () => {
-    const clear = setTimeout(() => {
-      BackHandler.exitApp();
-    }, 250);
-    return () => clearTimeout(clear);
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        onClose(false);
-        return true;
-      };
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      return () =>
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, []),
-  );
-
   return (
     <CommonFilterModal
       close={onClose}
@@ -72,7 +40,7 @@ const WantToExit = () => {
             fontFamily: ROBOTO_MEDIUM,
             alignSelf: 'center',
           }}>
-          {i18n[language.code].areYouSure} {i18n[language.code].exit}
+          {i18n[language.code].areYouSure} {i18n[language.code].logout}
         </Text>
         <RowContainer
           style={{
@@ -87,7 +55,7 @@ const WantToExit = () => {
               marginRight: HP(20),
             }}>
             <Text style={[styles.titletxt, {color: WHITE}]}>
-              {i18n[language.code].yes}
+              {i18n[language.code].logout}
             </Text>
           </ActionButton>
           <ActionButton
@@ -96,7 +64,10 @@ const WantToExit = () => {
               ...styles.resetBtn,
               backgroundColor: SECONDARY_COLOR,
             }}>
-            <Text style={[styles.titletxt, {color: WHITE}]}>
+            <Text
+              style={[styles.titletxt, {color: WHITE}]}
+              adjustsFontSizeToFit
+              numberOfLines={1}>
               {i18n[language.code].no}
             </Text>
           </ActionButton>
@@ -106,7 +77,7 @@ const WantToExit = () => {
   );
 };
 
-export default WantToExit;
+export default LogoutModal;
 
 const styles = StyleSheet.create({
   resetBtn: {
@@ -116,6 +87,6 @@ const styles = StyleSheet.create({
   titletxt: {
     color: 'rgba(0,0,0,0.7)',
     fontFamily: ROBOTO_MEDIUM,
-    fontSize: WP(15),
+    // fontSize: WP(15),
   },
 });

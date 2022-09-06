@@ -32,6 +32,7 @@ import buyStocks from '../../services/stock/BuyStocks';
 import {isFeildValid} from '../../utils/Validation';
 import Loader from '../../component/Loader';
 import {i18n} from '../../i18n/lang';
+import {CURRENCY} from '../../constants/AppConstant';
 
 const data = [
   {
@@ -113,7 +114,7 @@ const BuyShares = ({navigation, route}) => {
   );
 
   const onStockBuy = () => {
-    const [ammount] = isFeildValid(getter.ammount);
+    const [ammount] = isFeildValid(getter.ammount, '', '', language);
     if (ammount == '') {
       dispatch(buyStocks(getter.ammount, stock_id, setter, navigation));
       setError(prev => ({
@@ -172,7 +173,8 @@ const BuyShares = ({navigation, route}) => {
               styles.itemContainerLeftTitTxt,
               {fontSize: WP(14), alignSelf: 'flex-start'},
             ]}>
-            {stockAmout}$
+            {stockAmout}
+            {CURRENCY}
           </Text>
           {/* <Text
               style={{

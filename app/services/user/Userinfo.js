@@ -21,7 +21,6 @@ const getUserInfo = isLoader => async dispatch => {
         isLoader(false);
       });
   } catch (e) {
-    dispatch(NeworkError());
     console.error(e + ' coming from UserInfo');
   }
 };

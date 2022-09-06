@@ -23,7 +23,15 @@ const getNotification = () => async dispatch => {
         responseHandler(res.data, GET_NOTIFICATION, dispatch);
       })
       .catch(e => {
-        errorhandler(e, GET_NOTIFICATION, dispatch);
+        errorhandler(e, GET_NOTIFICATION);
+        dispatch({
+          type: GET_NOTIFICATION,
+          payload: {
+            isLoading: false,
+            data: null,
+            error: null,
+          },
+        });
       });
   } catch (e) {
     console.error(e + ' coming from UserInfo');

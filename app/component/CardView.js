@@ -1,4 +1,4 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Image, LogBox, Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {SvgXml} from 'react-native-svg';
 
@@ -15,10 +15,13 @@ import {
   SECONDARY_COLOR,
   WHITE,
 } from '../styles/Fonts&Colors';
-import {WP} from '../styles/Dimesions';
+import {HP, WP} from '../styles/Dimesions';
 import {i18n} from '../i18n/lang';
 import {useSelector} from 'react-redux';
 import {Selector} from '../store/redux/localization';
+import useNavigations from './UseNavigation';
+import {useNavigation} from '@react-navigation/native';
+import {CURRENCY} from '../constants/AppConstant';
 
 const GrowthAndEquity = (
   <Text
@@ -32,7 +35,8 @@ const GrowthAndEquity = (
   </Text>
 );
 
-const CardView = ({callback, url, data}) => {
+const CardView = ({url, data}) => {
+  const navigation = useNavigation();
   const language = useSelector(Selector.Localization);
 
   const {
@@ -46,6 +50,14 @@ const CardView = ({callback, url, data}) => {
     code,
     created_at,
   } = data;
+
+  const navigateTo = () => {
+    // console.log('calleed');
+    console.log(code + ' code');
+    navigation.navigate('Portfolio', {
+      CodeID: code,
+    });
+  };
 
   const RenderBack = url => {
     return (
@@ -74,7 +86,7 @@ const CardView = ({callback, url, data}) => {
                 fontFamily: POPPINS_REGULAR,
                 fontSize: 12,
               }}>
-              Stock Allocted - {qty || 0}
+              {i18n[language.code].stockAllocated} - {qty || 0}
             </Text>
           </>
         ) : (
@@ -107,19 +119,12 @@ const CardView = ({callback, url, data}) => {
         left: 10,
         right: 10,
       }}
-      style={[styles.container, {paddingTop: 30}]}
-      onPress={() => {
-        callback != undefined && callback();
-      }}>
+      style={[styles.container, {paddingTop: HP(30)}]}
+      onPress={() => navigateTo()}>
       {/**
        * Bank Details
        */}
-      <RowContainer
-        callback={() => {
-          if (callback != undefined) {
-            callback();
-          }
-        }}>
+      <RowContainer callback={() => navigateTo()}>
         {RenderBack(url)}
         <Text
           style={{
@@ -128,18 +133,26 @@ const CardView = ({callback, url, data}) => {
             fontFamily: ROBOTO_REGULAR,
             textTransform: 'capitalize',
           }}>
-          {order_type}
+          {order_type == 'buy'
+            ? i18n[language.code].buy
+            : i18n[language.code].sell}
         </Text>
       </RowContainer>
       <CardViewDivider />
-      <RowContainer callback={() => callback != undefined && callback()}>
+      <RowContainer callback={() => navigateTo()}>
         <View>
           <Text style={styles.invest}>{i18n[language.code].invested}</Text>
-          <Text style={styles.value}>{total_price}</Text>
+          <Text style={styles.value}>
+            {total_price}
+            {CURRENCY}
+          </Text>
         </View>
         <View>
           <Text style={styles.invest}>{i18n[language.code].current}</Text>
-          <Text style={styles.value}>{stock_amount}</Text>
+          <Text style={styles.value}>
+            {stock_amount}
+            {CURRENCY}
+          </Text>
         </View>
         <View>
           <Text

@@ -7,28 +7,19 @@ import SnackBar from '../../component/SnackBar';
 
 export function errorhandler(error) {
   if (error.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
-    // console.log(JSON.stringify(error.response) + ' server Response');
     if (error.response.data) {
       SnackBar('Something Went Wrong');
       console.log(error.response.data);
-      // alert(error.response.data.message);
     }
     if (error.response.status > 200) {
-      // alert(error.response.status);
     }
-    // alert(error.response.status);
-    // alert(error.response.headers);
   } else if (error.request) {
+    SnackBar('Something Went Wrong');
     console.log(error.request + ' Server not responding');
-    //the requset is made but no response is send by server
   } else {
-    //something happen in setting up request that triggers an Error
-    alert('Someting went wrong please try again');
+    SnackBar('Something Went Wrong');
     console.log(error.message + ' Someting went wrong');
   }
-  // console.log(error.config);
 }
 
 function checkCredentials(res, dispatch) {

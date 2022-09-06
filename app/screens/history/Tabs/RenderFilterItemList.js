@@ -2,17 +2,16 @@ import {launchCamera} from '@yunfeic/react-native-imagepicker';
 import React from 'react';
 import {View, Text} from 'react-native';
 import Animated, {SlideInLeft, Layout} from 'react-native-reanimated';
-import {useSelector} from 'react-redux';
 
 import RowContainer from '../../../component/RowContainer';
+import {CURRENCY} from '../../../constants/AppConstant';
 import {i18n} from '../../../i18n/lang';
-import {Selector} from '../../../store/redux/localization';
 import {SECONDARY_COLOR} from '../../../styles/Fonts&Colors';
 import {DDMMYY} from '../../../utils/Date';
 import styles from './styles';
 
-const FilterItem = ({requestData}) => {
-  const language = useSelector(Selector.Localization);
+const FilterItem = ({requestData, language}) => {
+  // const language = useSelector(Selector.Localization);
 
   return (
     <>
@@ -32,9 +31,10 @@ const FilterItem = ({requestData}) => {
               <View>
                 <Text style={styles.itemContainerLeftTitTxt}>
                   {item.total_price}
+                  {CURRENCY}
                 </Text>
                 <Text style={styles.itemContainerLeftSubTitTxt}>
-                  {DDMMYY(item.created_at)}
+                  {DDMMYY(item.created_at, '-', language)}
                 </Text>
               </View>
               <Text
@@ -55,6 +55,12 @@ const FilterItem = ({requestData}) => {
       })}
     </>
   );
+};
+
+FilterItem.defaultProps = {
+  language: {
+    code: 'en',
+  },
 };
 
 export default FilterItem;

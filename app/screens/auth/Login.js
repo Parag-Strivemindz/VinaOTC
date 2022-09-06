@@ -67,8 +67,8 @@ const Login = ({navigation}) => {
   useFocusEffect(emptyState);
 
   const makeLoginCall = () => {
-    const isValid = emailVerification(getter.email);
-    const [passwordError] = passwordVerification(getter.password);
+    const isValid = emailVerification(getter.email, Language);
+    const [passwordError] = passwordVerification(getter.password, '', Language);
 
     if (isValid == '' && passwordError == '') {
       dispatch(loginUser(getter.email, getter.password));

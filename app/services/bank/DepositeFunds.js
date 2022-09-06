@@ -45,6 +45,10 @@ const DepositeFunds = (navigation, amount, file, setter) => {
         .catch(error => {
           console.error(error + ' error');
           errorhandler(error);
+          setter(prev => ({
+            ...prev,
+            isLoading: false,
+          }));
           // SnackBar(res.data.message, autoDismiss, action);
         });
     } catch (error) {

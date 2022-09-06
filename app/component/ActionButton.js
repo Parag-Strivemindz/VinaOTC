@@ -15,7 +15,6 @@ function ActionButton({children, callBack, style, image, ...props}) {
       }}
       style={[styles.actionBtn, {...style}]}>
       {children}
-      {/* <Text styles={styles.actionBtnTxt}>{text}</Text> */}
     </Pressable>
   );
 }

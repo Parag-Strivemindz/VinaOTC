@@ -34,12 +34,6 @@ const ResetPassword = ({navigation, route}) => {
     return navigation.navigate('login');
   }
 
-  if (Platform.OS === 'android') {
-    if (UIManager.setLayoutAnimationEnabledExperimental) {
-      UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-  }
-
   const resetPassword = useCallback(() => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const [password, confirmPassword, isEqual] = passwordVerification(

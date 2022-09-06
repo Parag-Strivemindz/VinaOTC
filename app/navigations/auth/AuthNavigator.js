@@ -39,6 +39,7 @@ function AuthNavigator() {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
+          animation: 'none',
         }}>
         <Stack.Screen name="login" component={Login} />
         <Stack.Screen name="signup" component={SignUp} />

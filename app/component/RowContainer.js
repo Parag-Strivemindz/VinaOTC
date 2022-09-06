@@ -5,7 +5,7 @@ const RowContainer = ({children, style, callback}) => {
   return (
     <Pressable
       onPress={() => {
-        callback != undefined && callback();
+        callback && callback();
       }}
       style={[styles.container, {...style}]}>
       {children}

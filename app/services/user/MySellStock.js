@@ -21,7 +21,15 @@ const getMySellStock = () => async dispatch => {
         responseHandler(res.data, MY_SELL_STOCKS, dispatch);
       })
       .catch(e => {
-        errorhandler(e, MY_SELL_STOCKS, dispatch);
+        errorhandler(e, MY_SELL_STOCKS);
+        dispatch({
+          type: MY_SELL_STOCKS,
+          payload: {
+            isLoading: false,
+            data: null,
+            error: null,
+          },
+        });
       });
   } catch (e) {
     console.error(e + ' coming from UserInfo');

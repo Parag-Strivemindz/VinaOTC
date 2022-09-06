@@ -31,11 +31,12 @@ import {
 } from '../../styles/Fonts&Colors';
 import {CLOCK, RIGHT_ARROW_PNG} from '../../constants/IconConstant';
 import {i18n} from '../../i18n/lang';
+import {CURRENCY} from '../../constants/AppConstant';
 
 function Shares({title, color, screenName = '', data = {}, navigation}) {
   const navigate = useNavigation(screenName, navigation);
 
-  console.log(navigate + ' navigate');
+  // console.log(navigate + ' navigate');
   return (
     <View
       style={{
@@ -79,6 +80,8 @@ const Portfolio = ({route, navigation}) => {
   const stockView = useSelector(dashBoardSelector.STOCK_VIEW);
   const language = useSelector(languageSelector.Localization);
 
+  console.log(CodeID + ' from Portfolio');
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -104,7 +107,8 @@ const Portfolio = ({route, navigation}) => {
                 color: WHITE,
                 fontSize: WP(32),
               }}>
-              {stockView.data.data.amount}
+              {stockView.data.data.amount} 
+              {CURRENCY}
             </Text>
             <Text
               style={{
@@ -135,7 +139,8 @@ const Portfolio = ({route, navigation}) => {
                   0,
                   stockView.data.data.created_at.indexOf('T'),
                 )}{' '}
-                | <Text>{CodeID}</Text> |<Text> Real Time Currency in</Text>
+                | <Text>{CodeID}</Text> |
+                <Text> Real Time Currency in {CURRENCY}</Text>
               </Text>
             </View>
           </View>
@@ -196,7 +201,7 @@ const Portfolio = ({route, navigation}) => {
             marginTop: WINDOW_HEIGHT / 2,
             fontSize: WP(12),
           }}>
-          This Stock is not Avilable Please Select Another Stock
+          {i18n[language.code].stockNotAvailable}
         </Text>
       )}
     </View>

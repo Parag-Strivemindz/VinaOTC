@@ -1,53 +1,44 @@
-import {BackHandler, Image, Text, View} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import {Image, LogBox, Text, View} from 'react-native';
+import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useFocusEffect} from '@react-navigation/native';
 
 import GetMyStockPortfolio from '../../services/dashboard/GetMyStockPortfolio';
-import getStockList from '../../services/dashboard/GetStockList';
 import GetWalletDetails from '../../services/dashboard/GetWalletDetails';
 import {Selector} from '../../store/redux/dashboard/index';
 import {Selector as languageSelector} from '../../store/redux/localization';
 
+import HomeStockWebView from './HomeStockWebView';
 import Loader from '../../component/Loader';
 import Container from '../../component/Container';
 import Header from '../../component/Header';
 import HifenDivider from '../../component/HifenDivider';
 import RowContainer from '../../component/RowContainer';
 import CardView from '../../component/CardView';
-import StockWebView from '../../component/StockWebView';
 
 import {SECONDARY_COLOR} from '../../styles/Fonts&Colors';
 import styles from './styles';
 import {HP} from '../../styles/Dimesions';
 import WantToExit from '../../component/WantToExit';
 import {i18n} from '../../i18n/lang';
+import {CURRENCY} from '../../constants/AppConstant';
 
 const Home = ({navigation}) => {
   const language = useSelector(languageSelector.Localization);
   const myPortfolio = useSelector(Selector.My_Stock_Portfolio);
   const walletDetails = useSelector(Selector.WALLET_DETAILS);
-  const stockList = useSelector(Selector.STOCK_LIST);
 
-  const navigateTo = useCallback(screenName => {
-    return (params = {}) => {
-      navigation.navigate(screenName, {
-        ...params,
-      });
-    };
-  }, []);
-
+  console.log(language.code);
   const dispatch = useDispatch();
-  // console.log(myPortfolio.data);
+
   useEffect(() => {
     dispatch(GetMyStockPortfolio());
     dispatch(GetWalletDetails());
-    dispatch(getStockList());
   }, []);
 
   return (
     <View style={styles.container}>
       <Header />
+
       <Container>
         {/**
          * Total InvesetMent
@@ -56,6 +47,7 @@ const Home = ({navigation}) => {
           <View>
             <Text numberOfLines={1} style={styles.titleTxt}>
               {walletDetails.data ? walletDetails.data.data : '0'}
+              { CURRENCY}
             </Text>
             <Text style={[styles.subtitleTxt, {marginTop: HP(10)}]}>
               {i18n[language.code].TotalPortfolio}
@@ -90,7 +82,6 @@ const Home = ({navigation}) => {
                 navigation.navigate('AllPortfolio', {
                   walletDetails: walletDetails.data,
                   allPortfolio: myPortfolio.data,
-                  navigateTo,
                 })
               }>
               {i18n[language.code].seeAll}
@@ -105,28 +96,12 @@ const Home = ({navigation}) => {
             ) : (
               myPortfolio.data &&
               myPortfolio.data.data.map((item, index) => {
-                return (
-                  <CardView
-                    key={index.toString()}
-                    data={item}
-                    callback={() =>
-                      navigateTo('Portfolio')({
-                        CodeID: item.code,
-                      })
-                    }
-                  />
-                );
+                return <CardView key={index} data={item} />;
               })
             )}
           </View>
         </View>
-        {stockList.isLoading ? (
-          <Loader color={SECONDARY_COLOR} size="large" />
-        ) : (
-          stockList.data && (
-            <StockWebView html={stockList.data.data[0].sotck_listing_en} />
-          )
-        )}
+        <HomeStockWebView />
         {/*
           <HomeTab />
           */}

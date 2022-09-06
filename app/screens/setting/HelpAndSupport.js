@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Platform, UIManager} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import React, {useState, useCallback, useEffect} from 'react';
 import {SvgXml} from 'react-native-svg';
 import {useDispatch, useSelector} from 'react-redux';
@@ -59,10 +59,12 @@ const HelpAndSupport = () => {
   }, [language]);
 
   const Submit = useCallback(() => {
-    const isEmailValid = emailVerification(getter.Email);
+    const isEmailValid = emailVerification(getter.Email, language);
     const [fullName, yourMessage] = isFeildValid(
       getter.fullName,
       getter.yourMessage,
+      '',
+      language,
     );
 
     if (isEmailValid == '' && fullName == '' && yourMessage == '') {
@@ -101,19 +103,34 @@ const HelpAndSupport = () => {
         />
         <View style={{marginTop: HP(40)}}>
           <HifenDivider style={{alignSelf: 'flex-start', marginTop: 0}} />
-          <RowContainer style={{alignSelf: 'flex-start', marginTop: HP(22)}}>
+          <RowContainer
+            style={{
+              alignSelf: 'flex-start',
+              marginTop: HP(22),
+              alignItems: 'center',
+            }}>
             <SvgXml xml={PHONE} style={{marginRight: 20}} />
             <Text style={styles.phone}>
               {contactUs.data ? contactUs.data.data.mobile_no : '?????'}
             </Text>
           </RowContainer>
-          <RowContainer style={{alignSelf: 'flex-start', marginTop: HP(22)}}>
-            <SvgXml xml={EMAIL_SVG} style={{marginRight: 20}} />
+          <RowContainer
+            style={{
+              alignSelf: 'flex-start',
+              marginTop: HP(22),
+              alignItems: 'center',
+            }}>
+            <SvgXml xml={EMAIL_SVG} width={20} style={{marginRight: 20}} />
             <Text style={styles.regularTxt}>
               {contactUs.data ? contactUs.data.data.email : '?????'}
             </Text>
           </RowContainer>
-          <RowContainer style={{alignSelf: 'flex-start', marginTop: HP(22)}}>
+          <RowContainer
+            style={{
+              alignSelf: 'flex-start',
+              marginTop: HP(22),
+              alignItems: 'center',
+            }}>
             <SvgXml xml={LOCATION} style={{marginRight: 20}} />
             <Text style={styles.regularTxt}>
               {contactUs.data
@@ -187,13 +204,11 @@ const HelpAndSupport = () => {
 const styles = StyleSheet.create({
   phone: {
     fontFamily: POPPINS_REGULAR,
-    fontSize: WP(13),
     color: WHITE,
     letterSpacing: 0.5,
   },
   regularTxt: {
     fontFamily: ROBOTO_REGULAR,
-    // fontSize: WP(13),
     lineHeight: 21,
     color: WHITE,
   },

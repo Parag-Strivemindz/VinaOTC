@@ -37,10 +37,15 @@ import {Selector as languageSelector} from '../../store/redux/localization';
 import {i18n} from '../../i18n/lang';
 import Loader from '../../component/Loader';
 import WantToExit from '../../component/WantToExit';
+import LogoutModal from './LogoutModal';
 
 const Setting = ({navigation}) => {
   const userInfo = useSelector(UserSelector.User_Info);
   const language = useSelector(languageSelector.Localization);
+
+  const [onClickLogout, setOnClickLogout] = useState({
+    isVisible: false,
+  });
 
   const [isLoader, setLoader] = useState(false);
 
@@ -49,6 +54,14 @@ const Setting = ({navigation}) => {
   };
 
   const dispatch = useDispatch();
+
+  const onLogout = value => {
+    console.log(value + '  value');
+    setOnClickLogout(prev => ({...prev, isVisible: !prev.isVisible}));
+    if (value) {
+      dispatch(SignOut(setLoader));
+    }
+  };
 
   const ItemContainer = ({icon, title, callback}) => {
     return (
@@ -123,7 +136,7 @@ const Setting = ({navigation}) => {
           <ItemContainer
             icon={LOGOUT}
             title={i18n[language.code].logMeOut}
-            callback={() => dispatch(SignOut(setLoader))}
+            callback={() => onLogout()}
           />
         )}
         <View
@@ -145,6 +158,7 @@ const Setting = ({navigation}) => {
         </View>
       </Container>
       {WantToExit()}
+      <LogoutModal getter={onClickLogout} onClose={onLogout} />
     </View>
   );
 };

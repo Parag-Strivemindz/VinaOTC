@@ -36,6 +36,8 @@ import {
   WHITE,
 } from '../../styles/Fonts&Colors';
 import {HP, WP} from '../../styles/Dimesions';
+import {CURRENCY} from '../../constants/AppConstant';
+import {DDMMYY} from '../../utils/Date';
 
 const selectedItemCircle = () => (
   <Image
@@ -227,7 +229,14 @@ const ProfilePaymentHistory = ({numberOfItems, pageNumber}) => {
                         Payment {item.type}
                       </Text>
                       <Text style={styles.payment_time}>
-                        {item.created_at.slice(0, item.created_at.indexOf('T'))}
+                        {DDMMYY(
+                          item.created_at.slice(
+                            0,
+                            item.created_at.indexOf('T'),
+                          ),
+                          '-',
+                          languague,
+                        )}
                       </Text>
                     </View>
                   </RowContainer>
@@ -241,6 +250,7 @@ const ProfilePaymentHistory = ({numberOfItems, pageNumber}) => {
                     {item.type == 'credit'
                       ? `+${item.amount}`
                       : `-${item.amount}`}
+                    {CURRENCY}
                   </Text>
                 </RowContainer>
                 <CardViewDivider style={{marginVertical: HP(20)}} />
@@ -256,8 +266,10 @@ const ProfilePaymentHistory = ({numberOfItems, pageNumber}) => {
             color: 'white',
             fontFamily: MONTSERRAT_MEDIUM,
             fontSize: 12,
+            alignSelf: 'center',
           }}>
-          PaymentHistory is not Available
+          {i18n[languague.code].payment} {i18n[languague.code].history}{' '}
+          {i18n[languague.code].isNotAvailable}
         </Text>
       )}
       {myPaymentHistory.isLoading && (

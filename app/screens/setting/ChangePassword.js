@@ -42,7 +42,11 @@ const ChangePassword = () => {
 
   const Submit = useCallback(() => {
     const [newpasswordError, confirmPasswordError, isEqual] =
-      passwordVerification(getter.newPassword, getter.confirmPassword);
+      passwordVerification(
+        getter.newPassword,
+        getter.confirmPassword,
+        language,
+      );
     const iscurrentPasswordError = getter.password >= 8 ? true : false;
     console.log(iscurrentPasswordError + ' currentPasswordError');
     if (
@@ -67,7 +71,9 @@ const ChangePassword = () => {
         ...prev,
         passwordError: iscurrentPasswordError
           ? ''
-          : "Password field Cant't be Empty",
+          : `${i18n[language.code].emptyFldErr} ${
+              i18n[language.code].Password
+            }`,
         newPasswordError: newpasswordError,
         confirmPasswordError: confirmPasswordError || isEqual,
       }));

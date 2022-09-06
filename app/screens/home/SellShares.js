@@ -31,6 +31,7 @@ import {isFeildValid} from '../../utils/Validation';
 import sellStock from '../../services/stock/SellStocks';
 import Loader from '../../component/Loader';
 import {i18n} from '../../i18n/lang';
+import { CURRENCY } from '../../constants/AppConstant';
 
 const data = [
   {
@@ -108,7 +109,7 @@ const SellShares = ({route, navigation}) => {
   );
 
   const onSellShare = () => {
-    const [ammount] = isFeildValid(getter.ammount);
+    const [ammount] = isFeildValid(getter.ammount, '', '', language);
     if (ammount == '') {
       dispatch(sellStock(getter.ammount, CodeID, setter, navigation));
       setError(prev => ({
@@ -167,6 +168,7 @@ const SellShares = ({route, navigation}) => {
                 {alignSelf: 'flex-end', fontSize: WP(14)},
               ]}>
               {stockAmout}
+              {CURRENCY}
             </Text>
             {/* <Text
               style={{

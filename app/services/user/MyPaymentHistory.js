@@ -89,6 +89,13 @@ const getMyPaymentHistory =
         })
         .catch(e => {
           errorhandler(e, MY_PAYMENT_HISTORY, dispatch);
+          dispatch({
+            type: MY_PAYMENT_HISTORY,
+            payload: {
+              ...myPaymentHistory,
+              isLoading: false,
+            },
+          });
         });
     } catch (e) {
       console.error(e + ' coming from UserInfo');

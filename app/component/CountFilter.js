@@ -144,7 +144,7 @@ const CountFilter = ({
         justifyContent: 'center',
         ...style,
       }}>
-      <RowContainer style={{paddingHorizontal: 20}}>
+      <RowContainer style={{paddingHorizontal: 20, alignItems: 'center'}}>
         <ActionButton
           disabled={disableLeftButton}
           style={{width: WP(90), height: HP(36), padding: 5}}

@@ -18,9 +18,9 @@ import {i18n} from '../../i18n/lang';
 
 const AllPortfolio = ({navigation, route}) => {
   const language = useSelector(Selector.Localization);
-  const {walletDetails, allPortfolio, navigateTo} = route.params;
+  const {walletDetails, allPortfolio} = route.params;
 
-  console.log(JSON.stringify(allPortfolio.data[0].code) + ' fromAllPorfolio');
+  // console.log(JSON.stringify(allPortfolio.data[0].code) + ' fromAllPorfolio');
 
   // const rightItem = () => <SvgXml xml={ARROW_DIGONAL} onPress={() => {}} />;
 
@@ -58,17 +58,7 @@ const AllPortfolio = ({navigation, route}) => {
            */}
           <View style={{marginTop: 10}}>
             {allPortfolio.data.map((item, index) => {
-              return (
-                <CardView
-                  key={index.toString()}
-                  data={item}
-                  callback={() =>
-                    navigateTo('Portfolio')({
-                      CodeID: item.code,
-                    })
-                  }
-                />
-              );
+              return <CardView key={index.toString()} data={item} />;
             })}
           </View>
         </View>

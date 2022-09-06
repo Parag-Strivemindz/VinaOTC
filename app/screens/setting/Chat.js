@@ -13,9 +13,9 @@ import {
 } from '../../styles/Fonts&Colors';
 import {HP, WP} from '../../styles/Dimesions';
 import {i18n} from '../../i18n/lang';
-import {APP_LANGUAGE} from '../../constants/AppConstant';
 import {useSelector} from 'react-redux';
 import {Selector} from '../../store/redux/localization';
+import StockWebView from '../../component/StockWebView';
 
 export default function Chat() {
   const language = useSelector(Selector.Localization);
@@ -160,7 +160,9 @@ export default function Chat() {
   return (
     <View style={{flex: 1, backgroundColor: BACKGROUND_COLOR}}>
       <CommonHeader title={i18n[language.code].chat} />
-      <GiftedChat
+
+      <StockWebView uri={'https://jivo.chat/Y20iTtiIJ8'} />
+      {/* <GiftedChat
         showAvatarForEveryMessage
         wrapInSafeArea
         messagesContainerStyle={{
@@ -179,7 +181,7 @@ export default function Chat() {
           name: 'Parag Sharma',
           avatar: 'https://placeimg.com/140/140/any',
         }}
-      />
+      /> */}
     </View>
   );
 }

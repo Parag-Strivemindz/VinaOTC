@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, ImageBackground, BackHandler} from 'react-native';
+import {StyleSheet, ImageBackground, BackHandler, View} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {useSelector, useDispatch} from 'react-redux';
+import * as RNLocalize from 'react-native-localize';
 
 import AuthNavigator from './navigations/auth/AuthNavigator';
 import {AUTH_LOGIN, STATUS_ACTIVE} from './constants/AppConstant';
@@ -10,13 +11,11 @@ import {getItem} from './utils/AsyncStorage';
 import {Selector} from './store/redux/user/index';
 import {getUserInfo} from './services/user/Index';
 import {LAUNCH_SCREEN} from './constants/ImageConstant';
-import WantToExit from './component/WantToExit';
-import {useNavigation} from '@react-navigation/native';
+import LocalizationAction from './services/Localization';
+import {BACKGROUND_COLOR} from './styles/Fonts&Colors';
 
 const AppIndex = () => {
   const [loader, isLoader] = useState(false);
-
-  const navigation = useNavigation();
 
   const userInfo = useSelector(Selector.User_Info);
   const dispatch = useDispatch();
@@ -27,6 +26,43 @@ const AppIndex = () => {
         dispatch(getUserInfo(isLoader));
       }
     });
+  }, []);
+
+  function changeLanguage() {
+    const locals = RNLocalize.getLocales();
+    const language = {
+      ...locals[0],
+    };
+    console.log(JSON.stringify(locals[0]) + ' locals');
+
+    if (language.languageCode == 'en') {
+      dispatch(
+        LocalizationAction({
+          code: language.languageCode,
+          value: 'English',
+        }),
+      );
+    }
+    if (language.languageCode == 'vi') {
+      dispatch(
+        LocalizationAction({
+          code: language.languageCode,
+          value: 'Vieatnam',
+        }),
+      );
+    }
+    if (language.languageCode == 'zh') {
+      dispatch(
+        LocalizationAction({
+          code: language.languageCode,
+          value: 'Chinese',
+        }),
+      );
+    }
+  }
+
+  useEffect(() => {
+    changeLanguage();
   }, []);
 
   if (!loader) {
@@ -40,13 +76,11 @@ const AppIndex = () => {
   }
 
   return (
-    <>
-      <ImageBackground
-        source={LAUNCH_SCREEN}
-        style={{flex: 1}}
-        resizeMode="cover"
-        imageStyle={{flex: 1}}></ImageBackground>
-    </>
+    <ImageBackground
+      source={LAUNCH_SCREEN}
+      style={{flex: 1}}
+      resizeMode="cover"
+      imageStyle={{flex: 1}}></ImageBackground>
   );
 };
 

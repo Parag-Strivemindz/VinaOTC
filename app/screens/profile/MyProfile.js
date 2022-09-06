@@ -27,6 +27,8 @@ import {
 } from '../../styles/Fonts&Colors';
 import CountFilter from '../../component/CountFilter';
 import {i18n} from '../../i18n/lang';
+import {USER_ICON} from '../../constants/IconConstant';
+import {CURRENCY} from '../../constants/AppConstant';
 
 const MyProfile = ({navigation}) => {
   const walletDetails = useSelector(walletSelector.WALLET_DETAILS);
@@ -47,9 +49,11 @@ const MyProfile = ({navigation}) => {
     };
   }, []);
 
+  console.log(myProfileDetails.data.data.ProfileImage);
+
   return (
     <View style={{flex: 1}}>
-      <CommonHeader title={'My Profile'} />
+      <CommonHeader title={i18n[language.code].myProfile} />
       <Container scrollViewContainerStyle={{paddingTop: CONTAINER_PADDINGTOP}}>
         <RowContainer
           style={{
@@ -60,9 +64,11 @@ const MyProfile = ({navigation}) => {
               alignItems: 'center',
             }}>
             <Image
-              source={{
-                uri: myProfileDetails.data.data.ProfileImage,
-              }}
+              source={
+                myProfileDetails.data.data.ProfileImage
+                  ? {uri: myProfileDetails.data.data.ProfileImage}
+                  : USER_ICON
+              }
               style={styles.profileImg}
               resizeMode="cover"
             />
@@ -128,7 +134,8 @@ const MyProfile = ({navigation}) => {
                   fontSize: WP(25),
                   marginTop: HP(8),
                 }}>
-                ${walletDetails.data.data || 0}
+                {walletDetails.data.data || 0}
+                {CURRENCY}
               </Text>
             </View>
             <View>

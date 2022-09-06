@@ -38,7 +38,7 @@ const ForgetPassword = ({navigation}) => {
   };
   // console.log(JSON.stringify(getter) + ' getter');
   const sendOtp = useCallback(() => {
-    const isEmailValid = emailVerification(getter.email);
+    const isEmailValid = emailVerification(getter.email, Language);
     if (isEmailValid != '') {
       setter(prev => ({
         ...prev,

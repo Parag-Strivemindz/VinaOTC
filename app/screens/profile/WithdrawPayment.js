@@ -68,14 +68,16 @@ const WithdrawPayment = () => {
       getter.accountHolder,
       getter.bankName,
       getter.branchAddress,
+      language,
     );
 
-    const [ammountError] = isFeildValid(getter.ammount);
+    const [ammountError] = isFeildValid(getter.ammount, '', '', language);
 
     const [acnumber, branchcode, ifsccode] = NumberVerification(
       getter.accountNumber,
       getter.branchCode,
       getter.ifscCode,
+      language,
     );
     if (
       ammountError == '' &&

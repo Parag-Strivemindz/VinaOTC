@@ -188,9 +188,9 @@ export default function EditProfile({route, navigation}) {
   const dispatch = useDispatch();
 
   const onEdit = useCallback(() => {
-    const isEmailValid = emailVerification(getter.Email);
+    const isEmailValid = emailVerification(getter.Email, languague);
 
-    const [fullName] = isFeildValid(getter.fullName);
+    const [fullName] = isFeildValid(getter.fullName, '', '', languague);
 
     if (isEmailValid == '' && fullName == '') {
       //make your api call here

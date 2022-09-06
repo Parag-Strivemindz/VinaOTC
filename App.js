@@ -1,4 +1,8 @@
-import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import {
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
+} from '@react-navigation/native';
 import React, {useEffect, useState, useMemo, useRef} from 'react';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {BackHandler, StatusBar, View} from 'react-native';
@@ -36,45 +40,22 @@ const App = () => {
       notification: 'rgb(255, 69, 58)',
     },
   };
-
-  function changeLanguage() {
-    const locals = RNLocalize.getLocales();
-    console.log(locals + ' locals');
-    strings.setLanguage(locals[0].languageCode);
-  }
-
   useEffect(() => {
     SplashScreen.hide();
-    (async () => {
-      try {
-        await getItem(APP_LANGUAGE).then(res => {
-          if (res) {
-            console.log(res);
-            const {code, value} = JSON.parse(res);
-            strings.setLanguage(code);
-          } else {
-            RNLocalize.addEventListener('change', changeLanguage);
-          }
-        });
-      } catch (Err) {}
-    })();
-    return () => RNLocalize.removeEventListener('change', changeLanguage);
   }, []);
 
   return (
-    <View style={{flex: 1, backgroundColor: BACKGROUND_COLOR}}>
-      <NavigationContainer ref={navRef}>
-        <Provider store={store}>
-          <SafeAreaProvider>
-            <StatusBar
-              backgroundColor={BACKGROUND_COLOR}
-              barStyle={'light-content'}
-            />
-            {netInfo.isConnected ? <AppIndex /> : <ShowNetworkError />}
-          </SafeAreaProvider>
-        </Provider>
-      </NavigationContainer>
-    </View>
+    <NavigationContainer ref={navRef} theme={DarkTheme}>
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <StatusBar
+            backgroundColor={BACKGROUND_COLOR}
+            barStyle={'light-content'}
+          />
+          {netInfo.isConnected ? <AppIndex /> : <ShowNetworkError />}
+        </SafeAreaProvider>
+      </Provider>
+    </NavigationContainer>
   );
 };
 

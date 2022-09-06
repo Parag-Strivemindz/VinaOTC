@@ -295,7 +295,7 @@ function AddMoney({navigation, route}) {
   };
 
   const onFundDeposite = useCallback(() => {
-    const [ammount] = isFeildValid(getter.ammount);
+    const [ammount] = isFeildValid(getter.ammount, '', '', language);
     // getter.attachment.uri != '' add this later
     if ((ammount == '', getter.attachment.uri != '')) {
       //make your api call here
@@ -312,7 +312,12 @@ function AddMoney({navigation, route}) {
         ammountError: ammount,
       }));
       if (getter.attachment.uri == '')
-        ToastAndroid.show('Please Select File', ToastAndroid.LONG);
+        ToastAndroid.show(
+          `${i18n[language.code].please} ${i18n[language.code].select} ${
+            i18n[language.code].file
+          }`,
+          ToastAndroid.LONG,
+        );
     }
     //check if any field is empty or invalid
   }, [getter, setter, Error, setError]);

@@ -1,11 +1,9 @@
-import {useSelector} from 'react-redux';
 import {i18n} from '../i18n/lang';
-import {Selector} from '../store/redux/localization';
 
-export const DDMMYY = (input, seperator = '-') => {
-  const language = useSelector(Selector.Localization);
-
-  console.log(input + ' date');
+export const DDMMYY = (input, seperator = '-', language) => {
+  // const language = useSelector(Selector.Localization);
+  console.log(language + ' language');
+  // console.log(input + ' date');
   const monthObj = [
     {
       id: '01',
