@@ -47,7 +47,7 @@ const Home = ({navigation}) => {
           <View>
             <Text numberOfLines={1} style={styles.titleTxt}>
               {walletDetails.data ? walletDetails.data.data : '0'}
-              { CURRENCY}
+              {CURRENCY}
             </Text>
             <Text style={[styles.subtitleTxt, {marginTop: HP(10)}]}>
               {i18n[language.code].TotalPortfolio}

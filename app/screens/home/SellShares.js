@@ -31,7 +31,7 @@ import {isFeildValid} from '../../utils/Validation';
 import sellStock from '../../services/stock/SellStocks';
 import Loader from '../../component/Loader';
 import {i18n} from '../../i18n/lang';
-import { CURRENCY } from '../../constants/AppConstant';
+import {CURRENCY} from '../../constants/AppConstant';
 
 const data = [
   {
